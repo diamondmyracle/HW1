@@ -1,0 +1,10 @@
+/*
+    CSS file for listings.html
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+body {
+    font-family: "Outfit", serif;
+    margin: 0px ;
+}
