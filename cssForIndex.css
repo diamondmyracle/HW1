@@ -1,0 +1,34 @@
+/* CSS file for index.html for COMP333 Project - L.Eldarazi, D. Braddy, A. Bosch */
+
+
+
+/* Import any additional fonts here */
+
+
+/* add a background to the navigation bar */
+.navbar {
+    background-color: green;
+    overflow: hidden;
+    text-align: center;
+}
+
+
+/* styling for links inside the navbar */
+.navbar a {
+    color: white;
+    text-align: center;
+    padding: 10%;
+}
+
+
+/* Change the color of links on hover */
+
+
+/* Add a color to the active/current link */
+
+
+/* styling for main header */
+
+
+
+/* styling for 
