@@ -2,9 +2,43 @@
     CSS file for listings.html
 */
 
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap') ;
 
 body {
-    font-family: "Outfit", serif;
+    font-family: "Outfit", serif ;
     margin: 0px ;
+}
+
+.page-content {
+    margin: 50px ;
+    margin-top: 100px ;
+    font-size: 125% ;
+}
+
+.listings-group {
+    background-color: #ffffff ;
+    border: 2px solid rgb(197, 197, 197) ;
+    width: 100% ;
+    margin: 0px ;
+}
+
+.listing {
+    background-color: #ffffff ;
+    border: 2px solid rgb(197, 197, 197) ;
+    width: 30% ;
+    margin: 10px ;
+}
+
+.listing h2 {
+    margin: 10px ;
+    margin-bottom: 0px ;
+}
+
+.listing p {
+    margin: 10px ;
+    margin-top: 0px ;
+}
+
+.listing h2:hover {
+    color: rgb(30, 209, 30) ;
 }
