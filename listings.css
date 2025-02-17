@@ -55,18 +55,42 @@ body {
     margin: 5px ;
     width: auto ;
     border: 2px solid rgb(197, 197, 197) ;
+    border-radius: 5% ;
+}
+
+.listing img {
+    box-sizing: border-box ;
+    width: 100% ;
+    padding: 10px ;
+    border-radius: 7.5% ;
 }
 
 .listing h2 {
     margin: 10px ;
+    margin-top: 0px ;
     margin-bottom: 0px ;
 }
 
 .listing p {
     margin: 10px ;
     margin-top: 0px ;
+    margin-bottom: 0px ;
 }
 
 .listing h2:hover {
     color: rgb(30, 209, 30) ;
+}
+
+.listing-price p {
+    margin-bottom: 5px ;
+    margin-left: 30px ;
+    padding-top: 5px ;
+    color: rgb(7, 138, 138);
+}
+
+.listing-price img {
+    image-rendering: pixelated ;
+    width: 1.5em ;
+    float: left ;
+    padding: 0px ;
 }
