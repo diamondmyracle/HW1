@@ -55,6 +55,14 @@ body {
     margin: 5px ;
     width: auto ;
     border: 2px solid rgb(197, 197, 197) ;
+    border-radius: 5% ;
+}
+
+.listing img {
+    box-sizing: border-box ;
+    width: 100% ;
+    padding: 10px ;
+    border-radius: 7.5% ;
 }
 
 .listing h2 {
