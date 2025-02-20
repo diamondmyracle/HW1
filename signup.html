@@ -16,16 +16,40 @@
 
 <body>
     <div id="site-content" class="site-content">
-        <h1>Sign Up</h1>
-        <p>Create an account here!</p>
-    
-        <label for="email"><b>Email</b></label>
-        <input type="text" placeholder="Enter Email" name="email" required>
-    
-        <label for="psw"><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="psw" required>
-    
-        <label for="psw-repeat"><b>Enter Password Again</b></label>
-        <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
+        <div id="logbox" class="logbox">
+            <h1>Sign Up</h1>
+            <p>Create an account here!</p>
+
+            <div>
+                <label for="email"><b>Email</b></label>
+                <br>
+                <input type="text" placeholder="Enter Email" name="email" required>
+            </div>
+
+            <br>
+
+            <div>
+                <label for="psw"><b>Password</b></label>
+                <br>
+                <input type="password" placeholder="Enter Password" name="psw" required>
+            </div>
+
+            <br>
+
+            <div>
+                <label for="psw-repeat"><b>Reenter Password</b></label>
+                <br>
+                <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
+            </div>
+
+            <br>
+            
+            <button type="submit">Create account</button>
+
+            <div class="text-button">
+                <p> Or |</p>
+                <a href="login.html">Login</a>
+            </div>
+        </div>
     </div>
 </body>

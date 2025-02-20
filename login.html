@@ -16,17 +16,38 @@
 
 <body>
   <div id="site-content" class="site-content">
-    <div class="logbox">
+    <div id="logbox" class="logbox">
+      <h1>Log in</h1>
+      <p>For returning users!</p>
+
+      <div>
         <label for="username"><b>Username</b></label>
+        <br>
         <input type="text" placeholder="Enter Username" name="username" required>
+      </div>
 
+      <br>
+
+      <div>
         <label for="pswd"><b>Password</b></label>
+        <br>
         <input type="password" placeholder="Enter Password" name="pswd" required>
+      </div>
 
-        <button type="submit">Login</button>
-        <label>
-          <input type="checkbox" checked="checked" name="remember"> Remember Me
-        </label>
+      <br>
+
+      <button type="submit">Login</button>
+
+      <br>
+
+      <label>
+        <input type="checkbox" checked="checked" name="remember"> Remember Me
+      </label>
+
+      <div class="text-button">
+        <p> Or |</p>
+        <a href="signup.html">Signup</a>
+      </div>
     </div>
   </div>
 </body>
