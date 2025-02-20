@@ -10,6 +10,11 @@ body {
     font-size: 100% ;
 }
 
+img {
+    float: left ;
+    width: 15% ;
+}
+
 button {
     font-family: "Outfit", serif ;
     margin: 0px ;
