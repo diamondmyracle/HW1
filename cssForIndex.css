@@ -31,4 +31,72 @@
 
 
 
-/* styling for 
+
+/* styling for the FAQ section */
+    /*styling of main FAQ container*/
+.FAQ {
+    max-width: 80%;
+    margin: 15%;
+    padding: 5%;
+    font-family: 'Arial, sans-serif';
+    color: #3a4c40; /* Base text color: Dark green */
+}
+
+    /* styling for main title */
+.FAQ h2 {
+    text-align: center;
+    margin-bottom: 10%;
+    color: #486856; /* Dark green color */
+}
+
+    /* styling for each FAQ item */
+.faq-item {
+    border-bottom: 1px solid #ddd; /* Light gray border between items */
+    overflow: hidden; /* Hide overflowing content */
+}
+
+    /* styling for the question buttons */
+.faq-question {
+    background-color: #ecf0f1; /* light-gray background */
+    width: 100%;
+    padding: 5%;
+    text-align: left;
+    font-size: 15px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.3s ease; /* smooth background transition on hover */
+}
+
+    /* styling a hover effect for question buttons */
+.faq-question:hover {
+    background-color: #d0d7de; /* Slightly darker gray on hover */
+}
+
+    /* styling for the arrow icon of the question buttons */
+.faq-question .arrow {
+    position: absolute;
+    right: 10%;
+    transition: transform 0.3s ease; /* Smooth rotation transition */
+}
+
+    /* rotate the arrow when the question has been expanded */
+.faq-question.active .arrow {
+    transform: rotate(180deg); /* rotate the arrow 180 degrees */
+}
+
+    /* style for the answer sections */
+.faq-answer {
+    max-height: 0; /* this will hide the answer initially */
+    overflow: hidden;
+    transition: max-height 0.3s ease; /* smooth transition for expanding */
+    background-color: #fff; /* white background for answers */
+}
+
+    /* style for the answer text */
+.faq-answer p {
+    padding: 10%;
+    line-height: 1.5; /* increasing line height for better readability */
+    color: #486856; /* Dark green color */ 
+}
