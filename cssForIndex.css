@@ -8,8 +8,11 @@ body {
     font-family: "Outfit", serif ;
     margin: 0px ;
     font-size: 100% ;
+    background-image: url("photos/background.jpg") ;
+    background-position: center ;
+    background-size: cover ;
+    background-attachment: fixed ;
 }
-
 
 /* add a background to the navigation bar */
 .navbar {
