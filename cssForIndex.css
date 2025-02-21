@@ -97,6 +97,12 @@ body {
     text-align: center; 
 }
 
+/* Styling the comp333 disclaimer in the About Us section */
+#comp333disclaimer {
+    color: #808080; /* making the disclaimer gray */
+}
+
+
 
 /* Styling the Iframe Section */
 #ourIframe {
