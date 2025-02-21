@@ -64,6 +64,61 @@ body {
 
 
 
+
+
+    /* Styling for the Tier List Table */
+
+/* making a background for the entire tier list section */
+#tierlist {
+    background-color: #fff;
+    border-radius: 1em;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    padding-left: 0%;
+    padding-right: 0%;
+    margin-left: 10%;
+    margin-right: 10%;
+
+}
+
+/* styling the header of the tier list */
+#tierlist h2 {
+    text-align: center;
+    color: #3c8f43;
+}
+
+/* styling the overall table */
+table {
+    border-collapse: collapse; /* removes the extra border of the table */
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* styling the data within the table */
+td {
+    text-align: center; /* aligns content within the table to the center */
+}
+
+tr:nth-child(even) {background-color: #f2f2f2;} /* makes every other row in the table a different background color */
+
+/* styling the table header row */
+th {
+    background-color: #3c8f43;
+    color: white;
+}
+
+/* styling the bit of text after the table */
+#tierlist p {
+    text-align: center;
+}
+
+
+
+
+
+
+
 /* styling for the FAQ section */
     /*styling of main FAQ container*/
 .FAQ {
