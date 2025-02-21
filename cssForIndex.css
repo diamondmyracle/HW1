@@ -85,6 +85,17 @@ body {
     text-align: center;
 }
 
+/* Changing size of the "Welcome to Diamond Real Estate" */
+#header h1 {
+    font-size: 3.5em;
+}
+
+/* Changing the other text within welcome section */
+#header p {
+    font-size: 2em;
+}
+
+
 
 /* Styling the About Us Section */
 #aboutus {
