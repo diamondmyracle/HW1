@@ -185,7 +185,7 @@ tr:nth-child(even) {background-color: #f2f2f2;} /* makes every other row in the 
 
 /* styling the table header row */
 th {
-    background-color: #3c8f43;
+    background-color: #38853F;
     color: white;
 }
 
