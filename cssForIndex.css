@@ -19,12 +19,14 @@ body {
     background-color: green;
     overflow: hidden;
     text-align: center;
+    width: 100%; /* these 2(this and the one below) make it so that the navbar stays in one line regardless of browser size*/
+    min-width: fit-content;
 }
 
 
 /* styling for links inside the navbar */
 .navbar a {
-    float: right;
+    float: right; /* float the links to the right of the navbar */
     color: white;
     text-align: center;
     padding: 14px 16px;
@@ -48,7 +50,6 @@ body {
 }
 
 /* styling for main header */
-
 .header {
     padding: 10%;
     text-align: center;
@@ -68,6 +69,9 @@ body {
 
 /* Styling the Welcome/Header section */
 #header {
+    /* making a large rounded white background for behind the text
+     * this same css is used repeatedly throughout the different sections of this website 
+     */
     background-color: #fff;
     border-radius: 1em;
     padding-top: 10%;
