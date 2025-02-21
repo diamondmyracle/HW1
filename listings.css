@@ -21,6 +21,11 @@ body {
     border: 2px solid rgb(197, 197, 197) ;
     width: 100% ;
     margin: 0px ;
+    border-radius: 1em ;
+}
+
+.listings-group h1 {
+    margin: 20px 10px ;
 }
 
 .listings-group ul {
@@ -55,14 +60,14 @@ body {
     margin: 5px ;
     width: auto ;
     border: 2px solid rgb(197, 197, 197) ;
-    border-radius: 5% ;
+    border-radius: 1em ;
 }
 
 .listing img {
     box-sizing: border-box ;
     width: 100% ;
     padding: 10px ;
-    border-radius: 7.5% ;
+    border-radius: 1em ;
 }
 
 .listing h2 {
