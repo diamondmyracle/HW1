@@ -280,3 +280,38 @@ th {
     color: #486856; /* Dark green color */ 
 }
 
+
+
+
+
+/* Styling for Timeline.html */
+/* adding the same white background and padding/margins as in index */
+#timelineContent {
+    background-color: #fff;
+    border-radius: 1em;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    padding-left: 5%;
+    padding-right: 5%;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    text-align: center;
+}
+
+/* styling the ul of timeline.html */
+#timelineContent ul {
+    text-align: center;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* styling the content of the ul to be left aligned so they sit against the bullet points*/
+#timelineContent li {
+    text-align: left;
+}
+
+
+
