@@ -144,6 +144,14 @@ body {
     text-align: center; 
 }
 
+/* styling the reviews so they're in line with each other (when the page is wide enough) */
+.card {
+    display: inline-block;
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-top: 5%;
+    padding-bottom: 5%;
+}
 /* styling for review profile pics */
 .card img {
     border-radius: 50%; /* making the pictures circles */
