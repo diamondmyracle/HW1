@@ -66,6 +66,81 @@ body {
 
 
 
+/* Styling the Welcome/Header section */
+#header {
+    background-color: #fff;
+    border-radius: 1em;
+    padding-top: 10%;
+    padding-bottom: 10%;
+    padding-left: 5%;
+    padding-right: 5%;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 7%;
+    margin-bottom: 5%;
+    text-align: center;
+}
+
+
+/* Styling the About Us Section */
+#aboutus {
+    background-color: #fff;
+    border-radius: 1em;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    padding-left: 5%;
+    padding-right: 5%;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 0%;
+    margin-bottom: 5%;
+    text-align: center; 
+}
+
+
+/* Styling the Iframe Section */
+#ourIframe {
+    background-color: #fff;
+    border-radius: 1em;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    padding-left: 5%;
+    padding-right: 5%;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 0%;
+    margin-bottom: 5%;
+    text-align: center;
+}
+
+#IframeUnit {
+    display: flex;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+}
+
+
+
+/* Styling the Review Section */
+#reviews {
+    background-color: #fff;
+    border-radius: 1em;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    padding-left: 5%;
+    padding-right: 5%;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+    text-align: center; 
+}
+/* style="background-color: #fff; border-radius: 1em; padding-top: 5%; padding-bottom: 5%;
+                padding-left: 5%; padding-right: 5%; margin-left: 10%; margin-right: 10%; margin-top: 5%; margin-bottom: 5%; text-align: center;"
+                allow="autoplay" */
+
     /* Styling for the Tier List Table */
 
 /* making a background for the entire tier list section */
@@ -127,6 +202,17 @@ th {
     padding: 5%;
     font-family: 'Arial, sans-serif';
     color: #3a4c40; /* Base text color: Dark green */
+    background-color: #fff;
+    border-radius: 1em;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    padding-left: 5%;
+    padding-right: 5%;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 5%;
+    margin-bottom: 10%;
+    text-align: center; 
 }
 
     /* styling for main title */
@@ -187,3 +273,4 @@ th {
     line-height: 1.5; /* increasing line height for better readability */
     color: #486856; /* Dark green color */ 
 }
+
