@@ -108,7 +108,7 @@ body {
 
 
 
-/* Styling the Iframe Section */
+/* Styling the Iframe Section 
 #ourIframe {
     background-color: #fff;
     border-radius: 1em;
@@ -131,6 +131,17 @@ body {
     justify-content: center;
 }
 
+*/
+
+/* styling the iframe */
+#IframeUnit {
+    display: flex;
+    width: 70%;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+}
 
 
 /* Styling the Review Section */
