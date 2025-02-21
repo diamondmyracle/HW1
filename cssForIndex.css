@@ -143,6 +143,15 @@ body {
     margin-bottom: 5%;
     text-align: center; 
 }
+
+/* styling for review profile pics */
+.card img {
+    border-radius: 50%; /* making the pictures circles */
+}
+
+
+
+
 /* style="background-color: #fff; border-radius: 1em; padding-top: 5%; padding-bottom: 5%;
                 padding-left: 5%; padding-right: 5%; margin-left: 10%; margin-right: 10%; margin-top: 5%; margin-bottom: 5%; text-align: center;"
                 allow="autoplay" */
