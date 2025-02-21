@@ -249,7 +249,6 @@ th {
     max-width: 80%;
     margin: 15%;
     padding: 5%;
-    font-family: 'Arial, sans-serif';
     color: #3a4c40; /* Base text color: Dark green */
     background-color: #fff;
     border-radius: 1em;
@@ -267,8 +266,9 @@ th {
     /* styling for main title */
 .FAQ h2 {
     text-align: center;
-    margin-bottom: 10%;
+    margin-bottom: 5%;
     color: #486856; /* Dark green color */
+    font-size: 1.6em;
 }
 
     /* styling for each FAQ item */
@@ -283,7 +283,7 @@ th {
     width: 100%;
     padding: 5%;
     text-align: left;
-    font-size: 15px;
+    font-size: 1.1em;
     border: none;
     outline: none;
     cursor: pointer;
@@ -318,11 +318,11 @@ th {
 
     /* style for the answer text */
 .faq-answer p {
-    padding: 10%;
+    padding: 5%;
     line-height: 1.5; /* increasing line height for better readability */
     color: #486856; /* Dark green color */ 
+    font-size: 1.15em;
 }
-
 
 
 
