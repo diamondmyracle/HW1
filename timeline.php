@@ -14,11 +14,11 @@
 
     <body>
         <div class="navbar">
-            <a href="index.html">Home</a>
-            <a href="listings.html">Listing</a>
-            <a href="index.html#faq">FAQ</a>
-            <a href="login.html">Login</a>
-            <a href="signup.html">Signup</a>
+            <a href="index.php">Home</a>
+            <a href="listings.php">Listing</a>
+            <a href="index.php#faq">FAQ</a>
+            <a href="login.php">Login</a>
+            <a href="signup.php">Signup</a>
         </div>
 
         <div id="timelineContent">

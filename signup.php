@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bind_param("ss", $username, $hashedPassword);
             if ($stmt->execute()) {
                 $_SESSION['username'] = $username;
-                header("Location: index.html");
+                header("Location: index.php");
                 exit;
             } else {
                 $error = "Database error: " . $stmt->error;
@@ -48,10 +48,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <div class="navbar">
-        <a href="index.html">Home</a>
-        <a href="listings.html">Listing</a>
-        <a href="index.html#faq">FAQ</a>
-        <a href="login.html">Login</a>
+        <a href="index.php">Home</a>
+        <a href="listings.php">Listing</a>
+        <a href="index.php#faq">FAQ</a>
+        <a href="login.php">Login</a>
         <a class="active" href="#home">Signup</a>
     </div>
     <div id="site-content" class="site-content">
@@ -96,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <div class="text-button">
                 <p> Or |</p>
-                <a href="login.html">Login</a>
+                <a href="login.php">Login</a>
             </div>
         </div>
     </div>

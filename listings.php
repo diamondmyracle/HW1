@@ -20,11 +20,11 @@
 
 <body>
     <div class="navbar">
-        <a href="index.html">Home</a>
-        <a class="active" href="listings.html">Listing</a> <!-- keeping this as listings.html as sometime people like to reload that way -->
-        <a href="index.html#faq">FAQ</a>
-        <a href="login.html">Login</a>
-        <a href="signup.html">Signup</a>
+        <a href="index.php">Home</a>
+        <a class="active" href="listings.php">Listing</a> <!-- keeping this as listings.html as sometime people like to reload that way -->
+        <a href="index.php#faq">FAQ</a>
+        <a href="login.php">Login</a>
+        <a href="signup.php">Signup</a>
     </div>
 
     <div id="site-content" class="site-content">
