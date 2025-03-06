@@ -177,7 +177,7 @@ ob_end_flush();  // Send the output and end buffering
 
       <div class="text-button">
         <p> Or |</p>
-        <a href="signup.html">Signup</a>
+        <a href="signup.php">Signup</a>
       </div>
     </div>
   </div>
