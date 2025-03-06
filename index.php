@@ -28,7 +28,7 @@ Index file for the landing page-->
         <div class="navbar">
             <a class="active" href="#home">Home</a>
             <a href="listings.php">Listing</a>
-            <a href="#faq">FAQ</a>
+            <a href="index.php#faq">FAQ</a>
             <?php if (!empty($username)): ?>
                  <a href="logout.php">Logout (<?php echo htmlspecialchars($username); ?>)</a>
             <?php else: ?>
