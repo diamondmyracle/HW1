@@ -20,11 +20,11 @@
 
 <body>
     <div class="navbar">
-        <a href="index.html">Home</a>
-        <a href="listings.html">Listing</a>
-        <a href="index.html#faq">FAQ</a>
+        <a href="index.php">Home</a>
+        <a href="listings.php">Listing</a>
+        <a href="index.php#faq">FAQ</a>
         <a class="active" href="#home">Login</a>
-        <a href="signup.html">Signup</a>
+        <a href="signup.php">Signup</a>
     </div>
     
   <div id="site-content" class="site-content">
@@ -58,7 +58,7 @@
 
       <div class="text-button">
         <p> Or |</p>
-        <a href="signup.html">Signup</a>
+        <a href="signup.php">Signup</a>
       </div>
     </div>
   </div>

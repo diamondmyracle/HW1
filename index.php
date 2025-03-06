@@ -17,10 +17,10 @@ Index file for the landing page-->
     <BODY>
         <div class="navbar">
             <a class="active" href="#home">Home</a>
-            <a href="listings.html">Listing</a>
+            <a href="listings.php">Listing</a>
             <a href="#faq">FAQ</a>
-            <a href="login.html">Login</a>
-            <a href="signup.html">Signup</a>
+            <a href="login.php">Login</a>
+            <a href="signup.php">Signup</a>
         </div>
 
         <div id="site-content" class="site-content">
@@ -214,7 +214,7 @@ Index file for the landing page-->
                         <ul>
                             <li>For Premium Buyers: Video Tours of Each Listing<br></li>
                             <li>A Save Listings Button<br></li>
-                            <li><a href="timeline.html">And More! See the Full List of Updates Coming Here!!</a></li>
+                            <li><a href="timeline.php">And More! See the Full List of Updates Coming Here!!</a></li>
                         </ul> 
                     </div>
                 </div>
