@@ -32,29 +32,34 @@
             <h1>Sign Up</h1>
             <p>Create an account here!</p>
 
-            <div>
-                <label for="username"><b>Username</b></label>
+            <form action="signup.php" method="POST">
+                <div>
+                    <label for="username"><b>Username</b></label>
+                    <br>
+                    <input type="text" placeholder="Enter Username" name="username" required>
+                </div>
+
                 <br>
-                <input type="text" placeholder="Enter Username" name="username" required>
-            </div>
 
-            <br>
+                <div>
+                    <label for="psw"><b>Password</b></label>
+                    <br>
+                    <input type="password" placeholder="Enter Password" name="psw" required>
+                </div>
 
-            <div>
-                <label for="psw"><b>Password</b></label>
                 <br>
-                <input type="password" placeholder="Enter Password" name="psw" required>
-            </div>
 
-            <br>
+                <div>
+                    <label for="psw-repeat"><b>Reenter Password</b></label>
+                    <br>
+                    <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
+                </div>
 
-            <div>
-                <label for="psw-repeat"><b>Reenter Password</b></label>
                 <br>
-                <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
-            </div>
 
-            <br>
+                <button type="submit">Create account</button>
+            </form>
+
             
             <button type="submit">Create account</button>
 
