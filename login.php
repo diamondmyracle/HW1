@@ -166,12 +166,6 @@ ob_end_flush();  // Send the output and end buffering
 
       <button type="submit">Login</button>
 
-      <br>
-
-      <label>
-        <input type="checkbox" checked="checked" name="remember"> Remember Me
-      </label>
-
 </form>
 
 
