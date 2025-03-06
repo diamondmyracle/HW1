@@ -121,12 +121,17 @@ ob_end_flush();  // Send the output and end buffering
 
 <body>
     <div class="navbar">
-        <a href="index.html">Home</a>
-        <a href="listings.html">Listing</a>
-        <a href="index.html#faq">FAQ</a>
-        <a class="active" href="login.php">Login</a>
-        <a href="signup.html">Signup</a>
-    </div>
+    <a href="index.php">Home</a>
+    <a href="listings.php">Listing</a>
+    <a href="#faq">FAQ</a>
+
+    <?php if (isset($_SESSION['username'])): ?>
+        <a href="logout.php">Logout (<?php echo htmlspecialchars($_SESSION['username']); ?>)</a>
+    <?php else: ?>
+        <a href="login.php">Login</a>
+        <a href="signup.php">Signup</a>
+    <?php endif; ?>
+</div>
     
   <div id="site-content" class="site-content">
     <div id="logbox" class="logbox">
