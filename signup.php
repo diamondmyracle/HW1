@@ -48,12 +48,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <div class="navbar">
-        <a href="index.php">Home</a>
-        <a href="listings.php">Listing</a>
-        <a href="index.php#faq">FAQ</a>
+    <a href="index.php">Home</a>
+    <a href="listings.php">Listing</a>
+    <a href="#faq">FAQ</a>
+
+    <?php if (isset($_SESSION['username'])): ?>
+        <a href="logout.php">Logout (<?php echo htmlspecialchars($_SESSION['username']); ?>)</a>
+    <?php else: ?>
         <a href="login.php">Login</a>
-        <a class="active" href="#home">Signup</a>
-    </div>
+        <a href="signup.php">Signup</a>
+    <?php endif; ?>
+</div>
     <div id="site-content" class="site-content">
         <img src="photos/fake_ad.webp" alt="Fake ad">
         <div id="logbox" class="logbox">
