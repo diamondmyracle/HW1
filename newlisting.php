@@ -20,7 +20,7 @@
     $param_listname = $_POST["listing_name"] ;
     $param_listdescript = $_POST["listing_desc"] ;
     $param_listprice = $_POST["listing_price"] ;
-    $param_author = "Anon" ;
+    $param_author = $_SESSION["username"] ;
     $param_id = uniqid("", true) ;
 
     $sql = "INSERT INTO listings (id, username, listing_name, listing_descript, price) VALUES (?, ?, ?, ?, ?)";
