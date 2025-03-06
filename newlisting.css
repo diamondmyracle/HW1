@@ -10,7 +10,14 @@ body {
     font-size: 100% ;
 }
 
-button {
+input {
+    margin: 0px ;
+    width: 100% ;
+    font-family: "Outfit", serif ;
+    font-size: 100% ;
+}
+
+button[type="submit"] {
     font-family: "Outfit", serif ;
     margin: 0px ;
     font-size: 100% ;
@@ -19,17 +26,10 @@ button {
     border: 2px solid rgb(197, 197, 197) ;
 }
 
-button:hover {
+button[type="submit"]:hover {
     color: white ;
     background-color: rgb(30, 209, 30) ;
     border: 2px solid rgb(30, 209, 30) ;
-}
-
-input {
-    margin: 0px ;
-    width: 100% ;
-    font-family: "Outfit", serif ;
-    font-size: 100% ;
 }
 
 textarea {
@@ -57,31 +57,4 @@ textarea {
 
 .createbox div {
     margin: 5px ;
-}
-
-.text-button {
-    position: absolute ;
-    left: 50% ;
-    transform: translate(-50%, 0%) ;
-    padding-top: 40px ;
-}
-
-.text-button p {
-    display: inline ;
-    color: white ;
-}
-
-.text-button a {
-    text-decoration: none ;
-    color: black ;
-    background-color: white ;
-    border: 2px solid rgb(197, 197, 197) ;
-    padding: 0px 10px ;
-}
-
-.text-button a:hover {
-    text-decoration: none ;
-    color: white ;
-    background-color: rgb(30, 209, 30) ;
-    border: 2px solid rgb(30, 209, 30) ;
 }
