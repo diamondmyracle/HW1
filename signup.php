@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="navbar">
     <a href="index.php">Home</a>
     <a href="listings.php">Listing</a>
-    <a href="#faq">FAQ</a>
+    <a href="index.php#faq">FAQ</a>
 
     <?php if (isset($_SESSION['username'])): ?>
         <a href="logout.php">Logout (<?php echo htmlspecialchars($_SESSION['username']); ?>)</a>
