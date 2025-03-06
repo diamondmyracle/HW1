@@ -26,7 +26,8 @@
         <a href="login.php">Login</a>
         <a href="signup.php">Signup</a>
     <?php endif; ?>
-    
+  </div>
+   
   <div id="site-content" class="site-content">
     <div id="editbox" class="editbox">
       <h1>Edit listing</h1>

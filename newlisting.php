@@ -1,3 +1,45 @@
+<?php 
+  require_once "config.php" ;
+
+  session_start() ;
+  
+  if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+    header("location: listings.php");
+    exit;
+  }
+
+  $param_listname = $param_listdescript = $param_listprice = $param_author = $param_id = "" ;
+
+  if($_SERVER["REQUEST_METHOD"] == "POST"){
+
+    if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+      header("location: listings.php");
+      exit;
+    }
+
+    $param_listname = $_POST["listing_name"] ;
+    $param_listdescript = $_POST["listing_desc"] ;
+    $param_listprice = $_POST["listing_price"] ;
+    $param_author = $_SESSION["username"] ;
+    $param_id = uniqid("", true) ;
+
+    $sql = "INSERT INTO listings (id, username, listing_name, listing_descript, price) VALUES (?, ?, ?, ?, ?)";
+
+    if($stmt = mysqli_prepare($db, $sql)){
+      mysqli_stmt_bind_param($stmt, "ssssi", $param_id, $param_author, $param_listname, $param_listdescript, $param_listprice) ;
+
+      if(mysqli_stmt_execute($stmt)){
+        header("location: listings.php") ;
+      } else{
+        echo "idk, it didn't work" ;
+      }
+    }
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($db);
+  }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,6 +61,7 @@
             <a class="active" href="#home">Home</a>
             <a href="listings.php">Listing</a>
             <a href="index.php#faq">FAQ</a>
+      
             <?php if (!empty($username)): ?>
                  <a href="logout.php">Logout (<?php echo htmlspecialchars($username); ?>)</a>
             <?php else: ?>
@@ -28,35 +71,37 @@
         </div>
     
   <div id="site-content" class="site-content">
-    <div id="createbox" class="createbox">
-      <h1>Create new listing</h1>
-      <p>Put your amazing Minecraft house on the market!</p>
+    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+      <div id="createbox" class="createbox">
+        <h1>Create new listing</h1>
+        <p>Put your amazing Minecraft house on the market!</p>
 
-      <div>
-        <label for="listing name">Listing name</label>
+        <div>
+          <label for="listing_name">Listing name</label>
+          <br>
+          <input type="text" placeholder="Listing name" name="listing_name" maxlength="32" required>
+        </div>
+
         <br>
-        <input type="text" placeholder="Listing name" name="listing name" maxlength="32" required>
-      </div>
 
-      <br>
+        <div>
+          <label for="listing_desc">Listing description</label>
+          <br>
+          <textarea placeholder="Listing description" name="listing_desc" style="resize: none" maxlength="255" required></textarea>
+        </div>
 
-      <div>
-        <label for="description">Listing description</label>
         <br>
-        <textarea placeholder="Listing description" name="description" style="resize: none" maxlength="256" required></textarea>
-      </div>
 
-      <br>
+        <div>
+          <label for="listing_price">Listing price</label>
+          <br>
+          <input type="number" placeholder="Listing price" name="listing_price" max="2048" min="1" required>
+        </div>
 
-      <div>
-        <label for="listing price">Listing price</label>
         <br>
-        <input type="number" placeholder="Listing price" name="listing price" max="2048" required>
+
+        <button type="submit" name="create_listing">Create listing</button>
       </div>
-
-      <br>
-
-      <button type="submit">Create listing</button>
-    </div>
+    </form>
   </div>
 </body>
