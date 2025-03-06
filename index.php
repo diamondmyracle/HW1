@@ -1,5 +1,15 @@
 <!--HW1: Diamond, Lauren, Austin 
 Index file for the landing page-->
+<?php
+    session_start();
+    if(isset($_SESSION['username'])){
+        $username = $_SESSION['username'];
+    }
+    else{
+        $username = "";
+    }
+?>
+
 <!DOCTYPE html>
 <HTML lang="en">
     <HEAD>
@@ -19,8 +29,12 @@ Index file for the landing page-->
             <a class="active" href="#home">Home</a>
             <a href="listings.php">Listing</a>
             <a href="#faq">FAQ</a>
-            <a href="login.php">Login</a>
-            <a href="signup.php">Signup</a>
+            <?php if (!empty($username)): ?>
+                 <a href="logout.php">Logout (<?php echo htmlspecialchars($username); ?>)</a>
+            <?php else: ?>
+                    <a href="login.php">Login</a>
+                    <a href="signup.php">Signup</a>
+            <?php endif; ?>
         </div>
 
         <div id="site-content" class="site-content">

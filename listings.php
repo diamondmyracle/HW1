@@ -1,3 +1,16 @@
+
+<?php
+    session_start();
+    if(isset($_SESSION['username'])){
+        $username = $_SESSION['username'];
+    }
+    else{
+        $username = "";
+    }
+?>
+
+
+
 <!--
     Listings page for HW1
 -->
@@ -20,12 +33,17 @@
 
 <body>
     <div class="navbar">
-        <a href="index.php">Home</a>
-        <a class="active" href="listings.php">Listing</a> <!-- keeping this as listings.html as sometime people like to reload that way -->
-        <a href="index.php#faq">FAQ</a>
+    <a href="index.php">Home</a>
+    <a href="listings.php">Listing</a>
+    <a href="index.php#faq">FAQ</a>
+
+    <?php if (isset($_SESSION['username'])): ?>
+        <a href="logout.php">Logout (<?php echo htmlspecialchars($_SESSION['username']); ?>)</a>
+    <?php else: ?>
         <a href="login.php">Login</a>
         <a href="signup.php">Signup</a>
-    </div>
+    <?php endif; ?>
+</div>
 
     <div id="site-content" class="site-content">
         <div id="listings-group" class="listings-group">

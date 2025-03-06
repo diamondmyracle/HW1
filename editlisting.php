@@ -16,13 +16,18 @@
 
 <body>
     <div class="navbar">
-        <a href="index.php">Home</a>
-        <a href="listings.php">Listing</a>
-        <a href="index.php#faq">FAQ</a>
-        <a class="active" href="#home">Login</a>
+    <a href="index.php">Home</a>
+    <a href="listings.php">Listing</a>
+    <a href="index.php#faq">FAQ</a>
+
+    <?php if (isset($_SESSION['username'])): ?>
+        <a href="logout.php">Logout (<?php echo htmlspecialchars($_SESSION['username']); ?>)</a>
+    <?php else: ?>
+        <a href="login.php">Login</a>
         <a href="signup.php">Signup</a>
-    </div>
-    
+    <?php endif; ?>
+  </div>
+   
   <div id="site-content" class="site-content">
     <div id="editbox" class="editbox">
       <h1>Edit listing</h1>
