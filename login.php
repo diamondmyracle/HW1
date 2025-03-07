@@ -128,7 +128,7 @@ ob_end_flush();  // Send the output and end buffering
     <?php if (isset($_SESSION['username'])): ?>
         <a href="logout.php">Logout (<?php echo htmlspecialchars($_SESSION['username']); ?>)</a>
     <?php else: ?>
-        <a href="login.php">Login</a>
+        <a class="active" href="login.php">Login</a>
         <a href="signup.php">Signup</a>
     <?php endif; ?>
 </div>

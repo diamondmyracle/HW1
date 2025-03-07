@@ -26,7 +26,7 @@
 
     <body>
         <div class="navbar">
-            <a class="active" href="#home">Home</a>
+            <a href="index.php">Home</a>
             <a href="listings.php">Listing</a>
             <a href="index.php#faq">FAQ</a>
             <?php if (!empty($username)): ?>

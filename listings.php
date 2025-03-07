@@ -34,7 +34,7 @@
 <body>
     <div class="navbar">
     <a href="index.php">Home</a>
-    <a href="listings.php">Listing</a>
+    <a class="active" href="listings.php">Listing</a>
     <a href="index.php#faq">FAQ</a>
 
     <?php if (isset($_SESSION['username'])): ?>
