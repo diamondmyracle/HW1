@@ -1,3 +1,95 @@
+<?php 
+  require_once "config.php" ;
+
+  session_start() ;
+
+  $result_name = $result_descript = $result_price = $result_author = $result_id = "" ;
+  $list_id = "" ;
+  
+  if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false){
+    header("location: listings.php") ;
+    exit ;
+  }
+
+  if(isset($_GET["id"])){
+    $list_id = $_GET["id"] ;
+  } 
+  else{
+    header("location: listings.php") ;
+    exit ;
+  }
+
+  $sql = "SELECT id, username, listing_name, listing_descript, price FROM listings WHERE id = ?" ;
+
+  if(!($stmt = mysqli_prepare($db, $sql))){
+    header("location: listings.php") ;
+    exit ;
+  }
+
+  mysqli_stmt_bind_param($stmt, "s", $list_id) ;
+  if(!mysqli_stmt_execute($stmt)){
+    header("location: listings.php") ;
+    exit ;
+  } 
+  
+  mysqli_stmt_store_result($stmt) ;
+  if(mysqli_stmt_num_rows($stmt) !== 1){
+    header("location: listings.php") ;
+    exit ;
+  }
+        
+  mysqli_stmt_bind_result($stmt, $result_id, $result_author, $result_name, $result_descript, $result_price) ;
+  if(!mysqli_stmt_fetch($stmt)) {
+    header("location: listings.php") ;
+    exit ;
+  }
+          
+  if($_SESSION["username"] !== $result_author){
+    header("location: listings.php") ;
+    exit ;
+  }
+
+  mysqli_stmt_close($stmt);
+
+  if($_SERVER["REQUEST_METHOD"] == "POST"){
+    if(isset($_POST["delete"])){
+      $sql = "DELETE FROM listings WHERE id = ?" ;
+
+      if($stmt = mysqli_prepare($db, $sql)){
+        mysqli_stmt_bind_param($stmt, "s", $list_id) ;
+
+        if(mysqli_stmt_execute($stmt)){
+          header("location: listings.php") ;
+          exit ;
+        } 
+      }
+    }
+
+    if(isset($_POST["save"])){
+      $param_listname = $_POST["listing_name"] ;
+      $param_listdescript = $_POST["listing_desc"] ;
+      $param_listprice = $_POST["listing_price"] ;
+      $param_author = $_SESSION["username"] ;
+      $param_id = uniqid("", true) ;
+  
+      $sql = "UPDATE listings SET listing_name=?, listing_descript=?, price=? WHERE id=?";
+  
+      if($stmt = mysqli_prepare($db, $sql)){
+        mysqli_stmt_bind_param($stmt, "ssis", $param_listname, $param_listdescript, $param_listprice, $list_id) ;
+  
+        if(mysqli_stmt_execute($stmt)){
+          header("location: listings.php") ;
+        } else{
+          echo "idk, it didn't work" ;
+        }
+      }
+  
+      mysqli_stmt_close($stmt);
+      mysqli_close($db);
+    }
+  }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,38 +121,40 @@
   </div>
    
   <div id="site-content" class="site-content">
-    <div id="editbox" class="editbox">
-      <h1>Edit listing</h1>
-      <p>Edit the listing for your Minecraft house</p>
+    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ; ?>?id=<?php echo htmlspecialchars($_GET["id"]) ; ?>" method="post">
+      <div id="editbox" class="editbox">
+        <h1>Edit listing</h1>
+        <p>Edit the listing for your Minecraft house</p>
 
-      <div>
-        <label for="listing name">Listing name</label>
+        <div>
+          <label for="listing_name">Listing name</label>
+          <br>
+          <input type="text" placeholder="Listing name" name="listing_name" maxlength="32" value="<?php echo $result_name ; ?>" required>
+        </div>
+
         <br>
-        <input type="text" placeholder="Listing name" name="listing name" maxlength="32" required>
-      </div>
 
-      <br>
+        <div>
+          <label for="listing_desc">Listing description</label>
+          <br>
+          <textarea placeholder="Listing description" name="listing_desc" style="resize: none" maxlength="256" required><?php echo $result_descript ; ?></textarea>
+        </div>
 
-      <div>
-        <label for="description">Listing description</label>
         <br>
-        <textarea placeholder="Listing description" name="description" style="resize: none" maxlength="256" required></textarea>
-      </div>
 
-      <br>
+        <div>
+          <label for="listing_price">Listing price</label>
+          <br>
+          <input type="number" placeholder="Listing price" name="listing_price" max="2048" value="<?php echo $result_price ; ?>" required>
+        </div>
 
-      <div>
-        <label for="listing price">Listing price</label>
         <br>
-        <input type="number" placeholder="Listing price" name="listing price" max="2048" required>
+
+        <button type="submit" name="save">Save changes</button>
+        <br>
+        <br>
+        <button type="submit" id="delete" name="delete">Delete listing</button>
       </div>
-
-      <br>
-
-      <button type="submit">Save changes</button>
-      <br>
-      <br>
-      <button type="submit" id="delete">Delete listing</button>
-    </div>
+    </form>
   </div>
 </body>
