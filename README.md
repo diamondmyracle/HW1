@@ -43,10 +43,11 @@ equal contribution
 
 #HW2
 
+Lauren:
 <img width="1440" alt="Screenshot 2025-03-01 at 5 02 58 PM" src="https://github.com/user-attachments/assets/b82177bf-b6fa-477e-8330-8321de4978bb" />
-
+Diamond:
 ![Screenshot](https://github.com/user-attachments/assets/08766a9f-ae60-4cf8-84fa-285df6ab9fc4)
-
+Austin: 
 ![Screenshot(2)](https://github.com/user-attachments/assets/e2b2ac83-c1cc-4b2f-8188-fc18fd589b60)
 
 
