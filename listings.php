@@ -1,12 +1,22 @@
 
 <?php
     session_start();
+
+
     if(isset($_SESSION['username'])){
         $username = $_SESSION['username'];
     }
     else{
         $username = "";
     }
+
+    // includes database connection
+    require_once "config.php"; 
+
+    // querying to fetch all listings within the listings table of our db 
+    $sql = "SELECT id, username, listing_name, listing_descript, price FROM listings";
+    $result = mysqli_query($db, $sql);
+
 ?>
 
 
@@ -113,7 +123,40 @@
                         </div>
                     </div>
                 </li>
+
+                <?php
+            
+                if (mysqli_num_rows($result) > 0) {
+                    // loop through each row in the listings table to create a listing object/display
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        echo '<li>';
+                        echo '<div class="listing">';
+                        //echo '<img src="' . htmlspecialchars($row['image']) . '" alt="alttext" >';
+                        echo '<img src="photos/listing1.webp" alt="Example listing photo">' ; 
+                        if($_SESSION["username"] == $row['username']) {
+                            echo '<a href="editlisting.php?id=' . htmlspecialchars($row['id']). '"><h2>' .htmlspecialchars($row['listing_name']) . '</h2></a>'; 
+                        } else {
+                            echo '<h2>' .htmlspecialchars($row['listing_name']) . '</h2>'; 
+                        }
+                        //echo '<h2>' .htmlspecialchars($row['listing_name']) . '</h2>'; 
+                        echo '<p>' . htmlspecialchars($row['username']) . '<br>' . htmlspecialchars($row['listing_descript']) . '</p>';
+                        echo '<div class="listing-price">';
+                        echo '<img src="diamond.png" alt = "diamond">' ; 
+                        echo '<p><b>' . $row['price'] . ' diamonds' . '</b><p>' ;
+                        // echo '<a href="link.php?id=' . $row['id'] . '" class="view-details">View Details</a>'>; 
+                        echo '</div>' ; 
+                        echo '</div>' ; 
+                        echo '</li>' ; 
+                    }
+                } else {
+                    echo "<p>No listings found. We guess our listings have been getting snatched up tooooo fast!</p>" ; 
+                }
+
+                // Close connection 
+                mysqli_close($db);
+                ?>
             </ul>
         </div>
     </div>
 </body>
+
