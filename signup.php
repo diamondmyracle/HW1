@@ -27,6 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt = $db->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
             $stmt->bind_param("ss", $username, $hashedPassword);
             if ($stmt->execute()) {
+                $_SESSION['loggedin'] = true;
                 $_SESSION['username'] = $username;
                 header("Location: index.php");
                 exit;
