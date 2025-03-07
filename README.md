@@ -52,7 +52,7 @@ Austin:
 
 
 Link to InfinityFree: https://diamondrealestate.infy.uk/index.php
-
+- ^^link to the active website!!
 SQL queries necessary:
 
 CREATE TABLE `app-db`.`users` (`username` VARCHAR(255) NOT NULL , `password` VARCHAR(255) NOT NULL ) ENGINE = InnoDB;
@@ -61,4 +61,48 @@ ALTER TABLE `users` ADD UNIQUE(`username`);
 CREATE TABLE `app-db`.`listings` (`id` VARCHAR(23) NOT NULL , `username` VARCHAR(255) NOT NULL , `listing_name` VARCHAR(255) NOT NULL , `listing_descript` VARCHAR(255) NOT NULL , `price` INT(11) NOT NULL ) ENGINE = InnoDB;
 ALTER TABLE `listings` ADD PRIMARY KEY(`id`);
 ALTER TABLE `listings` ADD UNIQUE(`id`);
+ALTER TABLE `listings` ADD `image` LONGBLOB NULL DEFAULT NULL AFTER `price`;
+
+
+
+Pic of our local development environment!!
+
+![PNG image](https://github.com/user-attachments/assets/f724b714-a4af-4745-9835-8459fa2ff580)
+
+
+
+How to Navigate the Website: 
+
+- Feel free to tap anything on the navbar, it all works!!
+- From home, you can choose to scroll farther through the home page or navigate to sign-up, log-in (if you've already made a log-in), the FAQ (on the home page), or to the listings page (although you won't be able to create or edit listings until you're logged in)
+- From Sign-up: enter your desired username and password (don't worry, you'll be notified if your username is taken already), and also re-enter your password for verification! Once you've signed up, you will be automatically logged into that same account to navigate the rest of the website as a logged-in user
+- From Log-In: log in with pre-existing username and password (our website will alert you if you enter in a wrong username/password or don't complete the fields necessary). Once you've logged in you can create listings or edit existing listings you've created under the same user!!
+- From Listings: if you're not logged in, you can view all listings but not edit or create any. Once you're logged in you may create as many listings as you like (just fill in all necessary fields) and also edit the listings you've created under this user
+- NOTE!!!!: if you're on Mac, before you upload a picture file for creating a listing you may need to run this command in your terminal to give make the uploads folder writeable to the browser:
+  
+ 
+  
+  chmod 777 /Applications/XAMPP/xamppfiles/htdocs/uploads
+  
+  
+  
+- Once logged in, feel free to click "Logout(yourUsername)" at any point and you'll need to sign-up or log-in again to access listing capabilities again!
+  
+...................................
+  
+- Extra Note: We may need to create our release as v1.1.0 (instead of v1.0.0) because we already made a v1.0.1 release for hw1
+
+
+
+Notes of our AI usage:
+
+In general we got help from ChatGPT for: 
+- describing + fixing bugs in our code (for login.php and signup.php, such as issues with our navbar) 
+- why we couldn't style an input type (newlisting.php)
+- why $_GET wasn't working with a form action
+- how to implement photo uploads (for our listings)
+- more debugging with accessing uploads file 
+- help with implementing the while loop for listings.php
+- some help with running SQL queries (in the beginning when we were more unfamiliar with them) 
+
 
