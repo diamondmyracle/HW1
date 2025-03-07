@@ -87,7 +87,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             mysqli_stmt_close($stmt);
         }
     
-        // ❗ Always set a generic error message when login fails (fix #4)
+        // generic error message if there's an error with username or password
         $login_err = "Invalid username or password.";
     }
     
