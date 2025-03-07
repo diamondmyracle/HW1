@@ -51,6 +51,14 @@ Austin:
 ![Screenshot(2)](https://github.com/user-attachments/assets/e2b2ac83-c1cc-4b2f-8188-fc18fd589b60)
 
 
-Link to InfinityFree: https://diamondrealestate.infy.uk/index.php#home 
+Link to InfinityFree: https://diamondrealestate.infy.uk/index.php
 
+SQL queries necessary:
+
+CREATE TABLE `app-db`.`users` (`username` VARCHAR(255) NOT NULL , `password` VARCHAR(255) NOT NULL ) ENGINE = InnoDB;
+ALTER TABLE `users` ADD PRIMARY KEY(`username`);
+ALTER TABLE `users` ADD UNIQUE(`username`);
+CREATE TABLE `app-db`.`listings` (`id` VARCHAR(23) NOT NULL , `username` VARCHAR(255) NOT NULL , `listing_name` VARCHAR(255) NOT NULL , `listing_descript` VARCHAR(255) NOT NULL , `price` INT(11) NOT NULL ) ENGINE = InnoDB;
+ALTER TABLE `listings` ADD PRIMARY KEY(`id`);
+ALTER TABLE `listings` ADD UNIQUE(`id`);
 
