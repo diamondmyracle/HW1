@@ -133,7 +133,7 @@
                         echo '<div class="listing">';
                         //echo '<img src="' . htmlspecialchars($row['image']) . '" alt="alttext" >';
                         echo '<img src="photos/listing1.webp" alt="Example listing photo">' ; 
-                        if($_SESSION["username"] == $row['username']) {
+                        if($username == $row['username']) {
                             echo '<a href="editlisting.php?id=' . htmlspecialchars($row['id']). '" style="text-decoration: none"><h2 style="color: rgb(7, 138, 138);">' .htmlspecialchars($row['listing_name']) . '</h2></a>';  
                         } else {
                             echo '<h2>' .htmlspecialchars($row['listing_name']) . '</h2>'; 
