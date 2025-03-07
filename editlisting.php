@@ -95,7 +95,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Create new Diamond Real Estate listing">
+    <meta name="description" content="Edit a Diamond Real Estate listing">
     <title>Create new listing</title>
 
     <link rel="stylesheet" href="cssForIndex.css">
