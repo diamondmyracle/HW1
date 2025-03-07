@@ -54,10 +54,16 @@
         <a href="signup.php">Signup</a>
     <?php endif; ?>
 </div>
-
     <div id="site-content" class="site-content">
         <div id="listings-group" class="listings-group">
             <h1>Listings</h1>
+            
+            <?php
+                if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+                        echo '<a href="newlisting.php" style="border-radius: .5em ; text-decoration: none ; margin: 10px ; margin-bottom: 15px ; padding: 2px ; border: 2px solid rgb(30, 209, 30) ; background-color: rgb(30, 209, 30) ; color: white ;">Create new listing</a>' ;
+                        echo '<br>' ;
+                }
+            ?>
             
             <ul>
                 <li>
