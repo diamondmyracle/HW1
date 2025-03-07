@@ -67,7 +67,7 @@
                         <p>
                             Author
                             <br>
-                            Some BS
+                            Perfect for an eternal date-night...
                         </p>
                         <div class="listing-price">
                             <img src="diamond.png" alt="diamond">
@@ -83,7 +83,7 @@
                         <p>
                             Author
                             <br>
-                            Some BS
+                            Get cozy!
                         </p>
                         <div class="listing-price">
                             <img src="diamond.png" alt="diamond">
@@ -99,7 +99,7 @@
                         <p>
                             Author
                             <br>
-                            Some BS
+                            Moooooo
                         </p>
                         <div class="listing-price">
                             <img src="diamond.png" alt="diamond">
@@ -115,7 +115,7 @@
                         <p>
                             Author
                             <br>
-                            Some BS
+                            Past tenants said the wall-shaking ding-dongs of the clock every hour were an integral part of the charm that everyone should experience!
                         </p>
                         <div class="listing-price">
                             <img src="diamond.png" alt="diamond">
