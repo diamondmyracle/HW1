@@ -1,3 +1,4 @@
+
 <?php
     session_start();
 
@@ -65,11 +66,11 @@
             
             <ul>
                 <li>
-                    <div class="listing">
+                <div class="listing">
                         <img src="photos/listing1.webp" alt="Listing 1 photo">
                         <h2>St. Valentine's Cathedral</h2>
                         <p>
-                            Author
+                            Saint Val
                             <br>
                             Perfect for an eternal date-night...
                         </p>
@@ -85,7 +86,7 @@
                         <img src="photos/listing2.webp" alt="Listing 2 photo">
                         <h2>2-Story 1 bedroom house</h2>
                         <p>
-                            Author
+                            Steve
                             <br>
                             Get cozy!
                         </p>
@@ -101,7 +102,7 @@
                         <img src="photos/listing3.webp" alt="Listing 3 photo">
                         <h2>Barn</h2>
                         <p>
-                            Author
+                            Farmer Alex
                             <br>
                             Moooooo
                         </p>
@@ -117,7 +118,7 @@
                         <img src="photos/listing4.webp" alt="Listing 4 photo">
                         <h2>Neo-classical clocktower</h2>
                         <p>
-                            Author
+                            Hugo Cabret 
                             <br>
                             Past tenants said the wall-shaking ding-dongs of the clock every hour were an integral part of the charm that everyone should experience!
                         </p>
@@ -127,7 +128,6 @@
                         </div>
                     </div>
                 </li>
-
                 <?php
             
             if (mysqli_num_rows($result) > 0) {
@@ -140,7 +140,7 @@
                     if (!empty($row['image'])) {
                         $imageSrc = 'uploads/' . htmlspecialchars($row['image']);
                     } else {
-                        $imageSrc = 'photos/default-placeholder.webp'; // backup if no image
+                        $imageSrc = 'photos/default-placeholder.webp'; // Fallback if no image
                     }
             
                     echo '<img src="' . $imageSrc . '" alt="Listing photo">';
@@ -161,9 +161,7 @@
                     echo '</div>'; 
                     echo '</li>'; 
                 }
-            } else {
-                echo "<p>No listings found. We guess our listings have been getting snatched up tooooo fast!</p>";
-            }
+            } 
             
                 // Close connection 
                 mysqli_close($db);
@@ -171,6 +169,9 @@
             </ul>
         </div>
     </div>
+</body>
+
+
 </body>
 
 
