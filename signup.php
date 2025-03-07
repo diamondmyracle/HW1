@@ -70,18 +70,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div id="logbox" class="logbox">
             <h1>Sign Up</h1>
 
-            <!-- Show error message if any -->
-            <?php if (!empty($error)): ?>
-                <p style="color: red; font-weight: bold;"><?php echo htmlspecialchars($error); ?></p>
-            <?php endif; ?>
-
             <p>Create an account here!</p>
 
             <form method="POST" action="signup.php">
                 <div>
                     <label for="username"><b>Username</b></label>
                     <br>
-                    <input type="text" placeholder="Enter Username" name="username" required>
+                    <input type="text" placeholder="Enter Username" name="username">
                 </div>
 
                 <br>
@@ -89,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div>
                     <label for="psw"><b>Password</b></label>
                     <br>
-                    <input type="password" placeholder="Enter Password" name="psw" required>
+                    <input type="password" placeholder="Enter Password" name="psw">
                 </div>
 
                 <br>
@@ -97,10 +92,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div>
                     <label for="psw-repeat"><b>Reenter Password</b></label>
                     <br>
-                    <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
+                    <input type="password" placeholder="Repeat Password" name="psw-repeat">
                 </div>
 
-                <br>
+            <br>
+       
+            <!-- Show error message if any -->
+            <?php if (!empty($error)): ?>
+              <p style="color: red; font-weight: bold;"><?php echo htmlspecialchars($error); ?></p>
+            <?php endif; ?>
 
                 <button type="submit">Create account</button>
             </form>
