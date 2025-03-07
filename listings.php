@@ -148,9 +148,7 @@
                         echo '</div>' ; 
                         echo '</li>' ; 
                     }
-                } else {
-                    echo "<p>No listings found. We guess our listings have been getting snatched up tooooo fast!</p>" ; 
-                }
+                } 
 
                 // Close connection 
                 mysqli_close($db);
