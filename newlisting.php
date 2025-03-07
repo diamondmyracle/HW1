@@ -23,6 +23,10 @@
       $form_error = "Form fields cannot be left blank" ;
     }
 
+    if(empty($form_error) && (($param_listprice > 2048) || ($param_listprice < 1))){
+      $form_error = "Price must be between 1 and 2048" ;
+    }
+
     if(empty($form_error)){
       $sql = "INSERT INTO listings (id, username, listing_name, listing_descript, price) VALUES (?, ?, ?, ?, ?)";
 
@@ -97,11 +101,11 @@
         <div>
           <label for="listing_price">Listing price</label>
           <br>
-          <input type="number" placeholder="Listing price" name="listing_price" max="2048" min="1">
+          <input type="number" placeholder="Listing price" name="listing_price">
         </div>
 
         <br>
-        
+
         <span style="color:red"><?php echo $form_error ; ?></span>
         <button type="submit" name="create_listing">Create listing</button>
       </div>

@@ -76,6 +76,10 @@
       if(empty($param_listname) || empty($param_listdescript) || empty($param_listprice)){
         $form_error = "Form fields cannot be left blank" ;
       }
+
+      if(empty($form_error) && (($param_listprice > 2048) || ($param_listprice < 1))){
+        $form_error = "Price must be between 1 and 2048" ;
+      }
   
       if(empty($form_error)){
         $sql = "UPDATE listings SET listing_name=?, listing_descript=?, price=? WHERE id=?";
@@ -89,7 +93,7 @@
             echo "idk, it didn't work" ;
           }
         }
-        
+
         mysqli_stmt_close($stmt);
         mysqli_close($db);
       }
@@ -152,7 +156,7 @@
         <div>
           <label for="listing_price">Listing price</label>
           <br>
-          <input type="number" placeholder="Listing price" name="listing_price" max="2048" value="<?php echo $result_price ; ?>">
+          <input type="number" placeholder="Listing price" name="listing_price" value="<?php echo $result_price ; ?>">
         </div>
 
         <br>
