@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <a href="index.php">Home</a>
             <a href="listings.php">Listing</a>
             <a href="index.php#faq">FAQ</a>
-            <?php if (!empty($username)): ?>
+            <?php if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true): ?>
                  <a href="logout.php">Logout (<?php echo htmlspecialchars($username); ?>)</a>
             <?php else: ?>
                     <a href="login.php">Login</a>
