@@ -49,33 +49,45 @@
     exit ;
   }
 
+  mysqli_stmt_close($stmt);
+
   if($_SERVER["REQUEST_METHOD"] == "POST"){
 
-    if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-      header("location: listings.php");
-      exit;
-    }
+    if(isset($_POST["delete"])){
+      $sql = "DELETE FROM listings WHERE id = ?" ;
 
-    $param_listname = $_POST["listing_name"] ;
-    $param_listdescript = $_POST["listing_desc"] ;
-    $param_listprice = $_POST["listing_price"] ;
-    $param_author = $_SESSION["username"] ;
-    $param_id = uniqid("", true) ;
+      if($stmt = mysqli_prepare($db, $sql)){
+        mysqli_stmt_bind_param($stmt, "s", $list_id) ;
 
-    $sql = "INSERT INTO listings (id, username, listing_name, listing_descript, price) VALUES (?, ?, ?, ?, ?)";
-
-    if($stmt = mysqli_prepare($db, $sql)){
-      mysqli_stmt_bind_param($stmt, "ssssi", $param_id, $param_author, $param_listname, $param_listdescript, $param_listprice) ;
-
-      if(mysqli_stmt_execute($stmt)){
-        header("location: listings.php") ;
-      } else{
-        echo "idk, it didn't work" ;
+        if(mysqli_stmt_execute($stmt)){
+          header("location: index.php") ;
+          exit ;
+        } 
       }
     }
 
-    mysqli_stmt_close($stmt);
-    mysqli_close($db);
+    if(isset($_POST["save"])){
+      $param_listname = $_POST["listing_name"] ;
+      $param_listdescript = $_POST["listing_desc"] ;
+      $param_listprice = $_POST["listing_price"] ;
+      $param_author = $_SESSION["username"] ;
+      $param_id = uniqid("", true) ;
+  
+      $sql = "INSERT INTO listings (id, username, listing_name, listing_descript, price) VALUES (?, ?, ?, ?, ?)";
+  
+      if($stmt = mysqli_prepare($db, $sql)){
+        mysqli_stmt_bind_param($stmt, "ssssi", $param_id, $param_author, $param_listname, $param_listdescript, $param_listprice) ;
+  
+        if(mysqli_stmt_execute($stmt)){
+          header("location: index.php") ;
+        } else{
+          echo "idk, it didn't work" ;
+        }
+      }
+  
+      mysqli_stmt_close($stmt);
+      mysqli_close($db);
+    }
   }
 ?>
 

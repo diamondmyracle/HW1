@@ -11,12 +11,7 @@
   $param_listname = $param_listdescript = $param_listprice = $param_author = $param_id = "" ;
 
   if($_SERVER["REQUEST_METHOD"] == "POST"){
-
-    if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-      header("location: listings.php");
-      exit;
-    }
-
+    
     $param_listname = $_POST["listing_name"] ;
     $param_listdescript = $_POST["listing_desc"] ;
     $param_listprice = $_POST["listing_price"] ;
