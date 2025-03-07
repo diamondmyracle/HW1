@@ -9,6 +9,7 @@
   }
 
   $param_listname = $param_listdescript = $param_listprice = $param_author = $param_id = "" ;
+  $form_error = "" ;
 
   if($_SERVER["REQUEST_METHOD"] == "POST"){
     
@@ -18,20 +19,26 @@
     $param_author = $_SESSION["username"] ;
     $param_id = uniqid("", true) ;
 
-    $sql = "INSERT INTO listings (id, username, listing_name, listing_descript, price) VALUES (?, ?, ?, ?, ?)";
-
-    if($stmt = mysqli_prepare($db, $sql)){
-      mysqli_stmt_bind_param($stmt, "ssssi", $param_id, $param_author, $param_listname, $param_listdescript, $param_listprice) ;
-
-      if(mysqli_stmt_execute($stmt)){
-        header("location: listings.php") ;
-      } else{
-        echo "idk, it didn't work" ;
-      }
+    if(empty($param_listname) || empty($param_listdescript) || empty($param_listprice)){
+      $form_error = "Form fields cannot be left blank" ;
     }
 
-    mysqli_stmt_close($stmt);
-    mysqli_close($db);
+    if(empty($form_error)){
+      $sql = "INSERT INTO listings (id, username, listing_name, listing_descript, price) VALUES (?, ?, ?, ?, ?)";
+
+      if($stmt = mysqli_prepare($db, $sql)){
+        mysqli_stmt_bind_param($stmt, "ssssi", $param_id, $param_author, $param_listname, $param_listdescript, $param_listprice) ;
+
+        if(mysqli_stmt_execute($stmt)){
+          header("location: listings.php") ;
+        } else{
+          echo "idk, it didn't work" ;
+        }
+      }
+
+      mysqli_stmt_close($stmt);
+      mysqli_close($db);
+    }
   }
 ?>
 
@@ -74,7 +81,7 @@
         <div>
           <label for="listing_name">Listing name</label>
           <br>
-          <input type="text" placeholder="Listing name" name="listing_name" maxlength="32" required>
+          <input type="text" placeholder="Listing name" name="listing_name" maxlength="32">
         </div>
 
         <br>
@@ -82,7 +89,7 @@
         <div>
           <label for="listing_desc">Listing description</label>
           <br>
-          <textarea placeholder="Listing description" name="listing_desc" style="resize: none" maxlength="255" required></textarea>
+          <textarea placeholder="Listing description" name="listing_desc" style="resize: none" maxlength="255"></textarea>
         </div>
 
         <br>
@@ -90,11 +97,12 @@
         <div>
           <label for="listing_price">Listing price</label>
           <br>
-          <input type="number" placeholder="Listing price" name="listing_price" max="2048" min="1" required>
+          <input type="number" placeholder="Listing price" name="listing_price" max="2048" min="1">
         </div>
 
         <br>
-
+        
+        <span style="color:red"><?php echo $form_error ; ?></span>
         <button type="submit" name="create_listing">Create listing</button>
       </div>
     </form>

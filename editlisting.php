@@ -5,6 +5,7 @@
 
   $result_name = $result_descript = $result_price = $result_author = $result_id = "" ;
   $list_id = "" ;
+  $form_error = "" ;
   
   if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false){
     header("location: listings.php") ;
@@ -71,21 +72,27 @@
       $param_listprice = $_POST["listing_price"] ;
       $param_author = $_SESSION["username"] ;
       $param_id = uniqid("", true) ;
-  
-      $sql = "UPDATE listings SET listing_name=?, listing_descript=?, price=? WHERE id=?";
-  
-      if($stmt = mysqli_prepare($db, $sql)){
-        mysqli_stmt_bind_param($stmt, "ssis", $param_listname, $param_listdescript, $param_listprice, $list_id) ;
-  
-        if(mysqli_stmt_execute($stmt)){
-          header("location: listings.php") ;
-        } else{
-          echo "idk, it didn't work" ;
-        }
+
+      if(empty($param_listname) || empty($param_listdescript) || empty($param_listprice)){
+        $form_error = "Form fields cannot be left blank" ;
       }
   
-      mysqli_stmt_close($stmt);
-      mysqli_close($db);
+      if(empty($form_error)){
+        $sql = "UPDATE listings SET listing_name=?, listing_descript=?, price=? WHERE id=?";
+    
+        if($stmt = mysqli_prepare($db, $sql)){
+          mysqli_stmt_bind_param($stmt, "ssis", $param_listname, $param_listdescript, $param_listprice, $list_id) ;
+    
+          if(mysqli_stmt_execute($stmt)){
+            header("location: listings.php") ;
+          } else{
+            echo "idk, it didn't work" ;
+          }
+        }
+        
+        mysqli_stmt_close($stmt);
+        mysqli_close($db);
+      }
     }
   }
 ?>
@@ -129,7 +136,7 @@
         <div>
           <label for="listing_name">Listing name</label>
           <br>
-          <input type="text" placeholder="Listing name" name="listing_name" maxlength="32" value="<?php echo $result_name ; ?>" required>
+          <input type="text" placeholder="Listing name" name="listing_name" maxlength="32" value="<?php echo $result_name ; ?>">
         </div>
 
         <br>
@@ -137,7 +144,7 @@
         <div>
           <label for="listing_desc">Listing description</label>
           <br>
-          <textarea placeholder="Listing description" name="listing_desc" style="resize: none" maxlength="256" required><?php echo $result_descript ; ?></textarea>
+          <textarea placeholder="Listing description" name="listing_desc" style="resize: none" maxlength="256"><?php echo $result_descript ; ?></textarea>
         </div>
 
         <br>
@@ -145,11 +152,12 @@
         <div>
           <label for="listing_price">Listing price</label>
           <br>
-          <input type="number" placeholder="Listing price" name="listing_price" max="2048" value="<?php echo $result_price ; ?>" required>
+          <input type="number" placeholder="Listing price" name="listing_price" max="2048" value="<?php echo $result_price ; ?>">
         </div>
 
         <br>
 
+        <span style="color:red"><?php echo $form_error ; ?></span>
         <button type="submit" name="save">Save changes</button>
         <br>
         <br>
