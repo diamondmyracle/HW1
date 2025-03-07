@@ -52,7 +52,6 @@
   mysqli_stmt_close($stmt);
 
   if($_SERVER["REQUEST_METHOD"] == "POST"){
-
     if(isset($_POST["delete"])){
       $sql = "DELETE FROM listings WHERE id = ?" ;
 
@@ -60,7 +59,7 @@
         mysqli_stmt_bind_param($stmt, "s", $list_id) ;
 
         if(mysqli_stmt_execute($stmt)){
-          header("location: index.php") ;
+          header("location: listings.php") ;
           exit ;
         } 
       }
@@ -73,13 +72,13 @@
       $param_author = $_SESSION["username"] ;
       $param_id = uniqid("", true) ;
   
-      $sql = "INSERT INTO listings (id, username, listing_name, listing_descript, price) VALUES (?, ?, ?, ?, ?)";
+      $sql = "UPDATE listings SET listing_name=?, listing_descript=?, price=? WHERE id=?";
   
       if($stmt = mysqli_prepare($db, $sql)){
-        mysqli_stmt_bind_param($stmt, "ssssi", $param_id, $param_author, $param_listname, $param_listdescript, $param_listprice) ;
+        mysqli_stmt_bind_param($stmt, "ssis", $param_listname, $param_listdescript, $param_listprice, $list_id) ;
   
         if(mysqli_stmt_execute($stmt)){
-          header("location: index.php") ;
+          header("location: listings.php") ;
         } else{
           echo "idk, it didn't work" ;
         }
@@ -122,7 +121,7 @@
   </div>
    
   <div id="site-content" class="site-content">
-    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ; ?>?id=<?php echo htmlspecialchars($_GET["id"]) ; ?>" method="post">
       <div id="editbox" class="editbox">
         <h1>Edit listing</h1>
         <p>Edit the listing for your Minecraft house</p>
