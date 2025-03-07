@@ -64,17 +64,17 @@
 
 <body>
     <div class="navbar">
-            <a href="index.php">Home</a>
-            <a class="active" href="listings.php">Listing</a>
-            <a href="index.php#faq">FAQ</a>
-      
-            <?php if (!empty($username)): ?>
-                 <a href="logout.php">Logout (<?php echo htmlspecialchars($username); ?>)</a>
-            <?php else: ?>
-                    <a href="login.php">Login</a>
-                    <a href="signup.php">Signup</a>
-            <?php endif; ?>
-        </div>
+    <a href="index.php">Home</a>
+    <a class="active" href="listings.php">Listing</a>
+    <a href="index.php#faq">FAQ</a>
+
+    <?php if (isset($_SESSION['username'])): ?>
+        <a href="logout.php">Logout (<?php echo htmlspecialchars($_SESSION['username']); ?>)</a>
+    <?php else: ?>
+        <a href="login.php">Login</a>
+        <a href="signup.php">Signup</a>
+    <?php endif; ?>
+    </div>
     
   <div id="site-content" class="site-content">
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
