@@ -53,16 +53,37 @@ Austin:
 
 Link to InfinityFree: https://diamondrealestate.infy.uk/index.php
 - ^^link to the active website!!
-SQL queries necessary:
 
-CREATE TABLE `app-db`.`users` (`username` VARCHAR(255) NOT NULL , `password` VARCHAR(255) NOT NULL ) ENGINE = InnoDB;
-ALTER TABLE `users` ADD PRIMARY KEY(`username`);
-ALTER TABLE `users` ADD UNIQUE(`username`);
-CREATE TABLE `app-db`.`listings` (`id` VARCHAR(23) NOT NULL , `username` VARCHAR(255) NOT NULL , `listing_name` VARCHAR(255) NOT NULL , `listing_descript` VARCHAR(255) NOT NULL , `price` INT(11) NOT NULL ) ENGINE = InnoDB;
-ALTER TABLE `listings` ADD PRIMARY KEY(`id`);
-ALTER TABLE `listings` ADD UNIQUE(`id`);
-ALTER TABLE `listings` ADD `image` LONGBLOB NULL DEFAULT NULL AFTER `price`;
+## 1. Install and Configure XXAMP
+Install XAMPP from here: [https://sourceforge.net/projects/xampp/files/XAMPP%20Mac%20OSX/8.0.2/](https://sourceforge.net/projects/xampp/files/XAMPP%20Mac%20OSX/8.0.2/). After installation, locate the `xampp` folder in your Applications. Open the `xamppfiles` folder and run `manager-osx`. Start MySQL Database and Apache Web Server under the Manage Servers tab.
 
+## 2. Set up SQL Database
+
+**Create `users` Table:**
+```sql
+CREATE TABLE `app-db`.`users` (
+    `username` VARCHAR(255) NOT NULL,
+    `password` VARCHAR(255) NOT NULL,
+    PRIMARY KEY (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+```
+
+**Create `listings` Table:**
+```sql
+CREATE TABLE `app-db`.`listings` (
+    `id` VARCHAR(23) NOT NULL,
+    `username` VARCHAR(255) NOT NULL,
+    `listing_name` VARCHAR(255) NOT NULL,
+    `listing_descript` VARCHAR(255) NOT NULL,
+    `price` INT(11) NOT NULL,
+    `image` LONGBLOB DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    INDEX username_idx (`username`),
+    FOREIGN KEY (`username`) REFERENCES users(`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```
+**Foreign Key Relationship:**  
+The column `username` in `listings` references the `username` in the `users` table.
 
 
 Pic of our local development environment!!
