@@ -59,6 +59,11 @@ Install XAMPP from here: [https://sourceforge.net/projects/xampp/files/XAMPP%20M
 
 ## 2. Set up SQL Database
 
+**Create `app-db` Database:**
+```sql
+    CREATE DATABASE `app-db`;
+```
+
 **Create `users` Table:**
 ```sql
 CREATE TABLE `app-db`.`users` (
