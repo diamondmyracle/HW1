@@ -41,7 +41,7 @@ equal contribution
 
 
 
-#HW2
+## HW2
 
 Lauren:
 <img width="1440" alt="Screenshot 2025-03-01 at 5 02 58 PM" src="https://github.com/user-attachments/assets/b82177bf-b6fa-477e-8330-8321de4978bb" />
@@ -131,4 +131,4 @@ In general we got help from ChatGPT for:
 - help with implementing the while loop for listings.php
 - some help with running SQL queries (in the beginning when we were more unfamiliar with them) 
 
-
+## HW3 - Frontend
