@@ -8,7 +8,10 @@ define('DBNAME', 'app-db'); // Database name
 $db = mysqli_connect(DBSERVER, DBUSERNAME, DBPASSWORD, DBNAME);
  
 // Check db connection
-if($db === false){
-    die("Error: connection error. " . mysqli_connect_error());
+if (!$db) {
+    die(json_encode([
+        "success" => false,
+        "message" => "Database connection failed: " . mysqli_connect_error()
+    ]));
 }
 ?>
