@@ -1,44 +1,64 @@
 <?php
-session_start();
+header("Content-Type: application/json");
 require_once 'config.php';
 
-$error = "";  // Store error message to show above the form
+session_start();
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = trim($_POST['username']);
-    $password = trim($_POST['psw']);
-    $passwordRepeat = trim($_POST['psw-repeat']);
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Headers: Content-Type");
 
-    if (empty($username) || empty($password) || empty($passwordRepeat)) {
-        $error = "Please fill out all fields.";
-    } elseif (strlen($password) < 10) {
-        $error = "Password must be at least 10 characters long.";
-    } elseif ($password !== $passwordRepeat) {
-        $error = "Passwords do not match.";
-    } else {
-        $stmt = $db->prepare("SELECT username FROM users WHERE username = ?");
-        $stmt->bind_param("s", $username);
-        $stmt->execute();
-        $stmt->store_result();
-        if ($stmt->num_rows > 0) {
-            $error = "Username is already taken. Please choose a different one.";
-        } else {
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-            $stmt = $db->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
-            $stmt->bind_param("ss", $username, $hashedPassword);
-            if ($stmt->execute()) {
-                $_SESSION['loggedin'] = true;
-                $_SESSION['username'] = $username;
-                header("Location: index.php");
-                exit;
-            } else {
-                $error = "Database error: " . $stmt->error;
-            }
-        }
-        $stmt->close();
-    }
-    $db->close();
+$response = ["success" => false, "message" => ""];
+
+if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+    $response["message"] = "Invalid request method.";
+    echo json_encode($response);
+    exit;
 }
+
+//if ($_SERVER["REQUEST_METHOD"] == "POST") {
+$data = json_decode(file_get_contents("php://input"), true);
+$username = trim($data['username'] ?? '');
+$password = trim($data['password'] ?? '');
+$passwordRepeat = trim($data['passwordRepeat'] ?? '');
+
+if (empty($username) || empty($password) || empty($passwordRepeat)) {
+    $response["message"] = "Please fill out all fields.";
+
+} elseif (strlen($password) < 10) {
+    $response["message"] = "Password must be at least 10 characters long.";
+
+} elseif ($password !== $passwordRepeat) {
+    $response["message"] = "Passwords do not match.";
+
+} else {
+    $stmt = $db->prepare("SELECT username FROM users WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $stmt->store_result();
+
+    if ($stmt->num_rows > 0) {
+        $response["message"] = "Username is already taken. Please choose a different one.";
+
+    } else {
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        $stmt = $db->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
+        $stmt->bind_param("ss", $username, $hashedPassword);
+
+        if ($stmt->execute()) {
+            $_SESSION['loggedin'] = true;
+            $_SESSION['username'] = $username;
+            //added code
+            $response["success"] = true;
+            $response["message"] = "Account created and user logged in.";
+        } else {
+            $response["message"] = "Database error: " . $stmt->error;
+        }
+    }
+    $stmt->close();
+}
+$db->close();
+echo json_encode($response);
 ?>
 <!DOCTYPE html>
 <html lang="en">
