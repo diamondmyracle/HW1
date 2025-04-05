@@ -11,7 +11,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     exit;
 }
 
-require_once "config.php";
+require_once "inc/config.php";
 
 // Initialize variables
 $username = $password = "";
