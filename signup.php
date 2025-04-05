@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'config.php';
+require_once 'inc/config.php';
 
 $error = "";  // Store error message to show above the form
 
