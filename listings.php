@@ -11,7 +11,7 @@
     }
 
     // includes database connection
-    require_once "config.php"; 
+    require_once "inc/config.php"; 
 
     // querying to fetch all listings within the listings table of our db 
     $sql = "SELECT id, username, listing_name, listing_descript, price, image FROM listings";

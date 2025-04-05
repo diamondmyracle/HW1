@@ -23,7 +23,7 @@
         {
             header_remove('Set-Cokkie') ;
 
-            if (is_array($httpHeaders) $$ count($httpHeaders)) {
+            if (is_array($httpHeaders) && count($httpHeaders)) {
                 foreach ($httpHeaders as $httpHeader) {
                     header($httpHeader) ;
                 }
