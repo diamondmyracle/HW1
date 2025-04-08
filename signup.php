@@ -97,7 +97,7 @@ require_once 'inc/config.php';
 
             <p>Create an account here!</p>
 
-            <form method="POST" action="signup.php">
+            <form method="POST" action="signup.php/user/createUser">
                 <div>
                     <label for="username"><b>Username</b></label>
                     <br>
