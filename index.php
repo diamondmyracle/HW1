@@ -1,24 +1,37 @@
 <!--HW1: Diamond, Lauren, Austin 
 Index file for the landing page-->
 <?php
-    session_start();
-    if(isset($_SESSION['username'])){
+     session_start();
+     if(isset($_SESSION['username'])) {
         $username = $_SESSION['username'];
-    }
-    else{
-        $username = "";
+    } else {
+        $username = '';
     }
 
     require __DIR__ . "/inc/bootstrap.php";
+    
     $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-    $uri = explode( '/', $uri );
-    if ((isset($uri[2]) && $uri[2] != 'user') || !isset($uri[3])) {
-        header("HTTP/1.1 404 Not Found");
-    } else {
-    require PROJECT_ROOT_PATH . "/Controller/Api/UserController.php";
-    $objFeedController = new UserController();
-    $strMethodName = $uri[3] . 'Action';
-    $objFeedController->{$strMethodName}();
+    $uriParts = explode('/', trim($uri, '/'));
+    
+    // Check if it's an API call (e.g., /index.php/user/list or /index.php/listing/create)
+    if (isset($uriParts[1]) && in_array($uriParts[1], ['user', 'listing']) && isset($uriParts[2])) {
+        $controllerName = ucfirst($uriParts[1]) . "Controller";
+        $controllerFile = PROJECT_ROOT_PATH . "/{$controllerName}.php";
+    
+        if (file_exists($controllerFile)) {
+            require_once $controllerFile;
+            $controller = new $controllerName();
+    
+            $method = $uriParts[2] . 'Action';
+            if (method_exists($controller, $method)) {
+                $controller->{$method}();
+                exit; // Stop further execution so HTML doesn't show up in Postman
+            } else {
+                header("HTTP/1.1 404 Not Found");
+                echo json_encode(["error" => "Method not found"]);
+                exit;
+            }
+        }
     }
 ?>
 
