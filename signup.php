@@ -18,7 +18,7 @@ require_once 'inc/config.php';
                 exit();
             }
 
-            require PROJECT_ROOT_PATH . "/Controllers/Api/UserController.php" ;
+            require PROJECT_ROOT_PATH . "/Controller/Api/UserController.php" ;
             $objFeedController = new UserController() ;
             $strMethodName = $uri[3] ;
 
