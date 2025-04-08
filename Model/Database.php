@@ -26,6 +26,20 @@ class Database
         }
         return false;
     }
+
+    public function insert($query = "" , $params = [])
+    {
+        try {
+            $stmt = $this->executeStatement( $query , $params ) ;
+            $result = $stmt->get_result() ;
+            $stmt->close() ;
+            return $result ;
+        } catch(Exception $e) {
+            throw New Exception( $e->getMessage() ) ;
+        }
+        return false ;
+    }
+
     private function executeStatement($query = "" , $params = [])
     {
         try {
@@ -34,7 +48,21 @@ class Database
                 throw New Exception("Unable to do prepared statement: " . $query);
             }
             if( $params ) {
-                $stmt->bind_param($params[0], $params[1]);
+                $numParams = count($params) ;
+                switch ($numParams) {
+                    case (2):
+                        $stmt->bind_param($params[0], $params[1]) ;
+                        break ;
+                    case (3):
+                        $stmt->bind_param($params[0], $params[1], $params[2]) ;
+                        break ;
+                    case (4):
+                        $stmt->bind_param($params[0], $params[1], $params[2], $params[3]) ;
+                        break ;
+                    case (5):
+                        $stmt->bind_param($params[0], $params[1], $params[2], $params[3], $params[4]) ;
+                        break ;
+                }
             }
             $stmt->execute();
             return $stmt;
