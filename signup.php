@@ -2,43 +2,67 @@
 session_start();
 require_once 'inc/config.php';
 
-$error = "";  // Store error message to show above the form
+ $error = "";  // Store error message to show above the form
+    $username = "" ;
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = trim($_POST['username']);
-    $password = trim($_POST['psw']);
-    $passwordRepeat = trim($_POST['psw-repeat']);
-
-    if (empty($username) || empty($password) || empty($passwordRepeat)) {
-        $error = "Please fill out all fields.";
-    } elseif (strlen($password) < 10) {
-        $error = "Password must be at least 10 characters long.";
-    } elseif ($password !== $passwordRepeat) {
-        $error = "Passwords do not match.";
+    if (isset($_SESSION['validationError'])) {
+        $error = $_SESSION['validationError'] ;
+        unset($_SESSION['validationError']) ;
     } else {
-        $stmt = $db->prepare("SELECT username FROM users WHERE username = ?");
-        $stmt->bind_param("s", $username);
-        $stmt->execute();
-        $stmt->store_result();
-        if ($stmt->num_rows > 0) {
-            $error = "Username is already taken. Please choose a different one.";
-        } else {
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-            $stmt = $db->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
-            $stmt->bind_param("ss", $username, $hashedPassword);
-            if ($stmt->execute()) {
-                $_SESSION['loggedin'] = true;
-                $_SESSION['username'] = $username;
-                header("Location: index.php");
-                exit;
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            require __DIR__ . "/inc/bootstrap.php" ;
+            $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ;
+            $uri = explode('/', $uri) ;
+            if ((isset($uri[2]) && $uri[2] != 'user') || ($uri[3] != 'createUser')) {
+                header("HTTP/1.1 404 Not Found");
+                exit();
+            }
+
+            require PROJECT_ROOT_PATH . "/Controllers/Api/UserController.php" ;
+            $objFeedController = new UserController() ;
+            $strMethodName = $uri[3] ;
+
+            $username = trim($_POST['username']);
+            $password = trim($_POST['psw']);
+            $passwordRepeat = trim($_POST['psw-repeat']);
+
+            if (empty($username) || empty($password) || empty($passwordRepeat)) {
+                $error = "Please fill out all fields.";
+                $_SESSION['validationError'] = $error ;
+                header("Location: /signup.php") ;
+                exit ;
+            } elseif (strlen($password) < 10) {
+                $error = "Password must be at least 10 characters long.";
+                $_SESSION['validationError'] = $error ;
+                header("Location: /signup.php") ;
+                exit ;
+            } elseif ($password !== $passwordRepeat) {
+                $error = "Passwords do not match.";
+                $_SESSION['validationError'] = $error ;
+                header("Location: /signup.php") ;
+                exit ;
             } else {
-                $error = "Database error: " . $stmt->error;
+                $result = $objFeedController->userExists() ;
+                if (count(json_decode($result)) > 0) {
+                    $error = "Username is already taken. Please choose a different one." ;
+                    $_SESSION['validationError'] = $error ;
+                    header("Location: /signup.php") ;
+                    exit ;
+                } else {
+                    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+                    $result = $objFeedController->{$strMethodName}() ;
+                    if ($result) {
+                        $_SESSION['loggedin'] = true;
+                        $_SESSION['username'] = $username;
+                        header("Location: /index.php");
+                        exit;
+                    } else {
+                        $error = "Database error: " . $result ;
+                    }
+                }
             }
         }
-        $stmt->close();
     }
-    $db->close();
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
