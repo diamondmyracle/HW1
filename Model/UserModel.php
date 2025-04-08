@@ -6,5 +6,15 @@ class UserModel extends Database
     {
         return $this->select("SELECT * FROM users ORDER BY username ASC LIMIT ?", ["i", $limit]);
     }
+
+    public function selectByUsername($username)
+    {
+        return $this->select("SELECT username FROM users WHERE username = ?", ["s", $username]) ;
+    }
+
+    public function insertUser($username, $hashedPassword)
+    {
+        return $this->insert("INSERT INTO users (username, password) VALUES (?, ?)", ["ss", $username, $hashedPassword]) ;
+    }
 }
 ?>
