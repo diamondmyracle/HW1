@@ -25,5 +25,27 @@ class ListingModel extends Database
     );
 }
 
+    public function updateListing($data)
+    {
+        return $this->update(
+            "UPDATE listings SET listing_name = ?, listing_descript = ?, price = ? WHERE id = ?",
+            ["ssis", $data['listing_name'], $data['listing_descript'], $data['price'], $data['id']]
+        );
+    }
+
+    public function deleteListing($data)
+    {
+        if (!isset($data['id'])) {
+            throw new InvalidArgumentException("Listing ID is required");
+        }
+
+        return $this->delete(
+            "DELETE FROM listings WHERE id = ?",
+            ["s", $data["id"]]
+        );
+    }
+
+
+    
 }
 ?>
