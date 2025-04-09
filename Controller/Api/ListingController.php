@@ -92,5 +92,85 @@ class ListingController extends BaseController
     }
 }
 
+    public function updateAction()
+    {
+        $requestMethod = $_SERVER["REQUEST_METHOD"];
+    
+        if (strtoupper($requestMethod) == 'PUT') {
+            $data = json_decode(file_get_contents('php://input'), true);
+            
+            try {
+                if (!isset($data['id'])) {
+                    throw new Exception("Listing ID is required for update");
+                }
+    
+                $listingModel = new ListingModel();
+                $affectedRows = $listingModel->updateListing($data);
+    
+                if ($affectedRows > 0) {
+                    $this->sendOutput(
+                        json_encode(['success' => true, 'message' => 'Listing updated']),
+                        ['Content-Type: application/json', 'HTTP/1.1 200 OK']
+                    );
+                } else {
+                    $this->sendOutput(
+                        json_encode(['success' => false, 'message' => 'No listing was updated']),
+                        ['Content-Type: application/json', 'HTTP/1.1 404 Not Found']
+                    );
+                }
+            } catch (Exception $e) {
+                $this->sendOutput(
+                    json_encode(['success' => false, 'message' => $e->getMessage()]),
+                    ['Content-Type: application/json', 'HTTP/1.1 500 Internal Server Error']
+                );
+            }
+        } else {
+            $this->sendOutput(
+                json_encode(['success' => false, 'message' => 'Method not allowed']),
+                ['Content-Type: application/json', 'HTTP/1.1 405 Method Not Allowed']
+            );
+        }
+    }
+    
+    public function deleteAction()
+    {
+        $requestMethod = $_SERVER["REQUEST_METHOD"];
+    
+        if (strtoupper($requestMethod) == 'DELETE') {
+            $data = json_decode(file_get_contents('php://input'), true);
+            try {
+                if (!isset($data['id'])) {
+                    throw new Exception("Listing ID is required");
+                }
+    
+                $listingModel = new ListingModel();
+                $affectedRows = $listingModel->deleteListing($data);
+    
+                if ($affectedRows > 0) {
+                    $this->sendOutput(
+                        json_encode(['success' => true, 'message' => 'Listing deleted']),
+                        ['Content-Type: application/json', 'HTTP/1.1 200 OK']
+                    );
+                } else {
+                    $this->sendOutput(
+                        json_encode(['success' => false, 'message' => 'Listing not found']),
+                        ['Content-Type: application/json', 'HTTP/1.1 404 Not Found']
+                    );
+                }
+            } catch (Exception $e) {
+                $this->sendOutput(
+                    json_encode(['success' => false, 'message' => $e->getMessage()]),
+                    ['Content-Type: application/json', 'HTTP/1.1 500 Internal Server Error']
+                );
+            }
+        } else {
+            $this->sendOutput(
+                json_encode(['success' => false, 'message' => 'Method not allowed']),
+                ['Content-Type: application/json', 'HTTP/1.1 405 Method Not Allowed']
+            );
+        }
+    }
+
+    
 }
 ?>

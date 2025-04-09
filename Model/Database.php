@@ -40,6 +40,29 @@ class Database
         return false ;
     }
 
+    public function update($query = "", $params = [])
+    {
+        try {
+            $stmt = $this->executeStatement( $query , $params ) ;
+            $affectedRows = $stmt->affected_rows;
+            $stmt->close() ;
+            return $affectedRows ;
+        } catch(Exception $e) {
+            throw new Exception( $e->getMessage() ) ;
+        }   
+    }
+
+    public function delete($query = "", $params = []) {
+        try {
+            $stmt = $this->executeStatement($query, $params);
+            $affectedRows = $stmt->affected_rows;
+            $stmt->close();
+            return $affectedRows;
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+    
     private function executeStatement($query = "" , $params = [])
     {
         try {
@@ -61,6 +84,12 @@ class Database
                         break ;
                     case (5):
                         $stmt->bind_param($params[0], $params[1], $params[2], $params[3], $params[4]) ;
+                        break ;
+                    case (6):
+                        $stmt->bind_param($params[0], $params[1], $params[2], $params[3], $params[4], $params[5]) ;
+                        break ;
+                    case (7):
+                        $stmt->bind_param($params[0], $params[1], $params[2], $params[3], $params[4], $params[5], $params[6]) ;
                         break ;
                 }
             }
