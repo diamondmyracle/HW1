@@ -22,9 +22,12 @@ require_once 'inc/config.php';
             $objFeedController = new UserController() ;
             $strMethodName = $uri[3] ;
 
-            $username = trim($_POST['username']);
-            $password = trim($_POST['psw']);
-            $passwordRepeat = trim($_POST['psw-repeat']);
+            $json = file_get_contents("php://input") ;
+            $data = json_decode($json, true) ;
+
+            $username = $data["username"] ?? "" ;   //trim($_POST['username']);
+            $password = $data["psw"] ?? "" ;        //trim($_POST['psw']);
+            $passwordRepeat = $data["psw-repeat"] ?? "" ; //trim($_POST['psw-repeat']);
 
             if (empty($username) || empty($password) || empty($passwordRepeat)) {
                 $error = "Please fill out all fields.";
@@ -49,12 +52,12 @@ require_once 'inc/config.php';
                     header("Location: /signup.php") ;
                     exit ;
                 } else {
-                    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+                    //$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
                     /* $result = */$objFeedController->{$strMethodName}() ;
                     //if ($result) {
                         $_SESSION['loggedin'] = true;
                         $_SESSION['username'] = $username;
-                        header("Location: /index.php");
+                        //header("Location: /index.php");
                         exit;
                     //} else {
                     //    $error = "Database error: " . $result ;
@@ -97,7 +100,7 @@ require_once 'inc/config.php';
 
             <p>Create an account here!</p>
 
-            <form method="POST" action="signup.php/user/createUser">
+            <form method="POST" action="signup.php/user/createUser" id="signupForm">
                 <div>
                     <label for="username"><b>Username</b></label>
                     <br>
@@ -138,3 +141,35 @@ require_once 'inc/config.php';
     </div>
 </body>
 </html>
+
+<script>
+    document.getElementById("signupForm").addEventListener("submit", function(event) {
+        event.preventDefault() ;
+
+        const form = event.target ;
+        const formData = new FormData(form) ;
+
+        const data = {} ;
+        formData.forEach((value, key) => {
+            data[key] = value ;
+        }) ;
+
+        fetch("signup.php/user/createUser", {
+            method: "POST",
+            header: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(json => {
+            if (json.status === "success") {
+                window.location.href = "/index.php" ;
+            } else {
+                alert(json.message || "Signup failed") ;
+            }
+        })
+        .catch(err => console.error("Fetch error:", err))
+    }) ;
+</script>

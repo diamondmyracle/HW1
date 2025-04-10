@@ -46,7 +46,11 @@ public function userExists()
         try {
             $userModel = new UserModel() ;
 
-            $username = trim($_POST['username']);
+            $json = file_get_contents("php://input") ;
+            $data = json_decode($json, true) ;
+
+            $username = $data["username"] ;
+
             $result = $userModel->selectByUsername($username) ;
             $responseData = json_encode($result) ;
             return $responseData ;
@@ -76,34 +80,40 @@ public function userExists()
             try {
                 $userModel = new UserModel() ;
 
-                $username = trim($_POST['username']);
-                $password = trim($_POST['psw']);
+                $json = file_get_contents("php://input") ;
+                $data = json_decode($json, true) ;
+
+                $username = $data["username"] ;
+                $password = $data["psw"] ;
 
                 $hashedPassword = password_hash($password, PASSWORD_DEFAULT) ;
                 $result = $userModel->insertUser($username, $hashedPassword) ;
                 $responseData = json_encode($result) ;
-                //return $responseData ;
             } catch (Error $e) {
                 $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
                 $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
-                //return $strErrorDesc ;
             }
         } else {
             $strErrorDesc = 'Method not supported';
             $strErrorHeader = 'HTTP/1.1 422 Unprocessable Entity';
         }
-        /* // send output 
+        // send output 
         if (!$strErrorDesc) {
             $this->sendOutput(
-                "User added.",
+                json_encode([
+                    "status" => "success",
+                    "message" => "User has been created."
+                ]),
                 array('Content-Type: application/json', 'HTTP/1.1 200 OK')
             );
         } else {
-            $this->sendOutput(json_encode(array('error' => $strErrorDesc)), 
+            $this->sendOutput(json_encode([
+                "status" => "error",
+            ]), json_encode(array('error' => $strErrorDesc)), 
                 array('Content-Type: application/json', $strErrorHeader)
             );
         }
-        */
+        
     }
     
 }
