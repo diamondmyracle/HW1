@@ -16,7 +16,7 @@ Index file for the landing page-->
     // Check if it's an API call (e.g., /index.php/user/list or /index.php/listing/create)
     if (isset($uriParts[1]) && in_array($uriParts[1], ['user', 'listing']) && isset($uriParts[2])) {
         $controllerName = ucfirst($uriParts[1]) . "Controller";
-        $controllerFile = PROJECT_ROOT_PATH . "/{$controllerName}.php";
+        $controllerFile = PROJECT_ROOT_PATH . "/Controller/Api/{$controllerName}.php";
     
         if (file_exists($controllerFile)) {
             require_once $controllerFile;
