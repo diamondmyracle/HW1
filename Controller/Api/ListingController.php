@@ -29,7 +29,7 @@ class ListingController extends BaseController
             $strErrorHeader = 'HTTP/1.1 422 Unprocessable Entity';
         }
 
-        // send output
+        /* // send output
         if (!$strErrorDesc) {
             $this->sendOutput(
                 $responseData,
@@ -41,6 +41,7 @@ class ListingController extends BaseController
                 ['Content-Type: application/json', $strErrorHeader]
             );
         }
+        */
     }
 
     public function createAction()
@@ -54,6 +55,7 @@ class ListingController extends BaseController
             $listingModel = new ListingModel();
             $result = $listingModel->createListing($data);
 
+            /*
             if ($result) {
                 $this->sendOutput(
                     json_encode([
@@ -72,7 +74,9 @@ class ListingController extends BaseController
                     ['Content-Type: application/json', 'HTTP/1.1 500 Internal Server Error']
                 );
             }
+                */
         } catch (Exception $e) {
+            /*
             $this->sendOutput(
                 json_encode([
                     'success' => false,
@@ -80,8 +84,10 @@ class ListingController extends BaseController
                 ]),
                 ['Content-Type: application/json', 'HTTP/1.1 500 Internal Server Error']
             );
+            */
         }
     } else {
+        /*
         $this->sendOutput(
             json_encode([
                 'success' => false,
@@ -89,6 +95,7 @@ class ListingController extends BaseController
             ]),
             ['Content-Type: application/json', 'HTTP/1.1 405 Method Not Allowed']
         );
+        */
     }
 }
 
@@ -106,7 +113,7 @@ class ListingController extends BaseController
     
                 $listingModel = new ListingModel();
                 $affectedRows = $listingModel->updateListing($data);
-    
+                /*
                 if ($affectedRows > 0) {
                     $this->sendOutput(
                         json_encode(['success' => true, 'message' => 'Listing updated']),
@@ -118,17 +125,22 @@ class ListingController extends BaseController
                         ['Content-Type: application/json', 'HTTP/1.1 404 Not Found']
                     );
                 }
+                */
             } catch (Exception $e) {
+                /*
                 $this->sendOutput(
                     json_encode(['success' => false, 'message' => $e->getMessage()]),
                     ['Content-Type: application/json', 'HTTP/1.1 500 Internal Server Error']
                 );
+                */
             }
         } else {
+            /*
             $this->sendOutput(
                 json_encode(['success' => false, 'message' => 'Method not allowed']),
                 ['Content-Type: application/json', 'HTTP/1.1 405 Method Not Allowed']
             );
+            */
         }
     }
     
@@ -145,7 +157,7 @@ class ListingController extends BaseController
     
                 $listingModel = new ListingModel();
                 $affectedRows = $listingModel->deleteListing($data);
-    
+                /*
                 if ($affectedRows > 0) {
                     $this->sendOutput(
                         json_encode(['success' => true, 'message' => 'Listing deleted']),
@@ -157,17 +169,22 @@ class ListingController extends BaseController
                         ['Content-Type: application/json', 'HTTP/1.1 404 Not Found']
                     );
                 }
+                */
             } catch (Exception $e) {
+                /*
                 $this->sendOutput(
                     json_encode(['success' => false, 'message' => $e->getMessage()]),
                     ['Content-Type: application/json', 'HTTP/1.1 500 Internal Server Error']
                 );
+                */
             }
         } else {
+            /*
             $this->sendOutput(
                 json_encode(['success' => false, 'message' => 'Method not allowed']),
                 ['Content-Type: application/json', 'HTTP/1.1 405 Method Not Allowed']
             );
+            */
         }
     }
 
