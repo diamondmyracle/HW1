@@ -26,7 +26,7 @@ class UserController extends BaseController
             $strErrorDesc = 'Method not supported';
             $strErrorHeader = 'HTTP/1.1 422 Unprocessable Entity';
         }
-        // send output 
+        /* // send output 
         if (!$strErrorDesc) {
             $this->sendOutput(
                 $responseData,
@@ -37,6 +37,7 @@ class UserController extends BaseController
                 array('Content-Type: application/json', $strErrorHeader)
             );
         }
+        */
     }
 
 public function userExists()
@@ -53,8 +54,7 @@ public function userExists()
             $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
             $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
         }
-// /*
-        // send output 
+        /* // send output 
         if (!$strErrorDesc) {
             $this->sendOutput(
                 $responseData,
@@ -65,7 +65,7 @@ public function userExists()
                 array('Content-Type: application/json', $strErrorHeader)
             );
         }
-            // */
+        */
     }
 
     public function createUser()
@@ -82,19 +82,17 @@ public function userExists()
                 $hashedPassword = password_hash($password, PASSWORD_DEFAULT) ;
                 $result = $userModel->insertUser($username, $hashedPassword) ;
                 $responseData = json_encode($result) ;
-                return $responseData ;
+                //return $responseData ;
             } catch (Error $e) {
                 $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
                 $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
-                return $strErrorDesc ;
+                //return $strErrorDesc ;
             }
-        } 
-        // /*
-        else {
+        } else {
             $strErrorDesc = 'Method not supported';
             $strErrorHeader = 'HTTP/1.1 422 Unprocessable Entity';
         }
-        // send output 
+        /* // send output 
         if (!$strErrorDesc) {
             $this->sendOutput(
                 "User added.",
@@ -105,7 +103,7 @@ public function userExists()
                 array('Content-Type: application/json', $strErrorHeader)
             );
         }
-           // */
+        */
     }
     
 }

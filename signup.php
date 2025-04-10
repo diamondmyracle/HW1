@@ -50,15 +50,15 @@ require_once 'inc/config.php';
                     exit ;
                 } else {
                     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-                    $result = $objFeedController->{$strMethodName}() ;
-                    if ($result) {
+                    /* $result = */$objFeedController->{$strMethodName}() ;
+                    //if ($result) {
                         $_SESSION['loggedin'] = true;
                         $_SESSION['username'] = $username;
                         header("Location: /index.php");
                         exit;
-                    } else {
-                        $error = "Database error: " . $result ;
-                    }
+                    //} else {
+                    //    $error = "Database error: " . $result ;
+                    //}
                 }
             }
         }
