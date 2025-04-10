@@ -1,64 +1,17 @@
-<?php 
-require_once "inc/config.php";
-require_once "image_upload.php";
-
+<?php
 session_start();
+require_once "inc/config.php";
 
-if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true) {
-    header("location: listings.php");
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$uriParts = explode('/', trim($uri, '/'));
+
+if (isset($uriParts[1]) && $uriParts[1] === 'listing' && isset($uriParts[2]) && $uriParts[2] === 'create') {
+    require __DIR__ . "/inc/bootstrap.php";
+    require PROJECT_ROOT_PATH . "/Controller/Api/ListingController.php";
+
+    $controller = new ListingController();
+    $controller->createAction();
     exit;
-}
-
-$param_listname = $param_listdescript = $param_listprice = $param_author = $param_id = $imageFilename = "";
-$form_error = "";
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $param_listname = $_POST["listing_name"];
-    $param_listdescript = $_POST["listing_desc"];
-    $param_listprice = $_POST["listing_price"];
-    $param_author = $_SESSION["username"];
-    $param_id = uniqid("", true);
-
-    if (empty($param_listname) || empty($param_listdescript) || empty($param_listprice)) {
-        $form_error = "Form fields cannot be left blank";
-    }
-
-    if (empty($form_error) && (($param_listprice > 2048) || ($param_listprice < 1))) {
-        $form_error = "Price must be between 1 and 2048";
-    }
-
-    if (empty($form_error)) {
-        // Handle the image upload (image_upload.php should have the handleImageUpload function)
-        $imageFilename = handleImageUpload($param_id, $form_error);
-
-        if (empty($form_error)) {
-            // Proceed with inserting into the database
-            $sql = "INSERT INTO listings (id, username, listing_name, listing_descript, price, image) 
-                    VALUES (?, ?, ?, ?, ?, ?)";
-
-            if ($stmt = mysqli_prepare($db, $sql)) {
-                mysqli_stmt_bind_param($stmt, "ssssss", 
-                    $param_id, 
-                    $param_author, 
-                    $param_listname, 
-                    $param_listdescript, 
-                    $param_listprice, 
-                    $imageFilename
-                );
-
-                if (mysqli_stmt_execute($stmt)) {
-                    header("location: listings.php");
-                    exit;
-                } else {
-                    $form_error = "Database insert failed: " . mysqli_stmt_error($stmt);  // Show actual SQL error
-                }
-                mysqli_stmt_close($stmt);
-            } else {
-                $form_error = "Database prepare failed: " . mysqli_error($db);
-            }
-            mysqli_close($db);
-        }
-    }
 }
 ?>
 
@@ -137,4 +90,53 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 </body>
 </html>
+
+<script>
+    document.getElementById('listingForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const errorEl = document.getElementById('formError');
+    errorEl.textContent = '';
+
+    const imageFile = form.listing_image.files[0];
+
+    if (!imageFile) {
+        errorEl.textContent = 'Please upload an image.';
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = async function () {
+        const base64Image = reader.result;
+
+        const data = {
+            id: Math.random().toString(36).substring(2, 15),
+            username: "<?php echo $_SESSION['username']; ?>",
+            listing_name: form.listing_name.value,
+            listing_descript: form.listing_desc.value,
+            price: form.listing_price.value,
+            image: base64Image
+        };
+
+        const response = await fetch('newlisting.php/listing/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (result.status === "success") {
+            window.location.href = "listings.php";
+        } else {
+            errorEl.textContent = result.message || "Something went wrong.";
+        }
+    };
+
+    reader.readAsDataURL(imageFile);
+});
+</script>
 
