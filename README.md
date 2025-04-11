@@ -85,6 +85,7 @@ CREATE TABLE `app-db`.`listings` (
     PRIMARY KEY (`id`),
     INDEX username_idx (`username`),
     FOREIGN KEY (`username`) REFERENCES users(`username`)
+    ALTER TABLE listings MODIFY id INT NOT NULL AUTO_INCREMENT;
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 **Foreign Key Relationship:**  
