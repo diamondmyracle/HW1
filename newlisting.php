@@ -99,48 +99,44 @@ if (isset($uriParts[1]) && $uriParts[1] === 'listing' && isset($uriParts[2]) && 
         const errorEl = document.getElementById('formError');
         errorEl.textContent = '';
 
-        const imageFile = form.listing_image.files[0];
-
-        if (!imageFile) {
-            errorEl.textContent = 'Please upload an image.';
-            return;
-        }
-
-        const reader = new FileReader();
-        reader.onloadend = async function () {
-            const base64Image = reader.result;
+        try {
+            const formData = new FormData(form);
+            const imageFile = formData.get('listing_image');
+            
+            // Convert image to base64
+            const imageBase64 = await new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(imageFile);
+            });
 
             const data = {
-                username: "<?php echo $_SESSION['username']; ?>",
-                listing_name: form.listing_name.value,
-                listing_descript: form.listing_desc.value,
-                price: form.listing_price.value,
-                image: base64Image
+                listing_name: formData.get('listing_name'),
+                listing_descript: formData.get('listing_desc'),
+                price: formData.get('listing_price'),
+                image: imageBase64
             };
 
-            try {
-                const response = await fetch('newlisting.php/listing/create', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                });
+            const response = await fetch('http://localhost/index.php/listing/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
 
-                const result = await response.json();
+            const result = await response.json();
 
-                if (result.status === "success") {
-                    window.location.href = "listings.php";
-                } else {
-                    errorEl.textContent = result.message || "Something went wrong.";
-                }
-            } catch (error) {
-                errorEl.textContent = "An error occurred while submitting the form.";
-                console.error('Error:', error);
+            if (response.ok) {
+                window.location.href = 'listings.php';
+            } else {
+                errorEl.textContent = result.error || 'An error occurred while submitting the form';
             }
-        };
-
-        reader.readAsDataURL(imageFile);
+        } catch (error) {
+            console.error('Error:', error);
+            errorEl.textContent = 'An error occurred while submitting the form';
+        }
     });
 </script>
 

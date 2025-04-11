@@ -3,128 +3,109 @@
 
   session_start() ;
 
-  $result_name = $result_descript = $result_price = $result_author = $result_id = "" ;
-  $list_id = "" ;
-  $form_error = "" ;
-  
   if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false){
     header("location: listings.php") ;
     exit ;
   }
 
-  if(isset($_GET["id"])){
-    $list_id = $_GET["id"] ;
-  } 
-  else{
+  if(!isset($_GET["id"])){
     header("location: listings.php") ;
     exit ;
   }
 
-  $sql = "SELECT id, username, listing_name, listing_descript, price FROM listings WHERE id = ?" ;
+  $list_id = $_GET["id"] ;
+  $result_name = $result_descript = $result_price = $result_author = $result_id = "" ;
+  $form_error = "" ;
 
-  if(!($stmt = mysqli_prepare($db, $sql))){
-    header("location: listings.php") ;
-    exit ;
-  }
+  // Fetch listing details using REST API with file_get_contents
+  $context = stream_context_create([
+      'http' => [
+          'method' => 'GET',
+          'header' => 'Content-Type: application/json'
+      ]
+  ]);
 
-  mysqli_stmt_bind_param($stmt, "s", $list_id) ;
-  if(!mysqli_stmt_execute($stmt)){
-    header("location: listings.php") ;
-    exit ;
-  } 
-  
-  mysqli_stmt_store_result($stmt) ;
-  if(mysqli_stmt_num_rows($stmt) !== 1){
-    header("location: listings.php") ;
-    exit ;
-  }
-        
-  mysqli_stmt_bind_result($stmt, $result_id, $result_author, $result_name, $result_descript, $result_price) ;
-  if(!mysqli_stmt_fetch($stmt)) {
-    header("location: listings.php") ;
-    exit ;
-  }
-          
-  if($_SESSION["username"] !== $result_author){
-    header("location: listings.php") ;
-    exit ;
+  $response = file_get_contents('http://localhost/index.php/listing/get?id=' . urlencode($list_id), false, $context);
+
+  if ($response === false) {
+    header("location: listings.php");
+    exit;
   }
 
-  mysqli_stmt_close($stmt);
+  $listing = json_decode($response, true);
+  if (!$listing || !isset($listing['id'])) {
+    header("location: listings.php");
+    exit;
+  }
+
+  if ($_SESSION["username"] !== $listing['username']) {
+    header("location: listings.php");
+    exit;
+  }
+
+  $result_id = $listing['id'];
+  $result_author = $listing['username'];
+  $result_name = $listing['listing_name'];
+  $result_descript = $listing['listing_descript'];
+  $result_price = $listing['price'];
 
   if($_SERVER["REQUEST_METHOD"] == "POST"){
     if(isset($_POST["delete"])){
-      try {
-        $response = file_get_contents(
-          'http://localhost/index.php/listing/delete',
-          false,
-          stream_context_create([
-            'http' => [
+      // Handle delete through REST API
+      $context = stream_context_create([
+          'http' => [
               'method' => 'DELETE',
-              'header' => [
-                'Content-Type: application/json',
-                'Authorization: Bearer ' . $_SESSION['username']
-              ],
+              'header' => 'Content-Type: application/json',
               'content' => json_encode(['id' => $list_id])
-            ]
-          ])
-        );
+          ]
+      ]);
 
+      $response = file_get_contents('http://localhost/index.php/listing/delete', false, $context);
+
+      if ($response !== false) {
         $result = json_decode($response, true);
-        if ($result['success']) {
+        if (isset($result['success']) && $result['success']) {
           header("location: listings.php");
           exit;
         }
-      } catch (Exception $e) {
-        $form_error = "Failed to delete listing";
       }
-    }
+      $form_error = "Failed to delete listing";
+    } else {
+      // Handle update through REST API
+      $data = [
+        'id' => $list_id,
+        'listing_name' => $_POST["listing_name"],
+        'listing_descript' => $_POST["listing_desc"],
+        'price' => $_POST["listing_price"]
+      ];
 
-    if(isset($_POST["save"])){
-      $param_listname = $_POST["listing_name"];
-      $param_listdescript = $_POST["listing_desc"];
-      $param_listprice = $_POST["listing_price"];
+      // Debug: Log the request data
+      error_log("Update request data: " . print_r($data, true));
 
-      if(empty($param_listname) || empty($param_listdescript) || empty($param_listprice)){
-        $form_error = "Form fields cannot be left blank";
-      }
+      $context = stream_context_create([
+          'http' => [
+              'method' => 'PUT',
+              'header' => 'Content-Type: application/json',
+              'content' => json_encode($data)
+          ]
+      ]);
 
-      if(empty($form_error) && (($param_listprice > 2048) || ($param_listprice < 1))){
-        $form_error = "Price must be between 1 and 2048";
-      }
-  
-      if(empty($form_error)){
-        try {
-          $response = file_get_contents(
-            'http://localhost/index.php/listing/update',
-            false,
-            stream_context_create([
-              'http' => [
-                'method' => 'PUT',
-                'header' => [
-                  'Content-Type: application/json',
-                  'Authorization: Bearer ' . $_SESSION['username']
-                ],
-                'content' => json_encode([
-                  'id' => $list_id,
-                  'listing_name' => $param_listname,
-                  'listing_descript' => $param_listdescript,
-                  'price' => $param_listprice
-                ])
-              ]
-            ])
-          );
+      $response = file_get_contents('http://localhost/index.php/listing/update', false, $context);
 
-          $result = json_decode($response, true);
-          if ($result['success']) {
-            header("location: listings.php");
-            exit;
-          } else {
-            $form_error = $result['message'] ?? "Failed to update listing";
-          }
-        } catch (Exception $e) {
-          $form_error = "Failed to update listing";
+      // Debug: Log the response
+      error_log("Update response: " . $response);
+
+      if ($response !== false) {
+        $result = json_decode($response, true);
+        if (isset($result['message']) && $result['message'] === 'Listing updated successfully') {
+          header("location: listings.php");
+          exit;
+        } else if (isset($result['error'])) {
+          $form_error = $result['error'];
         }
+      }
+      if (empty($form_error)) {
+        $form_error = "Failed to update listing";
       }
     }
   }
@@ -161,7 +142,7 @@
   </div>
    
   <div id="site-content" class="site-content">
-    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ; ?>?id=<?php echo htmlspecialchars($_GET["id"]) ; ?>" method="post">
+    <form id="editForm" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ; ?>?id=<?php echo htmlspecialchars($_GET["id"]) ; ?>" method="post">
       <div id="editbox" class="editbox">
         <h1>Edit listing</h1>
         <p>Edit the listing for your Minecraft house</p>
@@ -190,12 +171,77 @@
 
         <br>
 
-        <span style="color:red"><?php echo $form_error ; ?></span>
+        <span id="formError" style="color:red"><?php echo $form_error ; ?></span>
         <button type="submit" name="save">Save changes</button>
         <br>
         <br>
-        <button type="submit" id="delete" name="delete">Delete listing</button>
+        <button type="button" id="deleteBtn">Delete listing</button>
       </div>
     </form>
   </div>
+
+<script>
+document.getElementById('editForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const form = e.target;
+    const errorEl = document.getElementById('formError');
+    errorEl.textContent = '';
+
+    const data = {
+        id: '<?php echo $list_id; ?>',
+        listing_name: form.elements['listing_name'].value,
+        listing_descript: form.elements['listing_desc'].value,
+        price: form.elements['listing_price'].value
+    };
+
+    try {
+        const response = await fetch('http://localhost/index.php/listing/update', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            window.location.href = 'listings.php';
+        } else {
+            errorEl.textContent = result.error || 'Failed to update listing';
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        errorEl.textContent = 'An error occurred while updating the listing';
+    }
+});
+
+document.getElementById('deleteBtn').addEventListener('click', async function() {
+    if (confirm('Are you sure you want to delete this listing?')) {
+        try {
+            const response = await fetch('http://localhost/index.php/listing/delete', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({ id: '<?php echo $list_id; ?>' })
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                window.location.href = 'listings.php';
+            } else {
+                document.getElementById('formError').textContent = result.error || 'Failed to delete listing';
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('formError').textContent = 'An error occurred while deleting the listing';
+        }
+    }
+});
+</script>
 </body>
