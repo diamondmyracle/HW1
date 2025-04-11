@@ -31,7 +31,7 @@ class Database
     {
         try {
             $stmt = $this->executeStatement( $query , $params ) ;
-            $result = $stmt->get_result() ;
+            $result = $stmt ;
             $stmt->close() ;
             return $result ;
         } catch(Exception $e) {
