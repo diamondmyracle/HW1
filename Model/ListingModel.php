@@ -42,11 +42,11 @@ class ListingModel extends Database
         );
     }
 
-    public function updateListing($data)
+    public function updateListing($id, $listing_name, $listing_descript, $price)
     {
         return $this->update(
             "UPDATE listings SET listing_name = ?, listing_descript = ?, price = ? WHERE id = ?",
-            ["ssis", $data['listing_name'], $data['listing_descript'], $data['price'], $data['id']]
+            ["ssis", $listing_name, $listing_descript, $price, $id]
         );
     }
 
@@ -62,8 +62,15 @@ class ListingModel extends Database
         );
     }
 
-
-    
+    public function getListingById($id)
+    {
+        $result = $this->select(
+            "SELECT id, username, listing_name, listing_descript, price, image FROM listings WHERE id = ?",
+            ["i", $id]
+        );
+        
+        return $result ? $result[0] : null;
+    }
 }
 ?>
 
