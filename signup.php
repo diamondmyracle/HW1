@@ -5,31 +5,19 @@ session_start();
     $username = "" ;
 
     $reqMethod = $_SERVER["REQUEST_METHOD"] ;
-    if ($reqMethod == "GET") //If the method is GET, then check for user/exist endpoint
-    {
-        require __DIR__ . "/inc/bootstrap.php" ;
-        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ;
-        $uri = explode('/', $uri) ;
-        if (count($uri) > 2)
-        {
-            if ((isset($uri[2]) && $uri[2] != "user") || (isset($uri[3]) && $uri[3] != "exist")) {
-                header("HTTP/1.1 404 Not Found") ;
-                exit() ;
-            }
-    
-            require PROJECT_ROOT_PATH . "/Controller/Api/UserController.php" ;
-            $objFeedController = new UserController() ;
-            $objFeedController->userExists() ;
-            exit() ;
-        }
-    } 
-    elseif ($reqMethod == "POST") //if the method is POST, then check for user/create endpoint
+    if ($reqMethod == "POST") //if the method is POST, then check for user/create endpoint
     {
         require __DIR__ . "/inc/bootstrap.php" ;
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ;
         $uri = explode('/', $uri) ;
         if ((isset($uri[2]) && $uri[2] != "user") || (isset($uri[3]) && $uri[3] != "create")) {
-            header("HTTP/1.1 404 Not Found") ;
+            if ((isset($uri[2]) && $uri[2] != "user") || (isset($uri[3]) && $uri[3] != "exists")) {
+                header("HTTP/1.1 404 Not Found") ;
+                exit() ;
+            }
+            require PROJECT_ROOT_PATH . "/Controller/Api/UserController.php" ;
+            $objFeedController = new UserController() ;
+            $objFeedController->userExists() ;
             exit() ;
         }
 
@@ -141,49 +129,56 @@ session_start();
             return ;
         }
 
-        //Check if the username is taken
-        fetch("signup.php/user/exists", {
-            method: "GET",
-            header: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(json => {
-            if (json.status === "success") {
-                if (json.data.length > 0) {
-                    errorMsgBox.innerText = "Username already taken." ;
-                    return ;                    
-                }
-            } else {
-                alert(json.message || "User GET failed") ;
-                errorMsgBox.innerText = "Database error." ;
-                return ;
-            }
-        })
-        .catch(err => console.error("Fetch error:", err))
+        //Sign up the user with the data
+        signupUser(data) ;
+    }) ;
 
-        //Create the user
-        fetch("signup.php/user/create", {
+    async function signupUser(data) {
+        const errorMsgBox = document.getElementById("error-msg") ;
+
+        //Test to see if the username is taken
+        const exists = await fetch("signup.php/user/exists", {
             method: "POST",
             header: {
                 "Content-Type": "application/json",
                 "Accept": "application/json"
             },
             body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(json => {
-            if (json.status === "success") {
-                //should probably fetch something like login.php/login
-                window.location.href = "/index.php" ;
-                return ;
-            } else {
-                alert(json.message || "Signup failed.") ;
+        }).catch(err => console.error("Fetch error:", err)) ;
+
+        const existsJson = await exists.json() ;
+
+        //Is it taken?
+        if (existsJson.status === "success") {
+            if (existsJson.data.length > 0) {
+                errorMsgBox.innerText = "Username already taken." ;
+                return ;                    
             }
-        })
-        .catch(err => console.error("Fetch error:", err))
-    }) ;
+        } else {
+            alert(existsJson.message || "User GET failed") ;
+            errorMsgBox.innerText = "Database error." ;
+            return ;
+        }
+
+        //Create the user
+        const signup = await fetch("signup.php/user/create", {
+            method: "POST",
+            header: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(data)
+        }).catch(err => console.error("Fetch error:", err)) ;
+
+        const signupJson = await signup.json() ;
+
+        //Was it successful?
+        if (signupJson.status === "success") {
+            //should probably fetch something like login.php/login
+            window.location.href = "/index.php" ;
+            return ;
+        } else {
+            alert(signupJson.message || "Signup failed.") ;
+        }
+    }
 </script>
