@@ -1,5 +1,3 @@
-<!--HW1: Diamond, Lauren, Austin 
-Index file for the landing page-->
 <?php
      session_start();
      if(isset($_SESSION['username'])) {
@@ -34,6 +32,8 @@ Index file for the landing page-->
         }
     }
 ?>
+<!--HW1: Diamond, Lauren, Austin 
+Index file for the landing page-->
 
 <!DOCTYPE html>
 <HTML lang="en">
