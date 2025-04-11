@@ -7,7 +7,7 @@ class UserModel extends Database
         return $this->select("SELECT * FROM users ORDER BY username ASC LIMIT ?", ["i", $limit]);
     }
 
-    public function selectByUsername($username)
+    public function usernameInDatabase($username)
     {
         return $this->select("SELECT username FROM users WHERE username = ?", ["s", $username]) ;
     }
@@ -15,6 +15,11 @@ class UserModel extends Database
     public function insertUser($username, $hashedPassword)
     {
         return $this->insert("INSERT INTO users (username, password) VALUES (?, ?)", ["ss", $username, $hashedPassword]) ;
+    }
+
+    public function getUserInfo($username)
+    {
+        return $this->select("SELECT * FROM users WHERE username = ?", ["s", $username]) ;
     }
 }
 ?>

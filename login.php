@@ -1,65 +1,42 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+    session_start();
+    require_once "inc/config.php";
 
-ob_start();  // Start output buffering
-session_start();
+    // Initialize variables
+    $username = $password = "";
+    $error = "";  // Single error message
 
-// Check if already logged in
-if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
-    header("location: index.php");
-    exit;
-}
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        require __DIR__ . "/inc/bootstrap.php" ;
+        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ;
+        $uri = explode('/', $uri) ;
+        if ((isset($uri[2]) && $uri[2] != "user") || (isset($uri[3]) && $uri[3] != "login")) {
+            header("HTTP/1.1 404 Not Found") ;
+            exit() ;
+        }
 
-require_once "inc/config.php";
+        $json = file_get_contents("php://input") ;
+        $data = json_decode($json, true) ;
 
-// Initialize variables
-$username = $password = "";
-$error = "";  // Single error message
+        $username = trim($data["username"]) ;
+        $password = trim($data["psw"]) ;
 
-// Process form submission
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = trim($_POST["username"] ?? '');
-    $password = trim($_POST["password"] ?? '');
+        require PROJECT_ROOT_PATH . "/Controller/Api/UserController.php" ;
+        $objFeedController = new UserController() ;
+        $objFeedController->loginUser() ;
 
-    // Check for empty fields
-    if (empty($username) || empty($password)) {
-        $error = "Please fill in all fields.";
+        // // Check for empty fields
+        // if (empty($username) || empty($password)) {
+        //     $error = "Please fill in all fields.";
+        // } else {
+
+        // }
     } else {
-        // Proceed with database check
-        $sql = "SELECT username, password FROM users WHERE username = ?";
-        if ($stmt = mysqli_prepare($db, $sql)) {
-            mysqli_stmt_bind_param($stmt, "s", $username);
-
-            if (mysqli_stmt_execute($stmt)) {
-                mysqli_stmt_store_result($stmt);
-
-                if (mysqli_stmt_num_rows($stmt) == 1) {
-                    mysqli_stmt_bind_result($stmt, $username, $hashed_password);
-                    
-                    if (mysqli_stmt_fetch($stmt)) {
-                        if (password_verify($password, $hashed_password)) {
-                            // Start session and redirect
-                            $_SESSION["loggedin"] = true;
-                            $_SESSION["username"] = $username;
-                            header("location: index.php");
-                            exit;
-                        } else {
-                            $error = "Invalid username or password.";
-                        }
-                    }
-                } else {
-                    $error = "Invalid username or password.";
-                }
-            } else {
-                $error = "Oops! Something went wrong. Please try again later.";
-            }
-            mysqli_stmt_close($stmt);
+        if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
+            header("location: index.php");
+            exit;
         }
     }
-    mysqli_close($db);
-}
-ob_end_flush();
 ?>
 
 <!DOCTYPE html>
@@ -98,7 +75,7 @@ ob_end_flush();
             <p>For returning users!</p>
 
 
-            <form method="POST" action="login.php">
+            <form method="POST" action="login.php" id="loginForm">
                 <div>
                     <label for="username"><b>Username</b></label>
                     <br>
@@ -108,16 +85,14 @@ ob_end_flush();
                 <br>
 
                 <div>
-                    <label for="password"><b>Password</b></label>
+                    <label for="psw"><b>Password</b></label>
                     <br>
-                    <input type="password" placeholder="Enter Password" name="password">
+                    <input type="password" placeholder="Enter Password" name="psw">
                 </div>
 
          <br>
             <!-- Single error message shown above the form -->
-             <?php if (!empty($error)): ?>
-                <p style="color: red; font-weight: bold;"><?php echo htmlspecialchars($error); ?></p>
-            <?php endif; ?>
+                <p style="color: red; font-weight: bold;" id="error-msg"></p>
 
                 <button type="submit">Login</button>
             </form>
@@ -130,3 +105,57 @@ ob_end_flush();
     </div>
 </body>
 </html>
+
+<script>
+    document.getElementById("loginForm").addEventListener("submit", function(event) {
+        event.preventDefault() ;
+
+        const form = event.target ;
+        const formData = new FormData(form) ;
+
+        const data = {} ;
+        formData.forEach((value, key) => {
+            data[key] = value ;
+        }) ;
+
+        const username = data["username"] ;
+        const psw = data["psw"] ;
+
+        const errorMsgBox = document.getElementById("error-msg") ;
+
+        //Check if form information is valid
+        if (username === "" || psw === "") {
+            errorMsgBox.innerText = "Please fill out all fields." ;
+            return ;
+        }
+
+        //Sign up the user with the data
+        loginUser(data) ;
+    }) ;
+
+    async function loginUser(data) {
+        const errorMsgBox = document.getElementById("error-msg") ;
+
+        //Create the user
+        const login = await fetch("login.php/user/login", {
+            method: "POST",
+            header: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(data)
+        }).catch(err => console.error("Fetch error:", err)) ;
+
+        const loginJson = await login.json() ;
+
+        //Was it successful?
+        if (loginJson.status === "success") {
+            window.location.href = "/index.php" ;
+            return ;
+        } else if (loginJson.status === "failure") {
+            errorMsgBox.innerText = "Invalid username or password." ;
+        } else {
+            alert(loginJson.message || "Login failed.") ;
+        }
+    }
+</script>
