@@ -133,3 +133,11 @@ In general we got help from ChatGPT for:
 - some help with running SQL queries (in the beginning when we were more unfamiliar with them) 
 
 ## HW3 - Frontend
+
+Postman Request Screenshots
+Lauren: 
+<img width="1440" alt="Screenshot 2025-04-11 at 4 21 40 AM" src="https://github.com/user-attachments/assets/31001a8d-85fd-4a3a-8aef-698852025987" />
+<img width="1440" alt="Screenshot 2025-04-11 at 4 21 48 AM" src="https://github.com/user-attachments/assets/50f18fe5-c2b1-49ca-9e92-fe90eca24aa7" />
+Diamond: 
+
+Austin: 
