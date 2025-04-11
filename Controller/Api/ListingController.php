@@ -83,24 +83,115 @@ public function createAction()
 
     
 
-    public function updateListing($data)
-    {
-        return $this->update(
-            "UPDATE listings SET listing_name = ?, listing_descript = ?, price = ? WHERE id = ?",
-            ["ssis", $data['listing_name'], $data['listing_descript'], $data['price'], $data['id']]
-        );
-    }
-    public function deleteListing($data)
-    {
-        if (!isset($data['id'])) {
-            throw new InvalidArgumentException("Listing ID is required");
-        }
+public function updateAction()
+{
+    $requestMethod = $_SERVER["REQUEST_METHOD"];
 
-        return $this->delete(
-            "DELETE FROM listings WHERE id = ?",
-            ["s", $data["id"]]
+    if (strtoupper($requestMethod) === 'PUT') {
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        try {
+            $listingModel = new ListingModel();
+            $result = $listingModel->updateListing($data);
+
+            
+            if ($result) {
+                $this->sendOutput(
+                    json_encode([
+                        'success' => true,
+                        'message' => 'Listing updated'
+                    ]),
+                    ['Content-Type: application/json']
+                );
+            } else {
+                $this->sendOutput(
+                    json_encode([
+                        'success' => false,
+                        'message' => 'No changes made or listing not found.'
+                    ]),
+                    ['Content-Type: application/json', 'HTTP/1.1 404 Not Found']
+                );
+            }
+            
+
+        } catch (Exception $e) {
+            
+            $this->sendOutput(
+                json_encode([
+                    'success' => false,
+                    'message' => 'Exception: ' . $e->getMessage()
+                ]),
+                ['Content-Type: application/json', 'HTTP/1.1 500 Internal Server Error']
+            );
+            
+        }
+    } else {
+        
+        $this->sendOutput(
+            json_encode([
+                'success' => false,
+                'message' => 'Method not allowed'
+            ]),
+            ['Content-Type: application/json', 'HTTP/1.1 405 Method Not Allowed']
         );
+        
     }
+}
+
+public function deleteAction()
+{
+    $requestMethod = $_SERVER["REQUEST_METHOD"];
+
+    if (strtoupper($requestMethod) === 'DELETE') {
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        try {
+            $listingModel = new ListingModel();
+            $result = $listingModel->deleteListing($data);
+
+            
+            if ($result) {
+                $this->sendOutput(
+                    json_encode([
+                        'success' => true,
+                        'message' => 'Listing deleted'
+                    ]),
+                    ['Content-Type: application/json']
+                );
+            } else {
+                $this->sendOutput(
+                    json_encode([
+                        'success' => false,
+                        'message' => 'Listing not found'
+                    ]),
+                    ['Content-Type: application/json', 'HTTP/1.1 404 Not Found']
+                );
+            }
+            
+
+        } catch (Exception $e) {
+            
+            $this->sendOutput(
+                json_encode([
+                    'success' => false,
+                    'message' => 'Exception: ' . $e->getMessage()
+                ]),
+                ['Content-Type: application/json', 'HTTP/1.1 500 Internal Server Error']
+            );
+            
+        }
+    } else {
+        
+        $this->sendOutput(
+            json_encode([
+                'success' => false,
+                'message' => 'Method not allowed'
+            ]),
+            ['Content-Type: application/json', 'HTTP/1.1 405 Method Not Allowed']
+        );
+        
+    }
+}
 
 
 
