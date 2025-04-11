@@ -152,7 +152,12 @@ Postman Request Screenshots
 Lauren: 
 <img width="1440" alt="Screenshot 2025-04-11 at 4 21 40 AM" src="https://github.com/user-attachments/assets/31001a8d-85fd-4a3a-8aef-698852025987" />
 <img width="1440" alt="Screenshot 2025-04-11 at 4 21 48 AM" src="https://github.com/user-attachments/assets/50f18fe5-c2b1-49ca-9e92-fe90eca24aa7" />
-Diamond: 
+
+
+Diamond:
+<img width="1439" alt="diamondSC1" src="https://github.com/user-attachments/assets/255d3e05-6fcb-4910-b811-63b36ad4e067" />
+<img width="1439" alt="diamondSC2" src="https://github.com/user-attachments/assets/f583beb8-aa3f-49ed-8da5-90c7048acfde" />
+
 
 Austin:
 ![Screenshot_1908](https://github.com/user-attachments/assets/6fb40258-8b03-4d48-a841-9ded97bf2d5a)
