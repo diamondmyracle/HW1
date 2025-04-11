@@ -132,6 +132,14 @@ In general we got help from ChatGPT for:
 - help with implementing the while loop for listings.php
 - some help with running SQL queries (in the beginning when we were more unfamiliar with them) 
 
+With regard specifically to HW3:
+- Some general debugging
+- Understanding REST APIs
+- Implementation of a RESTful API
+- Fetch requests
+- React code
+
+  
 ## HW3 - Frontend
 
 Postman Request Formation Tutorial (Professor Zimmeck + TA's should have access to the doc):
