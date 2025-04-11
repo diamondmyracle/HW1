@@ -54,48 +54,77 @@
 
   if($_SERVER["REQUEST_METHOD"] == "POST"){
     if(isset($_POST["delete"])){
-      $sql = "DELETE FROM listings WHERE id = ?" ;
+      try {
+        $response = file_get_contents(
+          'http://localhost/index.php/listing/delete',
+          false,
+          stream_context_create([
+            'http' => [
+              'method' => 'DELETE',
+              'header' => [
+                'Content-Type: application/json',
+                'Authorization: Bearer ' . $_SESSION['username']
+              ],
+              'content' => json_encode(['id' => $list_id])
+            ]
+          ])
+        );
 
-      if($stmt = mysqli_prepare($db, $sql)){
-        mysqli_stmt_bind_param($stmt, "s", $list_id) ;
-
-        if(mysqli_stmt_execute($stmt)){
-          header("location: listings.php") ;
-          exit ;
-        } 
+        $result = json_decode($response, true);
+        if ($result['success']) {
+          header("location: listings.php");
+          exit;
+        }
+      } catch (Exception $e) {
+        $form_error = "Failed to delete listing";
       }
     }
 
     if(isset($_POST["save"])){
-      $param_listname = $_POST["listing_name"] ;
-      $param_listdescript = $_POST["listing_desc"] ;
-      $param_listprice = $_POST["listing_price"] ;
-      $param_author = $_SESSION["username"] ;
-      $param_id = uniqid("", true) ;
+      $param_listname = $_POST["listing_name"];
+      $param_listdescript = $_POST["listing_desc"];
+      $param_listprice = $_POST["listing_price"];
 
       if(empty($param_listname) || empty($param_listdescript) || empty($param_listprice)){
-        $form_error = "Form fields cannot be left blank" ;
+        $form_error = "Form fields cannot be left blank";
       }
 
       if(empty($form_error) && (($param_listprice > 2048) || ($param_listprice < 1))){
-        $form_error = "Price must be between 1 and 2048" ;
+        $form_error = "Price must be between 1 and 2048";
       }
   
       if(empty($form_error)){
-        $sql = "UPDATE listings SET listing_name=?, listing_descript=?, price=? WHERE id=?";
-    
-        if($stmt = mysqli_prepare($db, $sql)){
-          mysqli_stmt_bind_param($stmt, "ssis", $param_listname, $param_listdescript, $param_listprice, $list_id) ;
-    
-          if(mysqli_stmt_execute($stmt)){
-            header("location: listings.php") ;
-          } else{
-            echo "idk, it didn't work" ;
-          }
-        }
+        try {
+          $response = file_get_contents(
+            'http://localhost/index.php/listing/update',
+            false,
+            stream_context_create([
+              'http' => [
+                'method' => 'PUT',
+                'header' => [
+                  'Content-Type: application/json',
+                  'Authorization: Bearer ' . $_SESSION['username']
+                ],
+                'content' => json_encode([
+                  'id' => $list_id,
+                  'listing_name' => $param_listname,
+                  'listing_descript' => $param_listdescript,
+                  'price' => $param_listprice
+                ])
+              ]
+            ])
+          );
 
-        mysqli_stmt_close($stmt);
-        mysqli_close($db);
+          $result = json_decode($response, true);
+          if ($result['success']) {
+            header("location: listings.php");
+            exit;
+          } else {
+            $form_error = $result['message'] ?? "Failed to update listing";
+          }
+        } catch (Exception $e) {
+          $form_error = "Failed to update listing";
+        }
       }
     }
   }
