@@ -1,70 +1,42 @@
 <?php
 session_start();
-require_once 'inc/config.php';
+    require_once 'inc/config.php';
 
- $error = "";  // Store error message to show above the form
     $username = "" ;
 
-    if (isset($_SESSION['validationError'])) {
-        $error = $_SESSION['validationError'] ;
-        unset($_SESSION['validationError']) ;
-    } else {
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            require __DIR__ . "/inc/bootstrap.php" ;
-            $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ;
-            $uri = explode('/', $uri) ;
-            if ((isset($uri[2]) && $uri[2] != 'user') || ($uri[3] != 'createUser')) {
-                header("HTTP/1.1 404 Not Found");
-                exit();
+    $reqMethod = $_SERVER["REQUEST_METHOD"] ;
+    if ($reqMethod == "GET") //If the method is GET, then check for user/exist endpoint
+    {
+        require __DIR__ . "/inc/bootstrap.php" ;
+        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ;
+        $uri = explode('/', $uri) ;
+        if (count($uri) > 2)
+        {
+            if ((isset($uri[2]) && $uri[2] != "user") || (isset($uri[3]) && $uri[3] != "exist")) {
+                header("HTTP/1.1 404 Not Found") ;
+                exit() ;
             }
-
+    
             require PROJECT_ROOT_PATH . "/Controller/Api/UserController.php" ;
             $objFeedController = new UserController() ;
-            $strMethodName = $uri[3] ;
-
-            $json = file_get_contents("php://input") ;
-            $data = json_decode($json, true) ;
-
-            $username = $data["username"] ?? "" ;   //trim($_POST['username']);
-            $password = $data["psw"] ?? "" ;        //trim($_POST['psw']);
-            $passwordRepeat = $data["psw-repeat"] ?? "" ; //trim($_POST['psw-repeat']);
-
-            if (empty($username) || empty($password) || empty($passwordRepeat)) {
-                $error = "Please fill out all fields.";
-                $_SESSION['validationError'] = $error ;
-                header("Location: /signup.php") ;
-                exit ;
-            } elseif (strlen($password) < 10) {
-                $error = "Password must be at least 10 characters long.";
-                $_SESSION['validationError'] = $error ;
-                header("Location: /signup.php") ;
-                exit ;
-            } elseif ($password !== $passwordRepeat) {
-                $error = "Passwords do not match.";
-                $_SESSION['validationError'] = $error ;
-                header("Location: /signup.php") ;
-                exit ;
-            } else {
-                $result = $objFeedController->userExists() ;
-                if (count(json_decode($result)) > 0) {
-                    $error = "Username is already taken. Please choose a different one." ;
-                    $_SESSION['validationError'] = $error ;
-                    header("Location: /signup.php") ;
-                    exit ;
-                } else {
-                    //$hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-                    /* $result = */$objFeedController->{$strMethodName}() ;
-                    //if ($result) {
-                        $_SESSION['loggedin'] = true;
-                        $_SESSION['username'] = $username;
-                        //header("Location: /index.php");
-                        exit;
-                    //} else {
-                    //    $error = "Database error: " . $result ;
-                    //}
-                }
-            }
+            $objFeedController->userExists() ;
+            exit() ;
         }
+    } 
+    elseif ($reqMethod == "POST") //if the method is POST, then check for user/create endpoint
+    {
+        require __DIR__ . "/inc/bootstrap.php" ;
+        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ;
+        $uri = explode('/', $uri) ;
+        if ((isset($uri[2]) && $uri[2] != "user") || (isset($uri[3]) && $uri[3] != "create")) {
+            header("HTTP/1.1 404 Not Found") ;
+            exit() ;
+        }
+
+        require PROJECT_ROOT_PATH . "/Controller/Api/UserController.php" ;
+        $objFeedController = new UserController() ;
+        $objFeedController->createUser() ;
+        exit ;
     }
 ?>
 <!DOCTYPE html>
@@ -125,10 +97,7 @@ require_once 'inc/config.php';
 
             <br>
        
-            <!-- Show error message if any -->
-            <?php if (!empty($error)): ?>
-              <p style="color: red; font-weight: bold;"><?php echo htmlspecialchars($error); ?></p>
-            <?php endif; ?>
+              <p style="color: red; font-weight: bold;" id="error-msg"></p>
 
                 <button type="submit">Create account</button>
             </form>
@@ -154,7 +123,50 @@ require_once 'inc/config.php';
             data[key] = value ;
         }) ;
 
-        fetch("signup.php/user/createUser", {
+        const username = data["username"] ;
+        const psw = data["psw"] ;
+        const psw_repeat = data["psw-repeat"] ;
+
+        const errorMsgBox = document.getElementById("error-msg") ;
+
+        //Check if form information is valid
+        if (username === "" || psw === "" || psw_repeat === "") {
+            errorMsgBox.innerText = "Please fill out all fields." ;
+            return ;
+        } else if (psw.length < 10) {
+            errorMsgBox.innerText = "Password must be at least 10 characters." ;
+            return ;
+        } else if (psw != psw_repeat) {
+            errorMsgBox.innerText = "Passwords must match." ;
+            return ;
+        }
+
+        //Check if the username is taken
+        fetch("signup.php/user/exists", {
+            method: "GET",
+            header: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(json => {
+            if (json.status === "success") {
+                if (json.data.length > 0) {
+                    errorMsgBox.innerText = "Username already taken." ;
+                    return ;                    
+                }
+            } else {
+                alert(json.message || "User GET failed") ;
+                errorMsgBox.innerText = "Database error." ;
+                return ;
+            }
+        })
+        .catch(err => console.error("Fetch error:", err))
+
+        //Create the user
+        fetch("signup.php/user/create", {
             method: "POST",
             header: {
                 "Content-Type": "application/json",
@@ -165,9 +177,11 @@ require_once 'inc/config.php';
         .then(response => response.json())
         .then(json => {
             if (json.status === "success") {
+                //should probably fetch something like login.php/login
                 window.location.href = "/index.php" ;
+                return ;
             } else {
-                alert(json.message || "Signup failed") ;
+                alert(json.message || "Signup failed.") ;
             }
         })
         .catch(err => console.error("Fetch error:", err))

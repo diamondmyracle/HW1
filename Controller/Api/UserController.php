@@ -53,23 +53,29 @@ public function userExists()
 
             $result = $userModel->selectByUsername($username) ;
             $responseData = json_encode($result) ;
-            return $responseData ;
         } catch (Error $e) {
             $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
             $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
         }
-        /* // send output 
+        // send output 
         if (!$strErrorDesc) {
             $this->sendOutput(
-                $responseData,
+                json_encode(
+                    array_merge(
+                        ["status" => "success"],
+                        ["data" => json_decode($responseData)]
+                    )),
                 array('Content-Type: application/json', 'HTTP/1.1 200 OK')
             );
         } else {
-            $this->sendOutput(json_encode(array('error' => $strErrorDesc)), 
+            $this->sendOutput(
+                json_encode([
+                    "status" => "error",
+                    ["error" => $strErrorDesc]
+                ]),
                 array('Content-Type: application/json', $strErrorHeader)
             );
         }
-        */
     }
 
     public function createUser()
@@ -107,9 +113,11 @@ public function userExists()
                 array('Content-Type: application/json', 'HTTP/1.1 200 OK')
             );
         } else {
-            $this->sendOutput(json_encode([
-                "status" => "error",
-            ]), json_encode(array('error' => $strErrorDesc)), 
+            $this->sendOutput(
+                json_encode([
+                    "status" => "error",
+                    ["error" => $strErrorDesc]
+                ]),
                 array('Content-Type: application/json', $strErrorHeader)
             );
         }
