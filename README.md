@@ -140,4 +140,7 @@ Lauren:
 <img width="1440" alt="Screenshot 2025-04-11 at 4 21 48 AM" src="https://github.com/user-attachments/assets/50f18fe5-c2b1-49ca-9e92-fe90eca24aa7" />
 Diamond: 
 
-Austin: 
+Austin:
+![Screenshot_1908](https://github.com/user-attachments/assets/6fb40258-8b03-4d48-a841-9ded97bf2d5a)
+![Screenshot_1909](https://github.com/user-attachments/assets/4f598986-61e0-44d5-b0cf-45f8feae92b3)
+
