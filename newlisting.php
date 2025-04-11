@@ -11,7 +11,7 @@ if (isset($uriParts[1]) && $uriParts[1] === 'listing' && isset($uriParts[2]) && 
 
     $controller = new ListingController();
     $controller->createAction();
-    exit;
+    exit() ;
 }
 ?>
 
@@ -46,7 +46,7 @@ if (isset($uriParts[1]) && $uriParts[1] === 'listing' && isset($uriParts[2]) && 
     </div>
 
     <div id="site-content" class="site-content">
-        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data" id="listingForm">
             <div id="createbox" class="createbox">
                 <h1>Create new listing</h1>
                 <p>Put your amazing Minecraft house on the market!</p>
@@ -75,15 +75,15 @@ if (isset($uriParts[1]) && $uriParts[1] === 'listing' && isset($uriParts[2]) && 
 
                 <br>
 
-                <div>
+                <!-- <div>
                     <label for="listing_image">Listing Image</label>
                     <br>
                     <input type="file" name="listing_image" accept="image/*">
-                </div>
+                </div> -->
 
                 <br>
 
-                <span style="color:red"><?php echo $form_error; ?></span>
+                <span style="color:red" id="formError"></span>
                 <button type="submit" name="create_listing">Create listing</button>
             </div>
         </form>
@@ -99,16 +99,16 @@ if (isset($uriParts[1]) && $uriParts[1] === 'listing' && isset($uriParts[2]) && 
     const errorEl = document.getElementById('formError');
     errorEl.textContent = '';
 
-    const imageFile = form.listing_image.files[0];
+    // const imageFile = form.listing_image.files[0];
 
-    if (!imageFile) {
-        errorEl.textContent = 'Please upload an image.';
-        return;
-    }
+    // if (!imageFile) {
+    //     errorEl.textContent = 'Please upload an image.';
+    //     return;
+    // }
 
-    const reader = new FileReader();
-    reader.onloadend = async function () {
-        const base64Image = reader.result;
+    // const reader = new FileReader();
+    // reader.onloadend = async function () {
+    //     const base64Image = reader.result;
 
         const data = {
             id: Math.random().toString(36).substring(2, 15),
@@ -116,16 +116,25 @@ if (isset($uriParts[1]) && $uriParts[1] === 'listing' && isset($uriParts[2]) && 
             listing_name: form.listing_name.value,
             listing_descript: form.listing_desc.value,
             price: form.listing_price.value,
-            image: base64Image
+            //image: base64Image
+            image: "50819.jpg"
         };
 
         const response = await fetch('newlisting.php/listing/create', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
+            method: "POST",
+            header: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
             },
             body: JSON.stringify(data)
-        });
+        }).catch(err => console.error("Fetch error:", err)) ;
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+
+        //     },
+        //     body: JSON.stringify(data)
+        // });
 
         const result = await response.json();
 
@@ -134,9 +143,9 @@ if (isset($uriParts[1]) && $uriParts[1] === 'listing' && isset($uriParts[2]) && 
         } else {
             errorEl.textContent = result.message || "Something went wrong.";
         }
-    };
+    // };
 
-    reader.readAsDataURL(imageFile);
+    //reader.readAsDataURL(imageFile);
 });
 </script>
 
