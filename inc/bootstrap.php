@@ -10,6 +10,9 @@
     // include the use model file 
     require_once PROJECT_ROOT_PATH . "/Model/UserModel.php";
 
-     // include the use model file 
+    // include the listing model file 
     require_once PROJECT_ROOT_PATH . "/Model/ListingModel.php";
+
+    // include the listing controller file
+    require_once PROJECT_ROOT_PATH . "/Controller/Api/ListingController.php";
 ?>
