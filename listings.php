@@ -1,7 +1,6 @@
 <?php
     session_start();
     require __DIR__ . "/inc/bootstrap.php";
-    require_once PROJECT_ROOT_PATH . "/Model/ListingModel.php";
 
     if(isset($_SESSION['username'])){
         $username = $_SESSION['username'];
@@ -10,13 +9,24 @@
         $username = "";
     }
 
-    // Fetch listings directly using the model
-    try {
-        $listingModel = new ListingModel();
-        $listings = $listingModel->getListings(100); // Get up to 100 listings
-    } catch (Exception $e) {
-        $listings = [];
+    // Fetch listings using REST API with file_get_contents
+    $context = stream_context_create([
+        'http' => [
+            'method' => 'GET',
+            'header' => 'Content-Type: application/json'
+        ]
+    ]);
+
+    $response = file_get_contents('http://localhost/index.php/listing/list', false, $context);
+    $listings = [];
+
+    if ($response !== false) {
+        $listings = json_decode($response, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            $listings = [];
+        }
     }
+
 ?>
 
 <!--
