@@ -1,4 +1,3 @@
-
 <?php
     session_start();
 
@@ -10,12 +9,9 @@
         $username = "";
     }
 
-    // includes database connection
-    require_once "inc/config.php"; 
-
-    // querying to fetch all listings within the listings table of our db 
-    $sql = "SELECT id, username, listing_name, listing_descript, price, image FROM listings";
-    $result = mysqli_query($db, $sql);
+    // Fetch listings using the REST API
+    $response = file_get_contents('http://localhost/index.php/listing/list');
+    $listings = json_decode($response, true);
 
 ?>
 
@@ -130,9 +126,9 @@
                 </li>
                 <?php
             
-            if (mysqli_num_rows($result) > 0) {
-                // Loop through each row in the listings table to create a listing object/display
-                while ($row = mysqli_fetch_assoc($result)) {
+            if ($listings && count($listings) > 0) {
+                // Loop through each listing to create a listing object/display
+                foreach ($listings as $row) {
                     echo '<li>';
                     echo '<div class="listing">';
             
@@ -162,9 +158,6 @@
                     echo '</li>'; 
                 }
             } 
-            
-                // Close connection 
-                mysqli_close($db);
                 ?>
             </ul>
         </div>
@@ -173,5 +166,6 @@
 
 
 </body>
+
 
 
