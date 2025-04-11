@@ -174,11 +174,30 @@ session_start();
 
         //Was it successful?
         if (signupJson.status === "success") {
-            //should probably fetch something like login.php/login
+            initialLogin(data) ;
             window.location.href = "/index.php" ;
             return ;
         } else {
             alert(signupJson.message || "Signup failed.") ;
+        }
+    }
+
+    async function initialLogin(data) {
+        const loginInit = await fetch("login.php/user/login", {
+            method: "POST",
+            header: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(data)
+        }).catch(err => console.error("Fetch error:", err)) ;
+
+        const loginJson = await loginInit.json() ;
+        if (loginJson.status === "success") {
+            return ;                    
+        } else {
+            alert(loginJson.message || "Initial login failed.") ;
+            return ;
         }
     }
 </script>

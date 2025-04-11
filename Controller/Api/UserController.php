@@ -51,7 +51,7 @@ public function userExists()
 
             $username = $data["username"] ;
 
-            $result = $userModel->selectByUsername($username) ;
+            $result = $userModel->usernameInDatabase($username) ;
             $responseData = json_encode($result) ;
         } catch (Error $e) {
             $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
@@ -123,5 +123,93 @@ public function userExists()
         }
         
     }
-    
+
+    public function getUserData() 
+    {
+        $strErrorDesc = '' ;
+        try {
+            $userModel = new UserModel() ;
+
+            $json = file_get_contents("php://input") ;
+            $data = json_decode($json, true) ;
+
+            $username = $data["username"] ;
+
+            $result = $userModel->getUserInfo($username) ;
+            $responseData = json_encode($result) ;
+        } catch (Error $e) {
+            $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
+            $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
+        }
+        // send output 
+        if (!$strErrorDesc) {
+            $this->sendOutput(
+                json_encode(
+                    array_merge(
+                        ["status" => "success"],
+                        ["data" => json_decode($responseData)]
+                    )),
+                array('Content-Type: application/json', 'HTTP/1.1 200 OK')
+            );
+        } else {
+            $this->sendOutput(
+                json_encode([
+                    "status" => "error",
+                    ["error" => $strErrorDesc]
+                ]),
+                array('Content-Type: application/json', $strErrorHeader)
+            );
+        }
+    }
+
+    public function loginUser()
+    {
+        $strErrorDesc = '' ;
+        try {
+            $userModel = new UserModel() ;
+
+            $json = file_get_contents("php://input") ;
+            $data = json_decode($json, true) ;
+
+            $username = $data["username"] ;
+            $password = $data["psw"] ;
+
+            $message = "Invalid username or password." ;
+            $status = "failure" ;
+
+            $result = $userModel->getUserInfo($username) ;
+            if (count($result) > 0) {
+                $row = $result[0] ;
+                $hashedPassword = $row["password"] ;
+
+                if (password_verify($password, $hashedPassword)) {
+                    $_SESSION["loggedin"] = true ;
+                    $_SESSION["username"] = $username ;
+                    $message = "Logged in." ;
+                    $status = "success" ;
+                }
+            }
+        } catch (Error $e) {
+            $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
+            $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
+        }
+        // send output 
+        if (!$strErrorDesc) {
+            $this->sendOutput(
+                json_encode([
+                    "status" => $status,
+                    "data" => $message
+                ]),
+                array('Content-Type: application/json', 'HTTP/1.1 200 OK')
+            );
+        } else {
+            $this->sendOutput(
+                json_encode([
+                    "status" => "error",
+                    ["error" => $strErrorDesc]
+                ]),
+                array('Content-Type: application/json', $strErrorHeader)
+            );
+        }
+    }
 }
