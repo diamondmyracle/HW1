@@ -1,6 +1,7 @@
+
 <?php
     session_start();
-    require __DIR__ . "/inc/bootstrap.php";
+
 
     if(isset($_SESSION['username'])){
         $username = $_SESSION['username'];
@@ -9,22 +10,19 @@
         $username = "";
     }
 
-    // Fetch listings using REST API with file_get_contents
-    $context = stream_context_create([
-        'http' => [
-            'method' => 'GET',
-            'header' => 'Content-Type: application/json'
-        ]
-    ]);
+    // includes database connection
+    require_once "inc/config.php";
 
-    $response = file_get_contents('http://localhost/index.php/listing/list', false, $context);
-    $listings = [];
+    $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+    $uriParts = explode('/', trim($uri, '/'));
 
-    if ($response !== false) {
-        $listings = json_decode($response, true);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            $listings = [];
-        }
+    if (isset($uriParts[1]) && $uriParts[1] === 'listing' && isset($uriParts[2]) && $uriParts[2] === 'list') {
+        require __DIR__ . "/inc/bootstrap.php";
+        require PROJECT_ROOT_PATH . "/Controller/Api/ListingController.php";
+
+        $controller = new ListingController();
+        $controller->listAction();
+        exit() ;
     }
 
 ?>
@@ -61,6 +59,66 @@
         <a href="login.php">Login</a>
         <a href="signup.php">Signup</a>
     <?php endif; ?>
+
+    <script>
+        function escapeHTML(str) {
+            return String(str)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;")    ;
+        }
+
+        fetch('/listings.php/listing/list')
+        .then(response => response.json())
+        .then(data => {
+            const container = document.getElementById("listing-list") ;
+
+            data.forEach(item => {
+                const listItem = document.createElement("li") ;
+                
+                if ("<?php echo $username ?>" == item.username) {
+                    listItem.innerHTML = `
+                    <div class="listing">
+                            <img src="uploads/${escapeHTML(item.image)}" alt="Listing 1 photo">
+                            <a href="editlisting.php?id=${item.id}" style="text-decoration: none">
+                                <h2 style="color: rgb(7, 138, 138);">${escapeHTML(item.listing_name)}</h2>
+                            </a>
+                            <p>
+                                ${escapeHTML(item.username)}
+                                <br>
+                                ${escapeHTML(item.listing_descript)}
+                            </p>
+                            <div class="listing-price">
+                                <img src="diamond.png" alt="diamond">
+                                <p><b>${escapeHTML(item.price)}</b></p>
+                            </div>
+                        </div>` ;
+                } else {
+                    listItem.innerHTML = `
+                    <div class="listing">
+                            <img src="uploads/${escapeHTML(item.image)}" alt="Listing 1 photo">
+                            <h2>${escapeHTML(item.listing_name)}</h2>
+                            <p>
+                                ${escapeHTML(item.username)}
+                                <br>
+                                ${escapeHTML(item.listing_descript)}
+                            </p>
+                            <div class="listing-price">
+                                <img src="diamond.png" alt="diamond">
+                                <p><b>${escapeHTML(item.price)}</b></p>
+                            </div>
+                        </div>` ;
+                }
+
+                container.appendChild(listItem) ;
+            }) ;
+        })
+        .catch(err =>{
+            console.error("Failed to load listings, bitch:", err) ;
+        })
+    </script>
 </div>
 
     <div id="site-content" class="site-content">
@@ -74,7 +132,7 @@
                 }
             ?>
             
-            <ul>
+            <ul id="listing-list">
                 <li>
                 <div class="listing">
                         <img src="photos/listing1.webp" alt="Listing 1 photo">
@@ -138,41 +196,6 @@
                         </div>
                     </div>
                 </li>
-                <?php
-            
-            if ($listings && count($listings) > 0) {
-                // Loop through each listing to create a listing object/display
-                foreach ($listings as $row) {
-                    echo '<li>';
-                    echo '<div class="listing">';
-            
-                    // Handle the image display
-                    if (!empty($row['image'])) {
-                        $imageSrc = 'uploads/' . htmlspecialchars($row['image']);
-                    } else {
-                        $imageSrc = 'photos/default-placeholder.webp'; // Fallback if no image
-                    }
-            
-                    echo '<img src="' . $imageSrc . '" alt="Listing photo">';
-            
-                    if ($username == $row['username']) {
-                        echo '<a href="editlisting.php?id=' . htmlspecialchars($row['id']) . '" style="text-decoration: none">
-                                <h2 style="color: rgb(7, 138, 138);">' . htmlspecialchars($row['listing_name']) . '</h2>
-                              </a>';
-                    } else {
-                        echo '<h2>' . htmlspecialchars($row['listing_name']) . '</h2>';
-                    }
-            
-                    echo '<p>' . htmlspecialchars($row['username']) . '<br>' . htmlspecialchars($row['listing_descript']) . '</p>';
-                    echo '<div class="listing-price">';
-                    echo '<img src="diamond.png" alt="diamond">';
-                    echo '<p><b>' . $row['price'] . ' diamonds</b><p>';
-                    echo '</div>'; 
-                    echo '</div>'; 
-                    echo '</li>'; 
-                }
-            } 
-                ?>
             </ul>
         </div>
     </div>
@@ -180,6 +203,5 @@
 
 
 </body>
-
 
 
