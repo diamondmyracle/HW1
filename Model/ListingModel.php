@@ -44,7 +44,10 @@ class ListingModel extends Database
         );
     }
 
-
+    public function getListingByID($data)
+    {
+        return $this->select("SELECT * FROM listings WHERE id = ?", ["i", $data['id']]) ;
+    }
     
 }
 ?>

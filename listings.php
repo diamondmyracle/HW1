@@ -16,13 +16,28 @@
     $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
     $uriParts = explode('/', trim($uri, '/'));
 
-    if (isset($uriParts[1]) && $uriParts[1] === 'listing' && isset($uriParts[2]) && $uriParts[2] === 'list') {
-        require __DIR__ . "/inc/bootstrap.php";
-        require PROJECT_ROOT_PATH . "/Controller/Api/ListingController.php";
-
-        $controller = new ListingController();
-        $controller->listAction();
-        exit() ;
+    $reqMethod = $_SERVER["REQUEST_METHOD"] ;
+    if ($reqMethod == "GET") //if the method is POST, then check for user/create endpoint
+    {
+        if (isset($uriParts[1]) && $uriParts[1] === 'listing' && isset($uriParts[2]) && $uriParts[2] === 'list') {
+            require __DIR__ . "/inc/bootstrap.php" ;
+            require PROJECT_ROOT_PATH . "/Controller/Api/ListingController.php" ;
+    
+            $controller = new ListingController() ;
+            $controller->listAction() ;
+            exit() ;
+        }
+    } 
+    elseif ($reqMethod == "POST")
+    {
+        if (isset($uriParts[1]) && $uriParts[1] === 'listing' && isset($uriParts[2]) && $uriParts[2] === 'id') {
+            require __DIR__ . "/inc/bootstrap.php" ;
+            require PROJECT_ROOT_PATH . "/Controller/Api/ListingController.php" ;
+    
+            $controller = new ListingController() ;
+            $controller->listingByID() ;
+            exit() ;
+        }
     }
 
 ?>

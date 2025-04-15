@@ -1,6 +1,44 @@
 <?php
 class ListingController extends BaseController
 {
+    public function listingByID()
+    {
+        $strErrorDesc = '';
+        $requestMethod = $_SERVER["REQUEST_METHOD"];
+
+        if (strtoupper($requestMethod) == 'POST') {
+            try {
+                $json = file_get_contents('php://input');
+                $data = json_decode($json, true);
+
+                $listingModel = new ListingModel();
+                $listing = $listingModel->getListingByID($data);
+                $responseData = json_encode($listing);
+
+            } catch (Error $e) {
+                $strErrorDesc = $e->getMessage() . ' Something went wrong! Please contact support.';
+                $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
+            }
+        } else {
+            $strErrorDesc = 'Method not supported';
+            $strErrorHeader = 'HTTP/1.1 422 Unprocessable Entity';
+        }
+
+        // send output
+        if (!$strErrorDesc) {
+            $this->sendOutput(
+                $responseData,
+                ['Content-Type: application/json', 'HTTP/1.1 200 OK']
+            );
+        } else {
+            $this->sendOutput(
+                json_encode(['error' => $strErrorDesc]),
+                ['Content-Type: application/json', $strErrorHeader]
+            );
+        }
+    }
+
+
     /** 
      * "/listing/list" Endpoint - Get list of listings 
      */

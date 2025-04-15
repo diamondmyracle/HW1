@@ -132,7 +132,52 @@
   </div>
 
   <script>
-    //const listingName = 
+    function escapeHTML(str) {
+      return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;") ;
+    }
+
+    const reqBody = {} ;
+    reqBody["id"] = <?php echo $list_id ?> ;
+
+    fetch("listings.php/listing/id", {
+        method: "POST",
+        header: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify(reqBody)
+      })
+    .then(response => response.json())
+    .then(data => {
+      const nameContainer = document.getElementById("listing-name") ;
+      nameContainer.innerHTML = `
+        <label for="listing_name">Listing name</label>
+        <br>
+        <input type="text" placeholder="Listing name" name="listing_name" maxlength="32" value="${escapeHTML((data[0]).listing_name)}">              
+      ` ;
+
+      const descContainer = document.getElementById("listing-desc") ;
+      descContainer.innerHTML = `
+        <label for="listing_desc">Listing description</label>
+        <br>
+        <textarea placeholder="Listing description" name="listing_desc" style="resize: none" maxlength="256">${escapeHTML((data[0]).listing_descript)}</textarea>
+      ` ;
+
+      const priceContainer = document.getElementById("listing-price") ;
+      priceContainer.innerHTML = `
+        <label for="listing_price">Listing price</label>
+        <br>
+        <input type="number" placeholder="Listing price" name="listing_price" value="${escapeHTML((data[0]).price)}">
+      `;
+    })
+    .catch(err =>{
+        console.error("Failed to load listings, bitch:", err) ;
+    })
   </script>
    
   <div id="site-content" class="site-content">
@@ -141,26 +186,20 @@
         <h1>Edit listing</h1>
         <p>Edit the listing for your Minecraft house</p>
 
-        <div>
-          <label for="listing_name">Listing name</label>
-          <br>
-          <input type="text" placeholder="Listing name" name="listing_name" maxlength="32" value="<?php echo $result_name ; ?>">
+        <div id="listing-name">
+          
         </div>
 
         <br>
 
-        <div>
-          <label for="listing_desc">Listing description</label>
-          <br>
-          <textarea placeholder="Listing description" name="listing_desc" style="resize: none" maxlength="256"><?php echo $result_descript ; ?></textarea>
+        <div id="listing-desc">
+          
         </div>
 
         <br>
 
-        <div>
-          <label for="listing_price">Listing price</label>
-          <br>
-          <input type="number" placeholder="Listing price" name="listing_price" value="<?php echo $result_price ; ?>">
+        <div id="listing-price">
+          
         </div>
 
         <br>
