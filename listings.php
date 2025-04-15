@@ -60,7 +60,16 @@
         <a href="signup.php">Signup</a>
     <?php endif; ?>
 
-    <script> 
+    <script>
+        function escapeHTML(str) {
+            return String(str)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;")    ;
+        }
+
         fetch('/listings.php/listing/list')
         .then(response => response.json())
         .then(data => {
@@ -71,16 +80,16 @@
                 
                 listItem.innerHTML = `
                 <div class="listing">
-                        <img src="uploads/${item.image}" alt="Listing 1 photo">
-                        <h2>${item.listing_name}</h2>
+                        <img src="uploads/${escapeHTML(item.image)}" alt="Listing 1 photo">
+                        <h2>${escapeHTML(item.listing_name)}</h2>
                         <p>
-                            ${item.username}
+                            ${escapeHTML(item.username)}
                             <br>
-                            ${item.listing_descript}
+                            ${escapeHTML(item.listing_descript)}
                         </p>
                         <div class="listing-price">
                             <img src="diamond.png" alt="diamond">
-                            <p><b>${item.price}</b></p>
+                            <p><b>${escapeHTML(item.price)}</b></p>
                         </div>
                     </div>` ;
 
