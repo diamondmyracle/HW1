@@ -116,6 +116,7 @@ session_start();
         const psw_repeat = data["psw-repeat"] ;
 
         const errorMsgBox = document.getElementById("error-msg") ;
+        errorMsgBox.innerText = "" ;
 
         //Check if form information is valid
         if (username === "" || psw === "" || psw_repeat === "") {

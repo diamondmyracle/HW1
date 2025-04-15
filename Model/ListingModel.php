@@ -28,7 +28,7 @@ class ListingModel extends Database
     {
         return $this->update(
             "UPDATE listings SET listing_name = ?, listing_descript = ?, price = ? WHERE id = ?",
-            ["ssis", $data['listing_name'], $data['listing_descript'], $data['price'], $data['id']]
+            ["ssii", $data['listing_name'], $data['listing_descript'], $data['price'], $data['id']]
         );
     }
 
@@ -40,7 +40,7 @@ class ListingModel extends Database
 
         return $this->delete(
             "DELETE FROM listings WHERE id = ?",
-            ["s", $data["id"]]
+            ["i", $data["id"]]
         );
     }
 
