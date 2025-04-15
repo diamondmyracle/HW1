@@ -13,9 +13,8 @@ class ListingModel extends Database
     public function createListing($data)
 {
     return $this->insert(
-        "INSERT INTO listings (id, username, listing_name, listing_descript, price, image) VALUES (?, ?, ?, ?, ?, ?)",
-        ["ssssis", 
-            $data["id"], 
+        "INSERT INTO listings (username, listing_name, listing_descript, price, image) VALUES (?, ?, ?, ?, ?)",
+        ["sssis",  
             $data["username"], 
             $data["listing_name"], 
             $data["listing_descript"], 

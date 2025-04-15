@@ -130,6 +130,10 @@
         <a href="signup.php">Signup</a>
     <?php endif; ?>
   </div>
+
+  <script>
+    //const listingName = 
+  </script>
    
   <div id="site-content" class="site-content">
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ; ?>?id=<?php echo htmlspecialchars($_GET["id"]) ; ?>" method="post">

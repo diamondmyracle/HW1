@@ -111,7 +111,7 @@ if (isset($uriParts[1]) && $uriParts[1] === 'listing' && isset($uriParts[2]) && 
     //     const base64Image = reader.result;
 
         const data = {
-            id: Math.random().toString(36).substring(2, 15),
+            //id: Math.random().toString(36).substring(2, 15),
             username: "<?php echo $_SESSION['username']; ?>",
             listing_name: form.listing_name.value,
             listing_descript: form.listing_desc.value,
