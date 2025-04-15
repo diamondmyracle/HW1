@@ -78,20 +78,39 @@
             data.forEach(item => {
                 const listItem = document.createElement("li") ;
                 
-                listItem.innerHTML = `
-                <div class="listing">
-                        <img src="uploads/${escapeHTML(item.image)}" alt="Listing 1 photo">
-                        <h2>${escapeHTML(item.listing_name)}</h2>
-                        <p>
-                            ${escapeHTML(item.username)}
-                            <br>
-                            ${escapeHTML(item.listing_descript)}
-                        </p>
-                        <div class="listing-price">
-                            <img src="diamond.png" alt="diamond">
-                            <p><b>${escapeHTML(item.price)}</b></p>
-                        </div>
-                    </div>` ;
+                if ("<?php echo $username ?>" == item.username) {
+                    listItem.innerHTML = `
+                    <div class="listing">
+                            <img src="uploads/${escapeHTML(item.image)}" alt="Listing 1 photo">
+                            <a href="editlisting.php?id=${item.id}" style="text-decoration: none">
+                                <h2 style="color: rgb(7, 138, 138);">${escapeHTML(item.listing_name)}</h2>
+                            </a>
+                            <p>
+                                ${escapeHTML(item.username)}
+                                <br>
+                                ${escapeHTML(item.listing_descript)}
+                            </p>
+                            <div class="listing-price">
+                                <img src="diamond.png" alt="diamond">
+                                <p><b>${escapeHTML(item.price)}</b></p>
+                            </div>
+                        </div>` ;
+                } else {
+                    listItem.innerHTML = `
+                    <div class="listing">
+                            <img src="uploads/${escapeHTML(item.image)}" alt="Listing 1 photo">
+                            <h2>${escapeHTML(item.listing_name)}</h2>
+                            <p>
+                                ${escapeHTML(item.username)}
+                                <br>
+                                ${escapeHTML(item.listing_descript)}
+                            </p>
+                            <div class="listing-price">
+                                <img src="diamond.png" alt="diamond">
+                                <p><b>${escapeHTML(item.price)}</b></p>
+                            </div>
+                        </div>` ;
+                }
 
                 container.appendChild(listItem) ;
             }) ;
