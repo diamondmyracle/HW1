@@ -11,42 +11,25 @@ class ListingModel extends Database
         );
     }
     public function createListing($data)
-    {
-        if (!isset($data['username']) || !isset($data['listing_name']) || 
-            !isset($data['listing_descript']) || !isset($data['price']) || 
-            !isset($data['image'])) {
-            throw new InvalidArgumentException("Missing required fields");
-        }
+{
+    return $this->insert(
+        "INSERT INTO listings (id, username, listing_name, listing_descript, price, image) VALUES (?, ?, ?, ?, ?, ?)",
+        ["ssssis", 
+            $data["id"], 
+            $data["username"], 
+            $data["listing_name"], 
+            $data["listing_descript"], 
+            $data["price"], 
+            $data["image"]
+        ]
+    );
+}
 
-        // Validate price is a positive number
-        if (!is_numeric($data['price']) || $data['price'] <= 0) {
-            throw new InvalidArgumentException("Price must be a positive number");
-        }
-
-        // Handle base64 image data
-        $imageData = $data['image'];
-        if (strpos($imageData, 'data:image') === 0) {
-            // Extract the base64 data
-            $imageData = explode(',', $imageData)[1];
-        }
-
-        return $this->insert(
-            "INSERT INTO listings (username, listing_name, listing_descript, price, image) VALUES (?, ?, ?, ?, ?)",
-            ["sssis", 
-                $data["username"], 
-                $data["listing_name"], 
-                $data["listing_descript"], 
-                $data["price"], 
-                $imageData
-            ]
-        );
-    }
-
-    public function updateListing($id, $listing_name, $listing_descript, $price)
+    public function updateListing($data)
     {
         return $this->update(
             "UPDATE listings SET listing_name = ?, listing_descript = ?, price = ? WHERE id = ?",
-            ["ssis", $listing_name, $listing_descript, $price, $id]
+            ["ssis", $data['listing_name'], $data['listing_descript'], $data['price'], $data['id']]
         );
     }
 
@@ -62,15 +45,7 @@ class ListingModel extends Database
         );
     }
 
-    public function getListingById($id)
-    {
-        $result = $this->select(
-            "SELECT id, username, listing_name, listing_descript, price, image FROM listings WHERE id = ?",
-            ["i", $id]
-        );
-        
-        return $result ? $result[0] : null;
-    }
+
+    
 }
 ?>
-

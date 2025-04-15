@@ -11,7 +11,7 @@ if (isset($uriParts[1]) && $uriParts[1] === 'listing' && isset($uriParts[2]) && 
 
     $controller = new ListingController();
     $controller->createAction();
-    exit;
+    exit() ;
 }
 ?>
 
@@ -46,7 +46,7 @@ if (isset($uriParts[1]) && $uriParts[1] === 'listing' && isset($uriParts[2]) && 
     </div>
 
     <div id="site-content" class="site-content">
-        <form id="listingForm" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
+        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data" id="listingForm">
             <div id="createbox" class="createbox">
                 <h1>Create new listing</h1>
                 <p>Put your amazing Minecraft house on the market!</p>
@@ -54,7 +54,7 @@ if (isset($uriParts[1]) && $uriParts[1] === 'listing' && isset($uriParts[2]) && 
                 <div>
                     <label for="listing_name">Listing name</label>
                     <br>
-                    <input type="text" placeholder="Listing name" name="listing_name" maxlength="32" required>
+                    <input type="text" placeholder="Listing name" name="listing_name" maxlength="32">
                 </div>
 
                 <br>
@@ -62,7 +62,7 @@ if (isset($uriParts[1]) && $uriParts[1] === 'listing' && isset($uriParts[2]) && 
                 <div>
                     <label for="listing_desc">Listing description</label>
                     <br>
-                    <textarea placeholder="Listing description" name="listing_desc" style="resize: none" maxlength="255" required></textarea>
+                    <textarea placeholder="Listing description" name="listing_desc" style="resize: none" maxlength="255"></textarea>
                 </div>
 
                 <br>
@@ -70,20 +70,20 @@ if (isset($uriParts[1]) && $uriParts[1] === 'listing' && isset($uriParts[2]) && 
                 <div>
                     <label for="listing_price">Listing price</label>
                     <br>
-                    <input type="number" placeholder="Listing price" name="listing_price" required>
+                    <input type="number" placeholder="Listing price" name="listing_price">
                 </div>
 
                 <br>
 
-                <div>
+                <!-- <div>
                     <label for="listing_image">Listing Image</label>
                     <br>
-                    <input type="file" name="listing_image" accept="image/*" required>
-                </div>
+                    <input type="file" name="listing_image" accept="image/*">
+                </div> -->
 
                 <br>
 
-                <span id="formError" style="color:red"><?php echo $form_error; ?></span>
+                <span style="color:red" id="formError"></span>
                 <button type="submit" name="create_listing">Create listing</button>
             </div>
         </form>
@@ -93,52 +93,59 @@ if (isset($uriParts[1]) && $uriParts[1] === 'listing' && isset($uriParts[2]) && 
 
 <script>
     document.getElementById('listingForm').addEventListener('submit', async function (e) {
-        e.preventDefault();
+    e.preventDefault();
 
-        const form = e.target;
-        const errorEl = document.getElementById('formError');
-        errorEl.textContent = '';
+    const form = e.target;
+    const errorEl = document.getElementById('formError');
+    errorEl.textContent = '';
 
-        try {
-            const formData = new FormData(form);
-            const imageFile = formData.get('listing_image');
-            
-            // Convert image to base64
-            const imageBase64 = await new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = reject;
-                reader.readAsDataURL(imageFile);
-            });
+    // const imageFile = form.listing_image.files[0];
 
-            const data = {
-                listing_name: formData.get('listing_name'),
-                listing_descript: formData.get('listing_desc'),
-                price: formData.get('listing_price'),
-                image: imageBase64
-            };
+    // if (!imageFile) {
+    //     errorEl.textContent = 'Please upload an image.';
+    //     return;
+    // }
 
-            const response = await fetch('http://localhost/index.php/listing/create', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            });
+    // const reader = new FileReader();
+    // reader.onloadend = async function () {
+    //     const base64Image = reader.result;
 
-            const result = await response.json();
+        const data = {
+            id: Math.random().toString(36).substring(2, 15),
+            username: "<?php echo $_SESSION['username']; ?>",
+            listing_name: form.listing_name.value,
+            listing_descript: form.listing_desc.value,
+            price: form.listing_price.value,
+            //image: base64Image
+            image: "50819.jpg"
+        };
 
-            if (response.ok) {
-                window.location.href = 'listings.php';
-            } else {
-                errorEl.textContent = result.error || 'An error occurred while submitting the form';
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            errorEl.textContent = 'An error occurred while submitting the form';
+        const response = await fetch('newlisting.php/listing/create', {
+            method: "POST",
+            header: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(data)
+        }).catch(err => console.error("Fetch error:", err)) ;
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+
+        //     },
+        //     body: JSON.stringify(data)
+        // });
+
+        const result = await response.json();
+
+        if (result.status === "success") {
+            window.location.href = "listings.php";
+        } else {
+            errorEl.textContent = result.message || "Something went wrong.";
         }
-    });
+    // };
+
+    //reader.readAsDataURL(imageFile);
+});
 </script>
-
-
 

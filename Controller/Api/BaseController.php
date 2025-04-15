@@ -16,9 +16,7 @@
 
         protected function getQueryStringParams()
         {
-            $query = array();
-            parse_str($_SERVER['QUERY_STRING'], $query);
-            return $query;
+            return parse_str($_SERVER['QUERY_STRING'], $query) ;
         }
 
         protected function sendOutput($data, $httpHeaders=array())
@@ -33,38 +31,6 @@
 
             echo $data ;
             exit ;
-        }
-
-        protected function getUsername()
-        {
-            // First check for session authentication
-            if (isset($_SESSION['username'])) {
-                return $_SESSION['username'];
-            }
-
-            // Then check for Bearer token
-            $headers = getallheaders();
-            if (isset($headers['Authorization'])) {
-                $token = str_replace('Bearer ', '', $headers['Authorization']);
-                // For this example, we'll treat the token as the username
-                // In a real application, you would validate the token properly
-                return $token;
-            }
-
-            return null;
-        }
-
-        protected function authenticate()
-        {
-            $username = $this->getUsername();
-            if (!$username) {
-                $this->sendOutput(
-                    json_encode(['error' => 'Authentication required']),
-                    ['Content-Type: application/json', 'HTTP/1.1 401 Unauthorized']
-                );
-                exit;
-            }
-            return $username;
         }
     }
 ?>

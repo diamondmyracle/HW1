@@ -12,25 +12,24 @@
     $uriParts = explode('/', trim($uri, '/'));
     
     // Check if it's an API call (e.g., /index.php/user/list or /index.php/listing/create)
-    if (isset($uriParts[0]) && $uriParts[0] === 'index.php' && 
-        isset($uriParts[1]) && in_array($uriParts[1], ['user', 'listing']) && 
-        isset($uriParts[2])) {
-        
+    if (isset($uriParts[1]) && in_array($uriParts[1], ['user', 'listing']) && isset($uriParts[2])) {
         $controllerName = ucfirst($uriParts[1]) . "Controller";
-        $method = $uriParts[2] . 'Action';
-        
-        if (class_exists($controllerName)) {
+        $controllerFile = PROJECT_ROOT_PATH . "/Controller/Api/{$controllerName}.php";
+    
+        if (file_exists($controllerFile)) {
+            require_once $controllerFile;
             $controller = new $controllerName();
-            
+    
+            $method = $uriParts[2] . 'Action';
             if (method_exists($controller, $method)) {
                 $controller->{$method}();
+                exit; // Stop further execution so HTML doesn't show up in Postman
+            } else {
+                header("HTTP/1.1 404 Not Found");
+                echo json_encode(["error" => "Method not found"]);
                 exit;
             }
         }
-        
-        header("HTTP/1.1 404 Not Found");
-        echo json_encode(["error" => "Method not found"]);
-        exit;
     }
 ?>
 <!--HW1: Diamond, Lauren, Austin 

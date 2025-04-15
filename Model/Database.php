@@ -31,9 +31,9 @@ class Database
     {
         try {
             $stmt = $this->executeStatement( $query , $params ) ;
-            $affectedRows = $stmt->affected_rows;
+            $result = $stmt ;
             $stmt->close() ;
-            return $affectedRows > 0;
+            return $result ;
         } catch(Exception $e) {
             throw New Exception( $e->getMessage() ) ;
         }
@@ -101,4 +101,3 @@ class Database
     }
 }
 ?>
-
