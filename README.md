@@ -187,6 +187,8 @@ To Integrate Our Frontend and Backend:
 16. If the above doesn't work, repeat the following:
 "Hail Mary, full of grace, the Lord is with thee. Blessed art thou among women, and blessed is the fruit of thy womb, Jesus. Holy Mary, mother of God, pray for us sinners now and at the hour of our death. Amen."
 
+#MAKE SURE DiamondRealEstate file is NOT in your HTDOCS, THIS IS A SEPARATE FILE
+
 Attached is app.zip and App.tsx. You should replace the app folder inside of DiamondRealEstate with the unzipped contents of app.zip. Then create file App.tsx and place it inside the DiamondRealEstate folder.
 app.zip : [app.zip](https://github.com/user-attachments/files/19775446/app.zip)
 App.tsx contents:
