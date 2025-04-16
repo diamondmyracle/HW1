@@ -164,3 +164,16 @@
  ![Screenshot_1908](https://github.com/user-attachments/assets/6fb40258-8b03-4d48-a841-9ded97bf2d5a)
  ![Screenshot_1909](https://github.com/user-attachments/assets/4f598986-61e0-44d5-b0cf-45f8feae92b3)
  
+
+To Integrate Our Frontend and Backend: 
+1. Clone our repository 
+2. Move only the non-React files into your htdocs (so everything in our repo besides "diamondrealestate-reactapp")
+3. Open your terminal and run "npx create-expo-app@latest DiamondRealEstate" to create the expo app
+4. Note: Have "diamondrealestate-reactapp" in a separate directory/path than htdocs
+5. Next, navigate into the "diamondrealestate-reactapp" folder wherever you have it (navigate into it not just to it)
+6. Open Android Studio and in the top-right corner, near "Clone Repository", press the button with "..." and select "Virtual Device Manager"
+7. Once you're taken to the Virtual Device Manager Screen, select the "+" button and search for "Pixel 6a" and select that and then "Next" in the bottom-right. Then, select "Finish"
+8. Now that your virtual device is created, press the play button for it to start it (the emulator should pop up on your screen, wait for it to completely boot up)
+10. Now, in your terminal (in which you've navigated to "diamondrealestate-reactapp", enter in "npx expo start"
+11. Then, (as in the given commands), type "a" (without the quotes) and now our React App should be running on the emulator
+12. You should see our default screen which will ask you to either navigate to listings or create a new listing (select either as you wish) 
