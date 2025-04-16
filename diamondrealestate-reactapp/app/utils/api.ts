@@ -1,21 +1,30 @@
-const API_BASE = 'http://129.133.75.93/api'; // change if using physical device or deployed backend
+const API_BASE = 'http://129.133.75.93'; // change if using physical device or deployed backend
 
 // Login user
 export async function loginUser(username: string, password: string) {
-  const res = await fetch(`${API_BASE}/login.php`, {
+    const obj: {username: string; psw: string} = {
+        username: username,
+        psw: password,
+      } ;
+  const res = await fetch(`${API_BASE}/login.php/user/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password }),
+    body: JSON.stringify(obj),
   });
   return res.json();
 }
 
 // Signup user
 export async function signupUser(username: string, password: string) {
-  const res = await fetch(`${API_BASE}/signup.php`, {
+  const obj: {username: string; psw: string} = {
+    username: username,
+    psw: password,
+  } ;
+
+  const res = await fetch(`${API_BASE}/signup.php/user/create`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password }),
+    body: JSON.stringify(obj),
   });
   return res.json();
 }
