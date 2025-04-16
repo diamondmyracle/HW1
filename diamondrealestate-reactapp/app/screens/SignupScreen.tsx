@@ -1,41 +1,82 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../navigation/Navigation';
+import { useRouter } from 'expo-router';
 import { signupUser } from '../utils/api';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Signup'>;
-
-export default function SignupScreen({ navigation }: Props) {
+export default function SignupScreen() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [repeatPassword, setRepeatPassword] = useState('');
+  const router = useRouter();
 
   const handleSignup = async () => {
+    if (!username || !password || !repeatPassword) {
+      Alert.alert('Error', 'All fields are required');
+      return;
+    }
+
+    if (password !== repeatPassword) {
+      Alert.alert('Error', 'Passwords do not match');
+      return;
+    }
+
     try {
       const res = await signupUser(username, password);
+      console.log('Signup response:', res);
+
       if (res.success) {
         Alert.alert('Signup successful', 'You can now log in.');
-        navigation.replace('Login');
+        router.replace('/login');
       } else {
-        Alert.alert('Signup failed', res.message || 'Try again.');
+        Alert.alert('Signup failed', res.message || 'Please try again.');
       }
-    } catch (err) {
-      Alert.alert('Error', 'An error occurred during signup.');
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Error', 'Something went wrong during signup.');
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Signup</Text>
-      <TextInput placeholder="Username" value={username} onChangeText={setUsername} style={styles.input} />
-      <TextInput placeholder="Password" value={password} onChangeText={setPassword} secureTextEntry style={styles.input} />
-      <Button title="Signup" onPress={handleSignup} />
+      <Text style={styles.header}>Create an Account</Text>
+      <TextInput
+        placeholder="Username"
+        value={username}
+        onChangeText={setUsername}
+        autoCapitalize="none"
+        style={styles.input}
+      />
+      <TextInput
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+        style={styles.input}
+      />
+      <TextInput
+        placeholder="Repeat Password"
+        value={repeatPassword}
+        onChangeText={setRepeatPassword}
+        secureTextEntry
+        style={styles.input}
+      />
+      <Button title="Sign Up" onPress={handleSignup} />
+      <View style={{ marginTop: 20 }}>
+        <Button title="Back to Login" onPress={() => router.push('/login')} />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 20 },
-  header: { fontSize: 24, marginBottom: 20 },
-  input: { borderWidth: 1, marginBottom: 10, padding: 10 },
+  container: { padding: 20, flex: 1, justifyContent: 'center' },
+  header: { fontSize: 24, marginBottom: 20, textAlign: 'center' },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    marginBottom: 12,
+    padding: 10,
+    borderRadius: 5,
+  },
 });
+
