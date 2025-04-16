@@ -21,19 +21,19 @@ export default function SignupScreen() {
     }
 
     try {
-      const res = await signupUser(username, password);
-      console.log('Signup response:', res);
-
-      if (res.success) {
-        Alert.alert('Signup successful', 'You can now log in.');
-        router.replace('/login');
-      } else {
-        Alert.alert('Signup failed', res.message || 'Please try again.');
+        const res = await signupUser(username, password);
+        console.log('Signup response:', res);
+      
+        if (res.status === 'success') {
+          Alert.alert('Signup successful', res.message);
+          router.replace({ pathname: '/', params: { username } }); // go to index with username
+        } else {
+          Alert.alert('Signup failed', res.message || 'Please try again.');
+        }
+      } catch (error) {
+        console.error(error);
+        Alert.alert('Error', 'Something went wrong during signup.');
       }
-    } catch (error) {
-      console.error(error);
-      Alert.alert('Error', 'Something went wrong during signup.');
-    }
   };
 
   return (
