@@ -166,6 +166,7 @@
  
 
 To Integrate Our Frontend and Backend: 
+(Note: Don't forget to follow previous instructions in the README, especially those for creating the database)
 1. Clone our repository 
 2. Move only the non-React files into your htdocs (so everything in our repo besides "diamondrealestate-reactapp")
 3. Open your terminal and run "npx create-expo-app@latest DiamondRealEstate" to create the expo app
