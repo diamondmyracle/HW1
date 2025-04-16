@@ -169,12 +169,18 @@ To Integrate Our Frontend and Backend:
 (Note: Don't forget to follow previous instructions in the README, especially those for creating the database)
 1. Clone our repository 
 2. Move only the non-React files into your htdocs (so everything in our repo besides "diamondrealestate-reactapp")
-3. Open your terminal and run "npx create-expo-app@latest DiamondRealEstate" to create the expo app
+3. Open your terminal and (first navigate to whatever directory you want to create the app in then) run "npx create-expo-app@latest DiamondRealEstate" to create the expo app. This will create a folder called "DiamondRealEstate" that will have any starter code needed for a React app
 4. Note: Have "diamondrealestate-reactapp" in a separate directory/path than htdocs
-5. Next, navigate into the "diamondrealestate-reactapp" folder wherever you have it (navigate into it not just to it)
-6. Open Android Studio and in the top-right corner, near "Clone Repository", press the button with "..." and select "Virtual Device Manager"
-7. Once you're taken to the Virtual Device Manager Screen, select the "+" button and search for "Pixel 6a" and select that and then "Next" in the bottom-right. Then, select "Finish"
-8. Now that your virtual device is created, press the play button for it to start it (the emulator should pop up on your screen, wait for it to completely boot up)
-10. Now, in your terminal (in which you've navigated to "diamondrealestate-reactapp", enter in "npx expo start"
-11. Then, (as in the given commands), type "a" (without the quotes) and now our React App should be running on the emulator
-12. You should see our default screen which will ask you to either navigate to listings or create a new listing (select either as you wish) 
+5. Next, in Finder/(whatever your files app is) navigate into the "diamondrealestate-reactapp" folder wherever you have it
+6. Then, select and copy all the files in "diamondrealestate-reactapp" into "DiamondRealEstate" (this will replace any of those starter files that we've modified, but also because you created the start app yourself you'll have other assets like the node-module folder which we can't upload to Github because of its size) 
+7. Next, open Android Studio and in the top-right corner, near "Clone Repository", press the button with "..." and select "Virtual Device Manager"
+8. Once you're taken to the Virtual Device Manager Screen, select the "+" button and search for "Pixel 6a" and select that and then "Next" in the bottom-right. Then, select "Finish"
+9. Now that your virtual device is created, press the play button for it to start it (the emulator should pop up on your screen, wait for it to completely boot up)
+10. Now, in your terminal (in which you've navigated to "DiamondRealEstate", enter in "npx expo start"
+11. After doing this, you may get an error. If you do, just run either of the commands the terminal suggest to move past and then rerun "npx expo start"
+   <img width="798" alt="Screenshot 2025-04-16 at 3 16 02 AM" src="https://github.com/user-attachments/assets/ff488cad-4921-4e5a-9525-45151ff49532" />
+
+12. Then, once it's started correctly (showing the QR code, available commands, expo url, etc.), type "a" (as in the given commands, without the quotes) and now Expo will install onto your emulator and our React App should be start running on the emulator after it finishes the bundling
+13. You should see our default screen which will ask you to either navigate to listings ("GO TO LISTINGS") or create a new listing ("CREATE NEW LISTING"); select either as you wish
+14. In the "DiamondRealEstate" folder, navigate to app>utils>api.ts and change the IP address in "const API_BASE = 'http://IP_ADDRESS';" to your own IP address (Zimmeck explained in the hw3 assignment pdf how to do so, but otherwise, just go to Wi-Fi>>Wi_Fi Settings...>>(the ... by whatever network you're connected to)>>Network Settings. There you will find you IP address, just copy and paste it in place of "IP_ADDRESS" (although in the actual code you may see a preexisting IP address as opposed to "IP_ADDRESS").
+15. ^^Also, add the port your Apache WebServer is running on (can check this in XAMPP, but probably will be ":8080" or ":80") to the end of your IP address (so, for ex. "http://172.21.146.71:8080") 
