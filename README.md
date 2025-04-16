@@ -183,4 +183,35 @@ To Integrate Our Frontend and Backend:
 12. Then, once it's started correctly (showing the QR code, available commands, expo url, etc.), type "a" (as in the given commands, without the quotes) and now Expo will install onto your emulator and our React App should be start running on the emulator after it finishes the bundling
 13. You should see our default screen which will ask you to either navigate to listings ("GO TO LISTINGS") or create a new listing ("CREATE NEW LISTING"); select either as you wish
 14. In the "DiamondRealEstate" folder, navigate to app>utils>api.ts and change the IP address in "const API_BASE = 'http://IP_ADDRESS';" to your own IP address (Zimmeck explained in the hw3 assignment pdf how to do so, but otherwise, just go to Wi-Fi>>Wi_Fi Settings...>>(the ... by whatever network you're connected to)>>Network Settings. There you will find you IP address, just copy and paste it in place of "IP_ADDRESS" (although in the actual code you may see a preexisting IP address as opposed to "IP_ADDRESS").
-15. ^^Also, add the port your Apache WebServer is running on (can check this in XAMPP, but probably will be ":8080" or ":80") to the end of your IP address (so, for ex. "http://172.21.146.71:8080") 
+15. ^^Also, add the port your Apache WebServer is running on (can check this in XAMPP, but probably will be ":8080" or ":80") to the end of your IP address (so, for ex. "http://172.21.146.71:8080")
+16. If the above doesn't work, repeat the following:
+"Hail Mary, full of grace, the Lord is with thee. Blessed art thou among women, and blessed is the fruit of thy womb, Jesus. Holy Mary, mother of God, pray for us sinners now and at the hour of our death. Amen."
+
+Attached is app.zip and App.tsx. You should replace the app folder inside of DiamondRealEstate with the unzipped contents of app.zip. Then create file App.tsx and place it inside the DiamondRealEstate folder.
+app.zip : [app.zip](https://github.com/user-attachments/files/19775446/app.zip)
+App.tsx contents:
+```javascript
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import Navigation from './navigation/Navigation';
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Navigation />
+    </NavigationContainer>
+  );
+}
+```
+Here are examples of the app logging in and signing up:
+<img width="1388" alt="Screenshot 2025-04-16 at 5 41 13 AM" src="https://github.com/user-attachments/assets/0e081aa5-0ea0-411b-a1e4-9f12685c8766" />
+<img width="1388" alt="Screenshot 2025-04-16 at 5 33 53 AM" src="https://github.com/user-attachments/assets/50dc4bd8-0bd9-41fb-bf87-245fd7a3a64b" />
+<img width="1388" alt="Screenshot 2025-04-16 at 5 34 20 AM" src="https://github.com/user-attachments/assets/ceef6e2c-aef7-4548-aeb4-95713721a53e" />
+
+We equally contributed! 
+
+We used ChatGPT to help start the foundation for how to begin the mobile frontend and being able to set up expo and react native. Used ChatGPT to help with debugging.
+
+
+
+
