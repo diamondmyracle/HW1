@@ -9,17 +9,26 @@ export default function LoginScreen() {
   const router = useRouter();
 
   const handleLogin = async () => {
+    if (!username || !password) {
+      Alert.alert('Missing credentials');
+      return;
+    }
+  
     try {
       const res = await loginUser(username, password);
-      if (res.success) {
-        router.replace('/'); // go to index/home page after login
+      console.log('Login result:', res);
+  
+      if (res.status === 'success') {
+        router.replace({ pathname: '/', params: { username } });
       } else {
-        Alert.alert('Login failed', res.message || 'Invalid credentials.');
-      }
-    } catch (err) {
-      Alert.alert('Error', 'An error occurred during login.');
+        Alert.alert('Login failed', res.message || 'Try again.');
+      }      
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Error', 'Something went wrong during login.');
     }
   };
+  
 
   return (
     <View style={styles.container}>
@@ -37,3 +46,4 @@ const styles = StyleSheet.create({
   header: { fontSize: 24, marginBottom: 20 },
   input: { borderWidth: 1, marginBottom: 10, padding: 10 },
 });
+
