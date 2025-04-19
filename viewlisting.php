@@ -31,7 +31,7 @@
         <title>Create new listing</title>
 
         <link rel="stylesheet" href="cssForIndex.css">
-        <link rel="stylesheet" href="editlisting.css">
+        <link rel="stylesheet" href="listings.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Outfit&display=swap" rel="stylesheet">
@@ -39,6 +39,23 @@
     </head>
 
     <body>
-        <p>Paragraph</p>
+        <div class="navbar">
+            <a href="index.php">Home</a>
+            <a class="active" href="listings.php">Listing</a>
+            <a href="index.php#faq">FAQ</a>
+
+            <?php if (isset($_SESSION['username'])): ?>
+                <a href="logout.php">Logout (<?php echo htmlspecialchars($_SESSION['username']); ?>)</a>
+            <?php else: ?>
+                <a href="login.php">Login</a>
+                <a href="signup.php">Signup</a>
+            <?php endif; ?>
+        </div>
+
+        <div class="site-content">
+            <div id="listings-group" class="listings-group">
+                <h1 id="listing-name">Listing Name</h1>
+            </div>
+        </div>
     </body>
 </html>
