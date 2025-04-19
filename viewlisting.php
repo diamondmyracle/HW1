@@ -31,7 +31,7 @@
         <title>Create new listing</title>
 
         <link rel="stylesheet" href="cssForIndex.css">
-        <link rel="stylesheet" href="listings.css">
+        <link rel="stylesheet" href="viewlisting.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Outfit&display=swap" rel="stylesheet">
@@ -53,8 +53,31 @@
         </div>
 
         <div class="site-content">
-            <div id="listings-group" class="listings-group">
-                <h1 id="listing-name">Listing Name</h1>
+            <div id="listing" class="listing">
+                <ul>
+                    <li>
+                        <div id="listing-image">
+                            <img src="photos/listing1.webp" alt="Listing 1 photo">
+                        </div>
+                    </li>
+
+                    <li>
+                        <div id="listing-info">
+                            <h1 id="listing-name">Listing Name</h1>
+                            <p>
+                                Saint Val
+                                <br>
+                                Perfect for an eternal date-night...
+                            </p>
+                            <div class="listing-price">
+                                <img src="diamond.png" alt="diamond">
+                                <p>
+                                    <b>10 diamonds</b>
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
     </body>

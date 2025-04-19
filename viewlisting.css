@@ -1,0 +1,101 @@
+/*
+    CSS file for listings.html
+*/
+
+/*@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap'); */
+
+body {
+    font-family: "Outfit", serif ;
+    margin: 0px ;
+    font-size: 100% ;
+}
+
+.site-content {
+    margin: 4% ;
+    margin-top: 8% ;
+    font-size: 1.25em ;
+}
+
+.listing {
+    background-color: #ffffff ;
+    border: 2px solid rgb(197, 197, 197) ;
+    width: 100% ;
+    margin: 0px ;
+    border-radius: 1em ;
+}
+
+.listing h1 {
+    margin: 20px 10px ;
+}
+
+.listing ul {
+    display: flex ;
+    flex-wrap: wrap ;
+    list-style: none ;
+    margin: 0px ;
+    padding: 5px ;
+    box-sizing: border-box ;
+}
+
+.listing li {
+    display: inline-block ;
+    padding: 0px ;
+    width: 33.3% ;
+    background-color: #ffffff ;
+}
+
+@media (max-width: 1000px) {
+    .listings-group li {
+        width: 50% ;
+    }
+}
+
+@media (max-width: 600px) {
+    .listings-group li {
+        width: 100% ;
+    }
+}
+
+.listing {
+    margin: 5px ;
+    width: auto ;
+    border: 2px solid rgb(197, 197, 197) ;
+    border-radius: 1em ;
+}
+
+.listing img {
+    box-sizing: border-box ;
+    width: 100% ;
+    padding: 10px ;
+    border-radius: 1em ;
+}
+
+.listing h2 {
+    margin: 10px ;
+    margin-top: 0px ;
+    margin-bottom: 0px ;
+}
+
+.listing p {
+    margin: 10px ;
+    margin-top: 0px ;
+    margin-bottom: 0px ;
+}
+
+.listing h2:hover {
+    color: rgb(30, 209, 30) ;
+}
+
+.listing-price p {
+    margin-bottom: 5px ;
+    margin-left: 30px ;
+    padding-top: 5px ;
+    color: rgb(7, 138, 138);
+}
+
+.listing-price img {
+    image-rendering: pixelated ;
+    width: 1.5em ;
+    float: left ;
+    padding: 0px ;
+}
