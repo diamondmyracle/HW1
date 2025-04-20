@@ -215,5 +215,51 @@ We equally contributed!
 We used ChatGPT to help start the foundation for how to begin the mobile frontend and being able to set up expo and react native. Used ChatGPT to help with debugging.
 
 
+## Project (HW4)
+
+## Setting Up The Unit Tests
+Make sure you have the following downloaded in your terminal as per Zimmeck's tutorial:
+
+1. If you do not have it yet, install [homebrew](https://brew.sh/) with:
+
+   ```bash
+   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+   ```
+
+2. Install PHPUnit with:
+
+   ```bash
+   brew install phpunit
+   ```
+
+3. Install Composer with:
+
+   ```bash
+   brew install composer
+   ```
+
+4. If necessary, you can install PHP with:
+
+   ```bash
+   brew install php
+   ```
+
+5. In the root folder of your music rating backend code, which contains your
+   `index.php`, create a new folder, say, `test-project` (the name does not matter).
+   From inside `test-project` folder start Composer by running:
+
+   ```bash
+   composer init
+   ```
+When you do "composer init" inside the `test-project` folder, many other files will be added. In the repo, we have provided the `test-project` folder which contains the `tests` folder and `phpunit.umx` file. The `tests` folder contains the unit test file `UserAPITest.php`. At this point your `test-project` folder should look like the following:
+
+<img width="940" alt="Screenshot 2025-04-20 at 2 41 32 PM" src="https://github.com/user-attachments/assets/3375d6c6-88b4-466d-8dee-01c0314acc83" />
+
+To be able to test the unit test do this command:
+
+```
+./vendor/bin/phpunit
+```
+
 
 
