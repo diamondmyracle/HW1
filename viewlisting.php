@@ -80,6 +80,19 @@
                                         <span id="cost" class="cost"><b>10</b></span> diamonds
                                     </p>
                             </div>
+                            <ul>
+                                <li>
+                                    1 left!
+                                </li>
+                                <li>
+                                    Greater than or equal to 1 watching!
+                                </li>
+                                <li>
+                                    <span id="num-favourited">0<span> people favourited!
+                                </li>
+                            </ul>
+
+                            <button type="button" class="buy">Buy now!</button>
                         </div>
                     </li>
                 </ul>

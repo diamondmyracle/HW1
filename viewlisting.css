@@ -144,3 +144,32 @@ body {
     float: left ;
     padding: 0px ;
 }
+
+.listing-sell-info ul {
+    list-style: circle ;
+    list-style-position: inside ;
+    margin: 0px ;
+    padding: 5px ;
+    box-sizing: border-box ;
+}
+
+.listing-sell-info li {
+    text-indent: -1em ;
+    display: list-item ;
+    padding-left: 1.25em ;
+    padding-bottom: 1em ;
+    width: auto ;
+}
+
+.listing-sell-info button {
+    width: calc(100% - 10px) ;
+    display: block ;
+    box-sizing: border-box;
+    margin: 5px ;
+    padding: 10px ;
+    font-size: 100% ;
+    background-color: #ffa749 ;
+    border: 2px solid rgb(255, 126, 71) ;
+    color:rgb(0, 0, 0) ;
+    border-radius: 1em ;
+}   
