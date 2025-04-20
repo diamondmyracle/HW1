@@ -55,25 +55,30 @@
         <div class="site-content">
             <div id="listing" class="listing">
                 <ul>
-                    <li>
-                        <div id="listing-image">
+                    <li id="li-img" class="li-img">
+                        <div id="listing-image" class="listing-image">
                             <img src="photos/listing1.webp" alt="Listing 1 photo">
                         </div>
                     </li>
 
-                    <li>
+                    <li id="li-info" class="li-info">
                         <div id="listing-info">
                             <h1 id="listing-name">Listing Name</h1>
-                            <p>
-                                Saint Val
-                                <br>
+                            <p id="listing-author">by <span id="seller" class="seller">Listing Author</span></p>
+                            <br>
+                            <p id="listing-descript">
                                 Perfect for an eternal date-night...
                             </p>
+                        </div>
+                    </li>
+
+                    <li id="li-sell-info" class="li-sell-info">
+                        <div id="listing-sell-info" class="listing-sell-info">
                             <div class="listing-price">
-                                <img src="diamond.png" alt="diamond">
-                                <p>
-                                    <b>10 diamonds</b>
-                                </p>
+                                    <img src="diamond.png" alt="diamond">
+                                    <p>
+                                        <span id="cost" class="cost"><b>10</b></span> diamonds
+                                    </p>
                             </div>
                         </div>
                     </li>
