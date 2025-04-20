@@ -65,7 +65,7 @@ public function userExists()
                         ["status" => "success"],
                         ["data" => json_decode($responseData)]
                     )),
-                array('Content-Type: application/json', 'HTTP/1.1 200 OK')
+                array('Content-Type: application/json', 'HTTP/1.1 201 OK')
             );
         } else {
             $this->sendOutput(
@@ -110,7 +110,7 @@ public function userExists()
                     "status" => "success",
                     "message" => "User has been created."
                 ]),
-                array('Content-Type: application/json', 'HTTP/1.1 200 OK')
+                array('Content-Type: application/json', 'HTTP/1.1 201 OK')
             );
         } else {
             $this->sendOutput(
@@ -200,7 +200,7 @@ public function userExists()
                     "status" => $status,
                     "data" => $message
                 ]),
-                array('Content-Type: application/json', 'HTTP/1.1 200 OK')
+                array('Content-Type: application/json', 'HTTP/1.1 201 OK')
             );
         } else {
             $this->sendOutput(

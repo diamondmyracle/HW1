@@ -98,7 +98,7 @@ public function createAction()
                 $this->sendOutput(json_encode([
                     'status' => 'success',
                     'message' => 'Listing created'
-                ]), ['Content-Type: application/json']);
+                ]), ['Content-Type: application/json', 'HTTP/1.1 201 Created']);
             } else {
                 $this->sendOutput(json_encode([
                     'status' => 'error',
