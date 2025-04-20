@@ -261,5 +261,155 @@ To be able to test the unit test do this command:
 ./vendor/bin/phpunit
 ```
 
+**NOTE**: 
+For the unit test:
+```
+ public function testPost_LoginUser(): void {
+        $data = json_encode([
+            'username' => 'diamond', // use an existing user
+            'psw' => '1234567890'
+        ]);
 
+        $ch = curl_init("{$this->baseUrl}/login.php/user/login");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+
+        curl_exec($ch);
+        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        $this->assertEquals(201, $status);
+    }
+```
+If you already have an account, replace the `'username' = ` with username you have created and do the same for `psw`. Otherwise, if you don't want to update the code, signup with an account with the username `diamond` and password `1234567890`.
+
+# Question 2 - Talks with ChatGPT
+
+After successfully completing the unit tests for testGet_UserList, testPost_CreateUser, testPost_LoginUser, testPost_FailedLogin. I asked ChatGPT how we would be able to make a unit test to test for listing creation. I placed this request into chat:
+
+```
+ok given these correct unit test:
+
+<?php
+
+use PHPUnit\Framework\TestCase;
+
+class UserApiTest extends TestCase
+{
+    private $baseUrl = "http://localhost"; 
+
+    public function testGet_UserList(): void {
+        $ch = curl_init("{$this->baseUrl}/signup.php");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        curl_exec($ch);
+        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        $this->assertEquals(200, $status);
+    }
+
+    public function testPost_CreateUser(): void {
+        $data = json_encode([
+            'username' => 'testuser_' . rand(1000, 9999),
+            'psw' => 'testpassword'
+        ]);
+
+        $ch = curl_init("{$this->baseUrl}/signup.php/user/create");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+
+        curl_exec($ch);
+        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        $this->assertEquals(201, $status);
+    }
+
+    public function testPost_LoginUser(): void {
+        $data = json_encode([
+            'username' => 'diamond', // use an existing user
+            'psw' => '1234567890'
+        ]);
+
+        $ch = curl_init("{$this->baseUrl}/login.php/user/login");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+
+        curl_exec($ch);
+        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        $this->assertEquals(201, $status);
+    }
+
+    public function testPost_FailedLogin(): void {
+        $data = json_encode([
+            'username' => 'not_valid_user',
+            'psw' => 'wrong_password'
+        ]);
+
+        $ch = curl_init("{$this->baseUrl}/login.php/user/login");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+
+        curl_exec($ch);
+        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        $this->assertEquals(201, $status);
+    }
+
+    public function testPost_CreateListing(): void {
+        $data = json_encode([
+            'listing_name' => 'Test Listing',
+            'listing_descript' => 'This is a test listing.',
+            'price' => 150,
+        ]);
+
+        $ch = curl_init("{$this->baseUrl}/listing.php/user/create");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+
+        curl_exec($ch);
+        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        $this->assertEquals(201, $status);
+    }
+}
+
+
+create one for ListingCreate i suppose
+```
+
+To which I received the code:
+
+```
+public function testPost_CreateListing(): void {
+    $data = json_encode([
+        'listing_name' => 'Test Listing',
+        'listing_descript' => 'This is a test listing.',
+        'price' => 150,
+        'username' => 'diamond' // add if your backend requires it
+    ]);
+
+    $ch = curl_init("{$this->baseUrl}/newlisting.php/listing/create");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+
+    curl_exec($ch);
+    $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    $this->assertEquals(201, $status);
+}
+```
+This code is correct, however, it doesn't account for out `ListingController.php` and the http response we received which was a 200 OK instead of 201. Going into that code and changing the response then gave a correct test result in the terminal.
 
