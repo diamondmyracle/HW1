@@ -57,17 +57,17 @@
                 <ul>
                     <li id="li-img" class="li-img">
                         <div id="listing-image" class="listing-image">
-                            <img src="photos/listing1.webp" alt="Listing 1 photo">
+                            <img src="uploads/50819.jpg" alt="Listing 1 photo">
                         </div>
                     </li>
 
                     <li id="li-info" class="li-info">
                         <div id="listing-info">
                             <h1 id="listing-name">Listing Name</h1>
-                            <p id="listing-author">by <span id="seller" class="seller">Listing Author</span></p>
+                            <p id="listing-author">by <b><span id="seller" class="seller">Listing Author</span></b></p>
                             <br>
                             <p id="listing-descript">
-                                Perfect for an eternal date-night...
+                                Description
                             </p>
                         </div>
                     </li>
@@ -77,7 +77,7 @@
                             <div class="listing-price">
                                     <img src="diamond.png" alt="diamond">
                                     <p>
-                                        <span id="cost" class="cost"><b>10</b></span> diamonds
+                                        <b><span id="cost" class="cost">0</span></b> diamonds
                                     </p>
                             </div>
                             <div id="watch-info" class="watch-info">
@@ -103,3 +103,56 @@
         </div>
     </body>
 </html>
+
+<script>
+    function escapeHTML(str) {
+    return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;") ;
+    }
+
+    const reqBody = {} ;
+    reqBody["id"] = <?php echo $list_id ?> ;
+
+    fetch("listings.php/listing/id", {
+        method: "POST",
+        header: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+        },
+        body: JSON.stringify(reqBody)
+    })
+    .then(response => response.json())
+    .then(data => {
+    const imageContainer = document.getElementById("listing-image") ;
+    imageContainer.innerHTML = `
+        <img src="/uploads/${escapeHTML((data[0]).image)}" alt="Listing 1 photo">
+    ` ;
+
+    const nameContainer = document.getElementById("listing-name") ;
+    nameContainer.innerHTML = `
+        ${escapeHTML((data[0]).listing_name)}
+    ` ;
+
+    const authorContainer = document.getElementById("seller") ;
+    authorContainer.innerHTML = `
+        ${escapeHTML((data[0]).username)}
+    ` ;
+
+    const descContainer = document.getElementById("listing-descript") ;
+    descContainer.innerHTML = `
+        ${escapeHTML((data[0]).listing_descript)}
+    ` ;
+
+    const priceContainer = document.getElementById("cost") ;
+    priceContainer.innerHTML = `
+        ${escapeHTML((data[0]).price)}
+    `;
+    })
+    .catch(err =>{
+        console.error("Failed to load listings, bitch:", err) ;
+    })
+</script>
