@@ -262,6 +262,9 @@ To be able to test the unit test do this command:
 ```
 
 **NOTE**: 
+We needed to change the HTTP response in the `UserController` and `ListingController` file from 200 to 201 depending on the test. So make sure to clone the repo for the most up to date version of the files.
+
+**Additional Note**
 For the unit test:
 ```
  public function testPost_LoginUser(): void {
