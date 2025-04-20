@@ -161,6 +161,13 @@ body {
     width: auto ;
 }
 
+.watch-info img {
+    image-rendering: pixelated ;
+    width: 1.5em ;
+    float: right ;
+    padding-left: 10px ;
+}
+
 .listing-sell-info button {
     width: calc(100% - 10px) ;
     display: block ;
