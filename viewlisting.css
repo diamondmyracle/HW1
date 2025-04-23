@@ -1,0 +1,188 @@
+/*
+    CSS file for viewlisting.html
+*/
+
+/*@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap'); */
+
+body {
+    font-family: "Outfit", serif ;
+    margin: 0px ;
+    font-size: 100% ;
+}
+
+.site-content {
+    margin: 4% ;
+    margin-top: 8% ;
+    font-size: 1.25em ;
+}
+
+.listing {
+    background-color: #ffffff ;
+    border: 2px solid rgb(197, 197, 197) ;
+    width: 100% ;
+    margin: 0px ;
+    border-radius: 1em ;
+}
+
+.listing-sell-info {
+    background-color: #ffffff ;
+    border: 2px solid rgb(197, 197, 197) ;
+    width: auto ;
+    margin: 0px ;
+    padding: 0px ;
+    border-radius: 1em ;
+}
+
+.listing h1 {
+    margin: 20px 10px ;
+}
+
+.listing ul {
+    display: flex ;
+    flex-wrap: wrap ;
+    list-style: none ;
+    margin: 0px ;
+    padding: 5px ;
+    box-sizing: border-box ;
+}
+
+/*
+    Fix later. Change widths of list items.
+*/
+
+.listing li.li-img {
+    display: inline-block ;
+    padding: 0px ;
+    width: 35% ;
+    background-color: #ffffff ;
+}
+
+.listing li.li-info {
+    display: inline-block ;
+    padding: 0px ;
+    width: 45% ;
+    background-color: #ffffff ;
+}
+
+.listing li.li-sell-info {
+    display: inline-block ;
+    padding: 0px ;
+    width: 20% ;
+    background-color: #ffffff ;
+}
+
+
+@media (max-width: 1000px) {
+    .listings-group li {
+        width: 50% ;
+    }
+}
+
+@media (max-width: 600px) {
+    .listings-group li {
+        width: 100% ;
+    }
+}
+
+.listing {
+    margin: 5px ;
+    width: auto ;
+    border: 2px solid rgb(197, 197, 197) ;
+    border-radius: 1em ;
+}
+
+.listing-image img {
+    box-sizing: border-box ;
+    width: 100% ;
+    padding: 10px ;
+    border-radius: 1em ;
+}
+
+.listing h2 {
+    margin: 10px ;
+    margin-top: 0px ;
+    margin-bottom: 0px ;
+}
+
+.listing p {
+    margin: 10px ;
+    margin-top: 0px ;
+    margin-bottom: 0px ;
+}
+
+.listing h2:hover {
+    color: rgb(30, 209, 30) ;
+}
+
+.listing-price {
+    background-color: #cff0ff ;
+    border: 2px solid rgb(144, 196, 255) ;
+    width: auto ;
+    margin: 5px ;
+    padding: 0px ;
+    border-radius: 1em ;
+}
+
+.listing-price p {
+    margin-bottom: 5px ;
+    margin-left: 30px ;
+    padding-top: 0px ;
+    color: rgb(0, 0, 0);
+}
+
+.listing-price span {
+    font-size: 125% ;
+    margin-bottom: 0px ;
+    margin-left: 0px ;
+    padding-top: 0px ;
+    color: rgb(0, 0, 0);
+}
+
+.listing-price img {
+    image-rendering: pixelated ;
+    width: 1.5em ;
+    float: left ;
+    padding: 0px ;
+}
+
+.listing-sell-info ul {
+    list-style: disc ;
+    list-style-position: inside ;
+    margin: 0px ;
+    padding: 5px ;
+    box-sizing: border-box ;
+}
+
+.listing-sell-info li {
+    text-indent: -1em ;
+    display: list-item ;
+    padding-left: 1.25em ;
+    padding-bottom: 1em ;
+    width: auto ;
+}
+
+.watch-info img {
+    image-rendering: pixelated ;
+    width: 1.5em ;
+    float: right ;
+    padding-left: 10px ;
+}
+
+.listing-sell-info button {
+    width: calc(100% - 10px) ;
+    display: block ;
+    box-sizing: border-box;
+    margin: 5px ;
+    padding: 10px ;
+    font-size: 100% ;
+    background-color: #ffa749 ;
+    border: 2px solid rgb(255, 126, 71) ;
+    color:rgb(0, 0, 0) ;
+    border-radius: 1em ;
+    transition-duration: 0.125s ;
+}
+
+.listing-sell-info button:hover {
+    background-color: #ff7c44 ;
+    border: 2px solid rgb(255, 89, 60) ;
+}
