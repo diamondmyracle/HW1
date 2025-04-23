@@ -105,6 +105,12 @@
 </html>
 
 <script>
+    function changeTitle(str) {
+        document.title = str
+    }
+</script>
+
+<script>
     function escapeHTML(str) {
     return String(str)
     .replace(/&/g, "&amp;")
@@ -136,6 +142,8 @@
     nameContainer.innerHTML = `
         ${escapeHTML((data[0]).listing_name)}
     ` ;
+
+    changeTitle(escapeHTML((data[0]).listing_name) + " - Diamond Real Estate") ;
 
     const authorContainer = document.getElementById("seller") ;
     authorContainer.innerHTML = `
