@@ -161,7 +161,7 @@
     `;
     })
     .catch(err =>{
-        console.error("Failed to load listings, bitch:", err) ;
+        console.error("Failed to load listings:", err) ;
         window.location.href = "/listings.php" ; //redirect user if the listing couldn't load
     })
 </script>
