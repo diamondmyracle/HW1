@@ -84,7 +84,7 @@
      `image` LONGBLOB DEFAULT NULL,
      PRIMARY KEY (`id`),
      INDEX username_idx (`username`),
-     FOREIGN KEY (`username`) REFERENCES users(`username`))
+     FOREIGN KEY (`username`) REFERENCES users(`username`));
 ```
 add this line
 ```
@@ -92,7 +92,21 @@ add this line
  ```
  **Foreign Key Relationship:**  
  The column `username` in `listings` references the `username` in the `users` table.
- 
+
+ **Create `comments` Table:**
+```sql
+CREATE TABLE `app-db`.`comments` (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    listing_id INT NOT NULL,
+    username VARCHAR(255) NOT NULL,
+    comment TEXT NOT NULL,
+    parent_id INT DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (listing_id) REFERENCES listings(id) ON DELETE CASCADE,
+    FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE,
+    FOREIGN KEY (parent_id) REFERENCES comments(id) ON DELETE SET NULL
+);
+```
  
  Pic of our local development environment!!
  
