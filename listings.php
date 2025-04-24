@@ -114,7 +114,9 @@
                     listItem.innerHTML = `
                     <div class="listing">
                             <img src="uploads/${escapeHTML(item.image)}" alt="Listing 1 photo">
-                            <h2>${escapeHTML(item.listing_name)}</h2>
+                            <a href="viewlisting.php?id=${item.id}" style="text-decoration: none">
+                                <h2 style="color: #000000" >${escapeHTML(item.listing_name)}</h2>
+                            </a>
                             <p>
                                 ${escapeHTML(item.username)}
                                 <br>
