@@ -244,9 +244,9 @@ Make sure you have the following downloaded in your terminal as per Zimmeck's tu
    brew install php
    ```
 
-5. In the root folder of your music rating backend code, which contains your
-   `index.php`, create a new folder, say, `test-project` (the name does not matter).
-   From inside `test-project` folder start Composer by running:
+5. In the root folder (so, htdocs which you've copied all our code into), of your diamondRealEstate backend code, which contains your
+   `index.php`, create a new folder, and name it `test-project` 
+   From inside `test-project` folder, start Composer by running:
 
    ```bash
    composer init
