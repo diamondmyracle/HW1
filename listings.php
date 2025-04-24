@@ -131,7 +131,7 @@
             }) ;
         })
         .catch(err =>{
-            console.error("Failed to load listings, bitch:", err) ;
+            console.error("Failed to load listings:", err) ;
         })
     </script>
 </div>
