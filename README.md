@@ -84,7 +84,7 @@
      `image` LONGBLOB DEFAULT NULL,
      PRIMARY KEY (`id`),
      INDEX username_idx (`username`),
-     FOREIGN KEY (`username`) REFERENCES users(`username`)
+     FOREIGN KEY (`username`) REFERENCES users(`username`))
 ```
 add this line
 ```
