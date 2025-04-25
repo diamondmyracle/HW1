@@ -72,6 +72,11 @@
      PRIMARY KEY (`username`)
  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
  ```
+add this line 
+```
+ALTER TABLE `users` ADD `acc_balance` INT(11) NOT NULL AFTER `password`,
+ADD `user_descript` VARCHAR(255) NOT NULL AFTER `acc_balance`;
+```
  
  **Create `listings` Table:**
  ```sql
