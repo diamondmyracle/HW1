@@ -9,15 +9,27 @@ session_start();
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ;
         $uri = explode('/', $uri) ;
 
-        if ((isset($uri[2]) && $uri[2] != "image")) {
-            header("HTTP/1.1 404 Not Found") ;
-            exit() ;
-        }
+        if (isset($uri[2])) {
+            switch $uri[2] {
+                case "image":
+                    require PROJECT_ROOT_PATH . "/Controller/Api/ImageController.php" ;
+                    $objFeedController = new ImageController() ;
+                    $objFeedController->handleImageUpload() ;
+                    exit() ;
+                    break ;
+                case "comment":
+                    // require PROJECT_ROOT_PATH . "/Controller/Api/CommentController.php" ;
+                    // $objFeedController = new CommentController() ;
+                    // $objFeedController->handleImageUpload() ; //Need to do the actual thingy here
+                    // exit() ;
+                    break ;
+                default:
+                    header("HTTP/1.1 404 Not Found") ;
+                    exit() ;
+            }
+        } else {
 
-        require PROJECT_ROOT_PATH . "/Controller/Api/ImageController.php" ;
-        $objFeedController = new ImageController() ;
-        $objFeedController->handleImageUpload() ;
-        exit() ;
+        }
     }
 ?>
 
