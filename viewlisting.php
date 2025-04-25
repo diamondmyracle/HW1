@@ -197,7 +197,7 @@ function displayComments($db, $list_id, $parent_id = null)
         const commentDiv = button.closest('div.comment') ;
         const textarea = commentDiv.querySelector('textarea') ;
         const text = textarea.value.trim() ;
-        const parentId = null ; //This should actually be set properly
+        const parentId = commentDiv.querySelector('input[type="hidden"][name="parent_id"]') ;
 
         if (!text) return ;
 
@@ -205,7 +205,7 @@ function displayComments($db, $list_id, $parent_id = null)
             list_id: <?php echo $list_id ?>,
             username: "<?php echo htmlspecialchars($_SESSION["username"]) ?>",
             comment: text,
-            parent_id: parentId
+            parent_id: parentId.value
         } ;
 
         const commentResponse = await fetch('upload.php/comment', {

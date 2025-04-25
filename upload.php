@@ -25,7 +25,7 @@ session_start();
                     require PROJECT_ROOT_PATH . "/Controller/Api/CommentController.php" ;
                     $objFeedController = new CommentController() ;
 
-                    if ($parent_id === null) {
+                    if ($parent_id === "") {
                         $objFeedController->postParentComment() ;
                     } else {
                         $objFeedController->postChildComment() ;
