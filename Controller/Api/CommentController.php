@@ -15,7 +15,8 @@
                     $username = $data["username"] ;
                     $comment = $data["comment"] ;
 
-                    insertParentComment($list_id, $username, $comment) ;
+                    $commentModel = new CommentModel();
+                    $commentModel->insertParentComment($list_id, $username, $comment) ;
                 } catch (Error $e) {
                     $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
                     $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
@@ -60,7 +61,8 @@
                     $comment = $data["comment"] ;
                     $parent_id = $data["parent_id"] ;
 
-                    insertChildComment($list_id, $username, $comment, $parent_id) ;
+                    $commentModel = new CommentModel();
+                    $commentModel->insertChildComment($list_id, $username, $comment, $parent_id) ;
                 } catch (Error $e) {
                     $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
                     $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';

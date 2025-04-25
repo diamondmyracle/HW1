@@ -10,7 +10,7 @@ session_start();
         $uri = explode('/', $uri) ;
 
         if (isset($uri[2])) {
-            switch $uri[2] {
+            switch ($uri[2]) {
                 case "image":
                     require PROJECT_ROOT_PATH . "/Controller/Api/ImageController.php" ;
                     $objFeedController = new ImageController() ;
@@ -18,10 +18,19 @@ session_start();
                     exit() ;
                     break ;
                 case "comment":
-                    // require PROJECT_ROOT_PATH . "/Controller/Api/CommentController.php" ;
-                    // $objFeedController = new CommentController() ;
-                    // $objFeedController->handleImageUpload() ; //Need to do the actual thingy here
-                    // exit() ;
+                    $json = file_get_contents("php://input") ;
+                    $data = json_decode($json, true) ;
+                    $parent_id = $data["parent_id"] ;
+
+                    require PROJECT_ROOT_PATH . "/Controller/Api/CommentController.php" ;
+                    $objFeedController = new CommentController() ;
+
+                    if ($parent_id === null) {
+                        $objFeedController->postParentComment() ;
+                    } else {
+                        $objFeedController->postChildComment() ;
+                    }
+                    exit() ;
                     break ;
                 default:
                     header("HTTP/1.1 404 Not Found") ;
