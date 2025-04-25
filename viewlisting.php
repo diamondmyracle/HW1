@@ -63,17 +63,17 @@ function displayComments($db, $list_id, $parent_id = null)
         echo "<p>" . nl2br(htmlspecialchars($row['comment'])) . "</p>";
 
         if (isset($_SESSION['username']) && $_SESSION['username'] === $row['username']) {
-            echo "<form method='post' action=''>";
+            //echo "<form method='post' action=''>";
             echo "<input type='hidden' name='comment_id' value='{$row['id']}'>";
-            echo "<button type='submit' name='delete_comment'>Delete</button>";
-            echo "</form>";
+            echo "<button class='delete-comment' name='delete_comment'>Delete</button>";
+            //echo "</form>";
         }
 
-        echo "<form method='post' action=''>";
+        //echo "<form method='post' action=''>";
         echo "<input type='hidden' name='parent_id' value='{$row['id']}'>";
-        echo "<textarea name='comment' required placeholder='Reply to this comment'></textarea>";
-        echo "<button type='submit' name='submit_comment'>Reply</button>";
-        echo "</form>";
+        echo "<textarea name='comment' placeholder='Reply to this comment'></textarea>";
+        echo "<button class='submit-comment' name='submit_comment'>Reply</button>";
+        //echo "</form>";
 
         displayComments($db, $list_id, $row['id']);
         echo "</div>";
@@ -137,6 +137,21 @@ function displayComments($db, $list_id, $parent_id = null)
                 </li>
             </ul>
         </div>
+
+        <div class="comment-section" id="comment-section">
+        <h2>Comments</h2>
+        <!-- <form method="post" action=""> -->
+            <div class="comment">
+                <textarea name="comment" placeholder="Write your comment!"></textarea>
+                <input type="hidden" name="parent_id" value="">
+                <button class="submit-comment" name="submit_comment">Post Comment</button>
+            </div>
+
+            <div class="comments-list">
+                <?php displayComments($db, $list_id); ?>
+            </div>
+        <!-- </form> -->
+    </div>
     </div>
 
     <script>
@@ -171,19 +186,124 @@ function displayComments($db, $list_id, $parent_id = null)
             window.location.href = "/listings.php";
         });
     </script>
-
-    <div class="comment-section">
-        <h2>Comments</h2>
-        <form method="post" action="">
-            <textarea name="comment" placeholder="Write your comment!" required></textarea>
-            <input type="hidden" name="parent_id" value="">
-            <button type="submit" name="submit_comment">Post Comment</button>
-        </form>
-
-        <div class="comments-list">
-            <?php displayComments($db, $list_id); ?>
-        </div>
-    </div>
 </body>
 </html>
 
+<script>
+    document.getElementById("comment-section").addEventListener("click", async (event) => {
+        if (!event.target.matches('.submit-comment')) return ;
+
+        const button = event.target ;
+        const commentDiv = button.closest('div.comment') ;
+        const textarea = commentDiv.querySelector('textarea') ;
+        const text = textarea.value.trim() ;
+        const parentId = null ; //This should actually be set properly
+
+        if (!text) return ;
+
+        const commentData = {
+            list_id: <?php echo $list_id ?>,
+            username: "<?php echo htmlspecialchars($_SESSION["username"]) ?>",
+            comment: text,
+            parent_id: parentId
+        } ;
+
+        const commentResponse = await fetch('upload.php/comment', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(commentData)
+        }).catch(err => console.error("Fetch error:", err)) ;
+
+        const commentResult = await commentResponse.json();
+
+        if (commentResult.status === "success") {
+            textarea.value = "" ;
+        } else {
+            //errorEl.textContent = commentResult.message || "Something went wrong uploading image.";
+            return ;
+        }
+
+    }) ;
+</script>
+
+<!-- <script>
+    document.getElementById('comment-section').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const errorEl = document.getElementById('formError');
+    errorEl.textContent = '';
+
+    const imageFile = form.listing_image.files[0];
+
+    if (!imageFile) {
+        errorEl.textContent = 'Please upload an image.';
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = async function () {
+        const base64Image = reader.result;
+
+        const imageData = {
+            name: imageFile.name,
+            image: base64Image
+        } ;
+
+        const imageResponse = await fetch('upload.php/image', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(imageData)
+        }).catch(err => console.error("Fetch error:", err)) ;
+
+        const imageResult = await imageResponse.json();
+
+        if (imageResult.status === "success") {
+
+        } else {
+            errorEl.textContent = imageResult.message || "Something went wrong uploading image.";
+            return ;
+        }
+
+        const listData = {
+            //id: Math.random().toString(36).substring(2, 15),
+            username: "",
+            listing_name: form.listing_name.value,
+            listing_descript: form.listing_desc.value,
+            price: form.listing_price.value,
+            image: imageResult.filename
+        };
+
+        const listingResponse = await fetch('newlisting.php/listing/create', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(listData)
+        }).catch(err => console.error("Fetch error:", err)) ;
+
+        const result = await listingResponse.json();
+
+        if (result.status === "success") {
+            window.location.href = "listings.php";
+        } else {
+            errorEl.textContent = result.message || "Something went wrong.";
+        }
+    } ;
+// };
+
+    reader.readAsDataURL(imageFile) ;
+});
+
+reader.onerror = function (error) {
+    errorEl.textContent = "Error reading image file.";
+    console.error("FileReader error:", error);
+};
+</script> -->
