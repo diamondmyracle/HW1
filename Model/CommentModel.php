@@ -13,5 +13,17 @@ class CommentModel extends Database
         return $this->insert("INSERT INTO comments (listing_id, username, comment, parent_id) VALUES (?, ?, ?, ?)", 
                             ["issi", $list_id, $username, $comment, $parent_id]) ;
     }
+
+    public function deleteComment($comment_id)
+    {
+        if (!isset($comment_id)) {
+            throw new InvalidArgumentException("Comment ID is required");
+        }
+
+        return $this->delete(
+            "DELETE FROM comments WHERE id = ?",
+            ["i", $comment_id]
+        );
+    }
 }
 ?>

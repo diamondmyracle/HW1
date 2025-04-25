@@ -191,119 +191,65 @@ function displayComments($db, $list_id, $parent_id = null)
 
 <script>
     document.getElementById("comment-section").addEventListener("click", async (event) => {
-        if (!event.target.matches('.submit-comment')) return ;
+        if (event.target.matches('.submit-comment')) {
+            //Submission of a comment
+            const button = event.target ;
+            const commentDiv = button.closest('div.comment') ;
+            const textarea = commentDiv.querySelector('textarea') ;
+            const text = textarea.value.trim() ;
+            const parentId = commentDiv.querySelector('input[type="hidden"][name="parent_id"]') ;
 
-        const button = event.target ;
-        const commentDiv = button.closest('div.comment') ;
-        const textarea = commentDiv.querySelector('textarea') ;
-        const text = textarea.value.trim() ;
-        const parentId = commentDiv.querySelector('input[type="hidden"][name="parent_id"]') ;
+            if (!text) return ;
 
-        if (!text) return ;
+            const commentData = {
+                list_id: <?php echo $list_id ?>,
+                username: "<?php echo htmlspecialchars($_SESSION["username"]) ?>",
+                comment: text,
+                parent_id: parentId.value
+            } ;
 
-        const commentData = {
-            list_id: <?php echo $list_id ?>,
-            username: "<?php echo htmlspecialchars($_SESSION["username"]) ?>",
-            comment: text,
-            parent_id: parentId.value
-        } ;
+            const commentResponse = await fetch('upload.php/comment/post', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify(commentData)
+            }).catch(err => console.error("Fetch error:", err)) ;
 
-        const commentResponse = await fetch('upload.php/comment', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            body: JSON.stringify(commentData)
-        }).catch(err => console.error("Fetch error:", err)) ;
+            const commentResult = await commentResponse.json();
 
-        const commentResult = await commentResponse.json();
+            if (commentResult.status === "success") {
+                textarea.value = "" ;
+            } else {
+                return ;
+            }
+        } else if (event.target.matches('.delete-comment')) {
+            //Deletion of a comment
+            const button = event.target ;
+            const commentDiv = button.closest('div.comment') ;
+            const commentId = commentDiv.querySelector('input[type="hidden"][name="comment_id"]') ;
 
-        if (commentResult.status === "success") {
-            textarea.value = "" ;
-        } else {
-            //errorEl.textContent = commentResult.message || "Something went wrong uploading image.";
-            return ;
+            const commentData = {
+                comment_id: commentId.value
+            } ;
+
+            const commentResponse = await fetch('upload.php/comment/delete', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify(commentData)
+            }).catch(err => console.error("Fetch error:", err)) ;
+
+            const commentResult = await commentResponse.json();
+
+            if (commentResult.status === "success") {
+                return ;
+            } else {
+                return ;
+            }
         }
-
     }) ;
 </script>
-
-<!-- <script>
-    document.getElementById('comment-section').addEventListener('submit', async function (e) {
-    e.preventDefault();
-
-    const form = e.target;
-    const errorEl = document.getElementById('formError');
-    errorEl.textContent = '';
-
-    const imageFile = form.listing_image.files[0];
-
-    if (!imageFile) {
-        errorEl.textContent = 'Please upload an image.';
-        return;
-    }
-
-    const reader = new FileReader();
-    reader.onloadend = async function () {
-        const base64Image = reader.result;
-
-        const imageData = {
-            name: imageFile.name,
-            image: base64Image
-        } ;
-
-        const imageResponse = await fetch('upload.php/image', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            body: JSON.stringify(imageData)
-        }).catch(err => console.error("Fetch error:", err)) ;
-
-        const imageResult = await imageResponse.json();
-
-        if (imageResult.status === "success") {
-
-        } else {
-            errorEl.textContent = imageResult.message || "Something went wrong uploading image.";
-            return ;
-        }
-
-        const listData = {
-            //id: Math.random().toString(36).substring(2, 15),
-            username: "",
-            listing_name: form.listing_name.value,
-            listing_descript: form.listing_desc.value,
-            price: form.listing_price.value,
-            image: imageResult.filename
-        };
-
-        const listingResponse = await fetch('newlisting.php/listing/create', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            body: JSON.stringify(listData)
-        }).catch(err => console.error("Fetch error:", err)) ;
-
-        const result = await listingResponse.json();
-
-        if (result.status === "success") {
-            window.location.href = "listings.php";
-        } else {
-            errorEl.textContent = result.message || "Something went wrong.";
-        }
-    } ;
-// };
-
-    reader.readAsDataURL(imageFile) ;
-});
-
-reader.onerror = function (error) {
-    errorEl.textContent = "Error reading image file.";
-    console.error("FileReader error:", error);
-};
-</script> -->

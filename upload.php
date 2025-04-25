@@ -18,19 +18,34 @@ session_start();
                     exit() ;
                     break ;
                 case "comment":
-                    $json = file_get_contents("php://input") ;
-                    $data = json_decode($json, true) ;
-                    $parent_id = $data["parent_id"] ;
+                    if (isset($uri[3])) {
+                        switch ($uri[3]) {
+                            case "post":
+                                $json = file_get_contents("php://input") ;
+                                $data = json_decode($json, true) ;
+                                $parent_id = $data["parent_id"] ;
 
-                    require PROJECT_ROOT_PATH . "/Controller/Api/CommentController.php" ;
-                    $objFeedController = new CommentController() ;
+                                require PROJECT_ROOT_PATH . "/Controller/Api/CommentController.php" ;
+                                $objFeedController = new CommentController() ;
 
-                    if ($parent_id === "") {
-                        $objFeedController->postParentComment() ;
-                    } else {
-                        $objFeedController->postChildComment() ;
+                                if ($parent_id === "") {
+                                    $objFeedController->postParentComment() ;
+                                } else {
+                                    $objFeedController->postChildComment() ;
+                                }
+                                exit() ;
+                                break ;
+                            case "delete":
+                                require PROJECT_ROOT_PATH . "/Controller/Api/CommentController.php" ;
+                                $objFeedController = new CommentController() ;
+                                $objFeedController->deleteCommentById() ;
+                                exit() ;
+                                break ;
+                            default:
+                                header("HTTP/1.1 404 Not Found") ;
+                                exit() ;
+                        }
                     }
-                    exit() ;
                     break ;
                 default:
                     header("HTTP/1.1 404 Not Found") ;
