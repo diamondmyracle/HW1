@@ -75,11 +75,11 @@ if (isset($uriParts[1]) && $uriParts[1] === 'listing' && isset($uriParts[2]) && 
 
                 <br>
 
-                <!-- <div>
+                <div>
                     <label for="listing_image">Listing Image</label>
                     <br>
                     <input type="file" name="listing_image" accept="image/*">
-                </div> -->
+                </div>
 
                 <br>
 
@@ -99,53 +99,74 @@ if (isset($uriParts[1]) && $uriParts[1] === 'listing' && isset($uriParts[2]) && 
     const errorEl = document.getElementById('formError');
     errorEl.textContent = '';
 
-    // const imageFile = form.listing_image.files[0];
+    const imageFile = form.listing_image.files[0];
 
-    // if (!imageFile) {
-    //     errorEl.textContent = 'Please upload an image.';
-    //     return;
-    // }
+    if (!imageFile) {
+        errorEl.textContent = 'Please upload an image.';
+        return;
+    }
 
-    // const reader = new FileReader();
-    // reader.onloadend = async function () {
-    //     const base64Image = reader.result;
+    const reader = new FileReader();
+    reader.onloadend = async function () {
+        const base64Image = reader.result;
 
-        const data = {
+        const imageData = {
+            name: imageFile.name,
+            image: base64Image
+        } ;
+
+        const imageResponse = await fetch('upload.php/image', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(imageData)
+        }).catch(err => console.error("Fetch error:", err)) ;
+
+        const imageResult = await imageResponse.json();
+
+        if (imageResult.status === "success") {
+
+        } else {
+            errorEl.textContent = imageResult.message || "Something went wrong uploading image.";
+            return ;
+        }
+
+        const listData = {
             //id: Math.random().toString(36).substring(2, 15),
             username: "<?php echo $_SESSION['username']; ?>",
             listing_name: form.listing_name.value,
             listing_descript: form.listing_desc.value,
             price: form.listing_price.value,
-            //image: base64Image
-            image: "50819.jpg"
+            image: imageResult.filename
         };
 
-        const response = await fetch('newlisting.php/listing/create', {
+        const listingResponse = await fetch('newlisting.php/listing/create', {
             method: "POST",
-            header: {
+            headers: {
                 "Content-Type": "application/json",
                 "Accept": "application/json"
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(listData)
         }).catch(err => console.error("Fetch error:", err)) ;
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json'
 
-        //     },
-        //     body: JSON.stringify(data)
-        // });
-
-        const result = await response.json();
+        const result = await listingResponse.json();
 
         if (result.status === "success") {
             window.location.href = "listings.php";
         } else {
             errorEl.textContent = result.message || "Something went wrong.";
         }
-    // };
+    } ;
+// };
 
-    //reader.readAsDataURL(imageFile);
+    reader.readAsDataURL(imageFile) ;
 });
+
+reader.onerror = function (error) {
+    errorEl.textContent = "Error reading image file.";
+    console.error("FileReader error:", error);
+};
 </script>
 
