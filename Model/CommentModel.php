@@ -16,14 +16,12 @@ class CommentModel extends Database
 
     public function deleteComment($comment_id)
     {
-        if (!isset($comment_id)) {
-            throw new InvalidArgumentException("Comment ID is required");
-        }
+        return $this->delete("DELETE FROM comments WHERE id = ?", ["i", $comment_id]) ;
+    }
 
-        return $this->delete(
-            "DELETE FROM comments WHERE id = ?",
-            ["i", $comment_id]
-        );
+    public function getChildComments($comment_id)
+    {
+        return $this->select("SELECT * FROM comments WHERE parent_id = ?", ["i", $comment_id]) ;
     }
 }
 ?>

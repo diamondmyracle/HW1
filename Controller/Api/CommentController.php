@@ -105,7 +105,7 @@
                     $comment_id = $data["comment_id"] ;
 
                     $commentModel = new CommentModel();
-                    $commentModel->deleteComment($comment_id) ;
+                    $this->deleteCommentChain($comment_id, $commentModel) ;
                 } catch (Error $e) {
                     $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
                     $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
@@ -133,6 +133,18 @@
                     array('Content-Type: application/json', $strErrorHeader)
                 );
             }
+        }
+
+        private function deleteCommentChain($comment_id, $commentModel)
+        {
+                $children = $commentModel->getChildComments($comment_id) ;
+
+                foreach ($children as $child) {
+                    $child_id = $child["id"] ;
+                    $this->deleteCommentChain($child_id, $commentModel) ;
+                }
+
+                $commentModel->deleteComment($comment_id) ;
         }
     }
 ?>
