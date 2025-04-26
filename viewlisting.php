@@ -147,7 +147,7 @@ function displayComments($db, $list_id, $parent_id = null)
                 <button class="submit-comment" name="submit_comment">Post Comment</button>
             </div>
 
-            <div class="comments-list">
+            <div class="comments-list" id="comments-list">
                 <?php displayComments($db, $list_id); ?>
             </div>
         <!-- </form> -->
@@ -190,6 +190,74 @@ function displayComments($db, $list_id, $parent_id = null)
 </html>
 
 <script>
+    renderComments() ;
+
+    async function renderComments() {
+        //Prepare the body of the request
+        const commentData = {
+            list_id: <?php echo $list_id ?>
+        } ;
+
+        const commentResponse = await fetch('upload.php/comment/list', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(commentData)
+        }).catch(err => console.error("Fetch error:", err)) ;
+
+        //Get resulting list and check to see if it was successful
+        const commentResult = await commentResponse.json();
+        if (commentResult.status != "success") {
+            return ;
+        }
+
+        const commentList = JSON.parse(commentResult[0].data) ;
+        const commentTree = buildCommentTree(commentList) ;
+
+        //Get the comment section div
+        const commentSection = document.getElementById("comments-list") ;
+        commentSection.innerHTML = "" ;
+
+        displayComment(commentSection) ;
+    }
+
+    function displayComment(parentDiv) {
+        parentDiv.innerHTML += `
+        <div class="comment">
+        <p><strong>USERNAME</strong></p>
+        <p>COMMENT</p>
+        <input type="hidden" name="comment_id" value="">
+        <button class="delete-comment" name="delete_comment">Delete</button>
+        <input type="hidden" name="parent_id" value="">
+        <textarea name="comment" placeholder="Reply to this comment"></textarea>
+        <button class="submit-comment" name="submit_comment">Reply</button>
+        </div>` ;
+    }
+
+    //Should make a tree of the comments and return the roots
+    function buildCommentTree(commentList) {
+        const commentMap = {} ;
+
+        commentList.forEach(comment => {
+            comment.children = [] ;
+            commentMap[comment.id] = comment ;
+        }) ;
+
+        const commentTree = [] ;
+
+        commentList.forEach(comment => {
+            if (!comment.parent_id) {
+                commentTree.push(comment) ;
+            } else {
+                commentMap[comment.parent_id].children.push(comment) ;
+            }
+        }) ;
+
+        return commentTree ;
+    }
+
     document.getElementById("comment-section").addEventListener("click", async (event) => {
         if (event.target.matches('.submit-comment')) {
             //Submission of a comment
