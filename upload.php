@@ -9,15 +9,57 @@ session_start();
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ;
         $uri = explode('/', $uri) ;
 
-        if ((isset($uri[2]) && $uri[2] != "image")) {
-            header("HTTP/1.1 404 Not Found") ;
-            exit() ;
-        }
+        if (isset($uri[2])) {
+            switch ($uri[2]) {
+                case "image":
+                    require PROJECT_ROOT_PATH . "/Controller/Api/ImageController.php" ;
+                    $objFeedController = new ImageController() ;
+                    $objFeedController->handleImageUpload() ;
+                    exit() ;
+                    break ;
+                case "comment":
+                    if (isset($uri[3])) {
+                        switch ($uri[3]) {
+                            case "post":
+                                $json = file_get_contents("php://input") ;
+                                $data = json_decode($json, true) ;
+                                $parent_id = $data["parent_id"] ;
 
-        require PROJECT_ROOT_PATH . "/Controller/Api/ImageController.php" ;
-        $objFeedController = new ImageController() ;
-        $objFeedController->handleImageUpload() ;
-        exit() ;
+                                require PROJECT_ROOT_PATH . "/Controller/Api/CommentController.php" ;
+                                $objFeedController = new CommentController() ;
+
+                                if ($parent_id === "") {
+                                    $objFeedController->postParentComment() ;
+                                } else {
+                                    $objFeedController->postChildComment() ;
+                                }
+                                exit() ;
+                                break ;
+                            case "delete":
+                                require PROJECT_ROOT_PATH . "/Controller/Api/CommentController.php" ;
+                                $objFeedController = new CommentController() ;
+                                $objFeedController->deleteCommentById() ;
+                                exit() ;
+                                break ;
+                            case "list":
+                                require PROJECT_ROOT_PATH . "/Controller/Api/CommentController.php" ;
+                                $objFeedController = new CommentController() ;
+                                $objFeedController->getListingComments() ;
+                                exit() ;
+                                break ;
+                            default:
+                                header("HTTP/1.1 404 Not Found") ;
+                                exit() ;
+                        }
+                    }
+                    break ;
+                default:
+                    header("HTTP/1.1 404 Not Found") ;
+                    exit() ;
+            }
+        } else {
+
+        }
     }
 ?>
 

@@ -15,70 +15,6 @@ if (isset($_GET["id"])) {
     exit;
 }
 
-// Handle comment submission
-if (isset($_POST['submit_comment'])) {
-    $comment = $_POST['comment'];
-    $username = $_SESSION['username'] ?? 'Anonymous';
-    $parent_id = $_POST['parent_id'] ?? null;
-    $parent_id = ($parent_id === '') ? null : (int)$parent_id;
-
-    if ($parent_id === null) {
-        $stmt = $db->prepare("INSERT INTO comments (listing_id, username, comment) VALUES (?, ?, ?)");
-        $stmt->bind_param("iss", $list_id, $username, $comment);
-    } else {
-        $stmt = $db->prepare("INSERT INTO comments (listing_id, username, comment, parent_id) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("issi", $list_id, $username, $comment, $parent_id);
-    }
-    $stmt->execute();
-}
-
-// Handle comment deletion
-if (isset($_POST['delete_comment']) && isset($_POST['comment_id'])) {
-    $comment_id = $_POST['comment_id'];
-    $stmt = $db->prepare("DELETE FROM comments WHERE id = ? AND username = ?");
-    $stmt->bind_param("is", $comment_id, $_SESSION['username']);
-    $stmt->execute();
-}
-
-// Recursive comment renderer
-function displayComments($db, $list_id, $parent_id = null)
-{
-    $query = "SELECT id, username, comment FROM comments WHERE listing_id = ? AND parent_id ";
-    $query .= is_null($parent_id) ? "IS NULL" : "= ?";
-    $query .= " ORDER BY id DESC";
-
-    $stmt = $db->prepare($query);
-    if (is_null($parent_id)) {
-        $stmt->bind_param("i", $list_id);
-    } else {
-        $stmt->bind_param("ii", $list_id, $parent_id);
-    }
-
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    while ($row = $result->fetch_assoc()) {
-        echo "<div class='comment'>";
-        echo "<p><strong>" . htmlspecialchars($row['username']) . "</strong></p>";
-        echo "<p>" . nl2br(htmlspecialchars($row['comment'])) . "</p>";
-
-        if (isset($_SESSION['username']) && $_SESSION['username'] === $row['username']) {
-            echo "<form method='post' action=''>";
-            echo "<input type='hidden' name='comment_id' value='{$row['id']}'>";
-            echo "<button type='submit' name='delete_comment'>Delete</button>";
-            echo "</form>";
-        }
-
-        echo "<form method='post' action=''>";
-        echo "<input type='hidden' name='parent_id' value='{$row['id']}'>";
-        echo "<textarea name='comment' required placeholder='Reply to this comment'></textarea>";
-        echo "<button type='submit' name='submit_comment'>Reply</button>";
-        echo "</form>";
-
-        displayComments($db, $list_id, $row['id']);
-        echo "</div>";
-    }
-}
 ?>
 
 <!DOCTYPE html>
@@ -137,6 +73,16 @@ function displayComments($db, $list_id, $parent_id = null)
                 </li>
             </ul>
         </div>
+
+        <div class="comment-section" id="comment-section">
+        <h2>Comments</h2>
+            <div class="comment">
+                <textarea name="comment" placeholder="Write your comment!"></textarea>
+                <input type="hidden" name="comment_id" value="">
+                <button class="submit-comment" name="submit_comment">Post Comment</button>
+            </div>
+            <div class="comments-list" id="comments-list"></div>
+    </div>
     </div>
 
     <script>
@@ -171,19 +117,192 @@ function displayComments($db, $list_id, $parent_id = null)
             window.location.href = "/listings.php";
         });
     </script>
-
-    <div class="comment-section">
-        <h2>Comments</h2>
-        <form method="post" action="">
-            <textarea name="comment" placeholder="Write your comment!" required></textarea>
-            <input type="hidden" name="parent_id" value="">
-            <button type="submit" name="submit_comment">Post Comment</button>
-        </form>
-
-        <div class="comments-list">
-            <?php displayComments($db, $list_id); ?>
-        </div>
-    </div>
 </body>
 </html>
 
+<script>
+    renderComments() ;
+
+    async function renderComments() {
+        //Prepare the body of the request
+        const commentData = {
+            list_id: <?php echo $list_id ?>
+        } ;
+
+        const commentResponse = await fetch('upload.php/comment/list', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(commentData)
+        }).catch(err => console.error("Fetch error:", err)) ;
+
+        //Get resulting list and check to see if it was successful
+        const commentResult = await commentResponse.json();
+        if (commentResult.status != "success") {
+            return ;
+        }
+
+        const commentList = JSON.parse(commentResult[0].data) ;
+        const commentTree = buildCommentTree(commentList) ;
+
+        console.log(commentTree) ;
+        console.log(commentTree[0]) ;
+
+        //Get the comment section div
+        const commentSection = document.getElementById("comments-list") ;
+        commentSection.classList.add("loading") ;
+        commentSection.innerHTML = "" ;
+
+        if (commentTree.length > 0) {
+            commentTree.forEach(comment => {
+                commentSection.appendChild(printComment(comment)) ;
+            }) ;
+        }
+
+        commentSection.classList.remove("loading") ;
+    }
+
+    function printComment(comment) {
+        //Create the comment div
+        const commentDiv = document.createElement("div") ;
+        commentDiv.classList.add("comment") ;
+
+        //Add the username
+        const usernameP = document.createElement("p") ;
+        const usernameText = document.createElement("strong") ;
+        usernameText.textContent = comment.username ;
+        usernameP.appendChild(usernameText) ;
+        commentDiv.appendChild(usernameP) ;
+
+        //Add the comment text
+        const commentText = document.createElement("p") ;
+        commentText.textContent = comment.comment ;
+        commentDiv.appendChild(commentText) ;
+
+        //Add the hidden comment id
+        const commentId = document.createElement("input") ;
+        commentId.setAttribute("type", "hidden") ;
+        commentId.setAttribute("name", "comment_id") ;
+        commentId.setAttribute("value", comment.id) ;
+        commentDiv.appendChild(commentId) ;
+
+        //Add the delete button
+        const deleteButton = document.createElement("button") ;
+        deleteButton.setAttribute("class", "delete-comment") ;
+        deleteButton.setAttribute("name", "delete_comment") ;
+        deleteButton.textContent = "Delete" ;
+        commentDiv.appendChild(deleteButton) ;
+
+        //Add the reply text area
+        const textArea = document.createElement("textarea") ;
+        textArea.setAttribute("name", "comment") ;
+        textArea.setAttribute("placeholder", "Reply to this comment") ;
+        commentDiv.appendChild(textArea) ;
+
+        //Add the reply button
+        const submitButton = document.createElement("button") ;
+        submitButton.setAttribute("class", "submit-comment") ;
+        submitButton.setAttribute("name", "submit_comment") ;
+        submitButton.textContent = "Reply" ;
+        commentDiv.appendChild(submitButton) ;
+
+        //Do recursion on children
+        if (comment.children && comment.children.length > 0) {
+            comment.children.forEach(child => {
+                const childDiv = printComment(child) ;
+                commentDiv.appendChild(childDiv) ;
+            }) ;
+        }
+
+        return commentDiv ;
+    }
+
+    //Should make a tree of the comments and return the roots
+    function buildCommentTree(commentList) {
+        const commentMap = {} ;
+
+        commentList.forEach(comment => {
+            comment.children = [] ;
+            commentMap[comment.id] = comment ;
+        }) ;
+
+        const commentTree = [] ;
+
+        commentList.forEach(comment => {
+            if (!comment.parent_id) {
+                commentTree.push(comment) ;
+            } else {
+                commentMap[comment.parent_id].children.push(comment) ;
+            }
+        }) ;
+
+        return commentTree ;
+    }
+
+    document.getElementById("comment-section").addEventListener("click", async (event) => {
+        if (event.target.matches('.submit-comment')) {
+            //Submission of a comment
+            const button = event.target ;
+            const commentDiv = button.closest('div.comment') ;
+            const textarea = commentDiv.querySelector('textarea') ;
+            const text = textarea.value.trim() ;
+            const parentId = commentDiv.querySelector('input[type="hidden"][name="comment_id"]') ;
+
+            if (!text) return ;
+
+            const commentData = {
+                list_id: <?php echo $list_id ?>,
+                username: "<?php echo htmlspecialchars($_SESSION["username"]) ?>",
+                comment: text,
+                parent_id: parentId.value
+            } ;
+
+            const commentResponse = await fetch('upload.php/comment/post', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify(commentData)
+            }).catch(err => console.error("Fetch error:", err)) ;
+
+            const commentResult = await commentResponse.json();
+
+            if (commentResult.status === "success") {
+                textarea.value = "" ;
+                renderComments() ;
+            } else {
+                return ;
+            }
+        } else if (event.target.matches('.delete-comment')) {
+            //Deletion of a comment
+            const button = event.target ;
+            const commentDiv = button.closest('div.comment') ;
+            const commentId = commentDiv.querySelector('input[type="hidden"][name="comment_id"]') ;
+
+            const commentData = {
+                comment_id: commentId.value
+            } ;
+
+            const commentResponse = await fetch('upload.php/comment/delete', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify(commentData)
+            }).catch(err => console.error("Fetch error:", err)) ;
+
+            const commentResult = await commentResponse.json();
+
+            if (commentResult.status === "success") {
+                renderComments() ;
+                return ;
+            } else {
+                return ;
+            }
+        }
+    }) ;
+</script>
