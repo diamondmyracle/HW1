@@ -152,6 +152,7 @@ if (isset($_GET["id"])) {
 
         //Get the comment section div
         const commentSection = document.getElementById("comments-list") ;
+        commentSection.classList.add("loading") ;
         commentSection.innerHTML = "" ;
 
         if (commentTree.length > 0) {
@@ -159,6 +160,8 @@ if (isset($_GET["id"])) {
                 commentSection.appendChild(printComment(comment)) ;
             }) ;
         }
+
+        commentSection.classList.remove("loading") ;
     }
 
     function printComment(comment) {
