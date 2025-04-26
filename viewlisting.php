@@ -223,7 +223,11 @@ function displayComments($db, $list_id, $parent_id = null)
         const commentSection = document.getElementById("comments-list") ;
         commentSection.innerHTML = "" ;
 
-        commentSection.appendChild(printComment(commentTree[0])) ;
+        if (commentTree.length > 0) {
+            commentTree.forEach(comment => {
+                commentSection.appendChild(printComment(comment)) ;
+            }) ;
+        }
     }
 
     function printComment(comment) {
@@ -269,6 +273,13 @@ function displayComments($db, $list_id, $parent_id = null)
         submitButton.setAttribute("name", "submit_comment") ;
         submitButton.textContent = "Reply" ;
         commentDiv.appendChild(submitButton) ;
+
+        if (comment.children && comment.children.length > 0) {
+            comment.children.forEach(child => {
+                const childDiv = printComment(child) ;
+                commentDiv.appendChild(childDiv) ;
+            }) ;
+        }
 
         return commentDiv ;
 
