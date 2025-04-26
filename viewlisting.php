@@ -15,70 +15,70 @@ if (isset($_GET["id"])) {
     exit;
 }
 
-// // Handle comment submission
-// if (isset($_POST['submit_comment'])) {
-//     $comment = $_POST['comment'];
-//     $username = $_SESSION['username'] ?? 'Anonymous';
-//     $parent_id = $_POST['parent_id'] ?? null;
-//     $parent_id = ($parent_id === '') ? null : (int)$parent_id;
+    // // Handle comment submission
+    // if (isset($_POST['submit_comment'])) {
+    //     $comment = $_POST['comment'];
+    //     $username = $_SESSION['username'] ?? 'Anonymous';
+    //     $parent_id = $_POST['parent_id'] ?? null;
+    //     $parent_id = ($parent_id === '') ? null : (int)$parent_id;
 
-//     if ($parent_id === null) {
-//         $stmt = $db->prepare("INSERT INTO comments (listing_id, username, comment) VALUES (?, ?, ?)");
-//         $stmt->bind_param("iss", $list_id, $username, $comment);
-//     } else {
-//         $stmt = $db->prepare("INSERT INTO comments (listing_id, username, comment, parent_id) VALUES (?, ?, ?, ?)");
-//         $stmt->bind_param("issi", $list_id, $username, $comment, $parent_id);
-//     }
-//     $stmt->execute();
-// }
+    //     if ($parent_id === null) {
+    //         $stmt = $db->prepare("INSERT INTO comments (listing_id, username, comment) VALUES (?, ?, ?)");
+    //         $stmt->bind_param("iss", $list_id, $username, $comment);
+    //     } else {
+    //         $stmt = $db->prepare("INSERT INTO comments (listing_id, username, comment, parent_id) VALUES (?, ?, ?, ?)");
+    //         $stmt->bind_param("issi", $list_id, $username, $comment, $parent_id);
+    //     }
+    //     $stmt->execute();
+    // }
 
-// // Handle comment deletion
-// if (isset($_POST['delete_comment']) && isset($_POST['comment_id'])) {
-//     $comment_id = $_POST['comment_id'];
-//     $stmt = $db->prepare("DELETE FROM comments WHERE id = ? AND username = ?");
-//     $stmt->bind_param("is", $comment_id, $_SESSION['username']);
-//     $stmt->execute();
-// }
+    // // Handle comment deletion
+    // if (isset($_POST['delete_comment']) && isset($_POST['comment_id'])) {
+    //     $comment_id = $_POST['comment_id'];
+    //     $stmt = $db->prepare("DELETE FROM comments WHERE id = ? AND username = ?");
+    //     $stmt->bind_param("is", $comment_id, $_SESSION['username']);
+    //     $stmt->execute();
+    // }
 
 // Recursive comment renderer
-function displayComments($db, $list_id, $parent_id = null)
-{
-    $query = "SELECT id, username, comment FROM comments WHERE listing_id = ? AND parent_id ";
-    $query .= is_null($parent_id) ? "IS NULL" : "= ?";
-    $query .= " ORDER BY id DESC";
+    // function displayComments($db, $list_id, $parent_id = null)
+    // {
+    //     $query = "SELECT id, username, comment FROM comments WHERE listing_id = ? AND parent_id ";
+    //     $query .= is_null($parent_id) ? "IS NULL" : "= ?";
+    //     $query .= " ORDER BY id DESC";
 
-    $stmt = $db->prepare($query);
-    if (is_null($parent_id)) {
-        $stmt->bind_param("i", $list_id);
-    } else {
-        $stmt->bind_param("ii", $list_id, $parent_id);
-    }
+    //     $stmt = $db->prepare($query);
+    //     if (is_null($parent_id)) {
+    //         $stmt->bind_param("i", $list_id);
+    //     } else {
+    //         $stmt->bind_param("ii", $list_id, $parent_id);
+    //     }
 
-    $stmt->execute();
-    $result = $stmt->get_result();
+    //     $stmt->execute();
+    //     $result = $stmt->get_result();
 
-    while ($row = $result->fetch_assoc()) {
-        echo "<div class='comment'>";
-        echo "<p><strong>" . htmlspecialchars($row['username']) . "</strong></p>";
-        echo "<p>" . nl2br(htmlspecialchars($row['comment'])) . "</p>";
+    //     while ($row = $result->fetch_assoc()) {
+    //         echo "<div class='comment'>";
+    //         echo "<p><strong>" . htmlspecialchars($row['username']) . "</strong></p>";
+    //         echo "<p>" . nl2br(htmlspecialchars($row['comment'])) . "</p>";
 
-        if (isset($_SESSION['username']) && $_SESSION['username'] === $row['username']) {
-            //echo "<form method='post' action=''>";
-            echo "<input type='hidden' name='comment_id' value='{$row['id']}'>";
-            echo "<button class='delete-comment' name='delete_comment'>Delete</button>";
-            //echo "</form>";
-        }
+    //         if (isset($_SESSION['username']) && $_SESSION['username'] === $row['username']) {
+    //             //echo "<form method='post' action=''>";
+    //             echo "<input type='hidden' name='comment_id' value='{$row['id']}'>";
+    //             echo "<button class='delete-comment' name='delete_comment'>Delete</button>";
+    //             //echo "</form>";
+    //         }
 
-        //echo "<form method='post' action=''>";
-        echo "<input type='hidden' name='parent_id' value='{$row['id']}'>";
-        echo "<textarea name='comment' placeholder='Reply to this comment'></textarea>";
-        echo "<button class='submit-comment' name='submit_comment'>Reply</button>";
-        //echo "</form>";
+    //         //echo "<form method='post' action=''>";
+    //         echo "<input type='hidden' name='parent_id' value='{$row['id']}'>";
+    //         echo "<textarea name='comment' placeholder='Reply to this comment'></textarea>";
+    //         echo "<button class='submit-comment' name='submit_comment'>Reply</button>";
+    //         //echo "</form>";
 
-        displayComments($db, $list_id, $row['id']);
-        echo "</div>";
-    }
-}
+    //         displayComments($db, $list_id, $row['id']);
+    //         echo "</div>";
+    //     }
+    // }
 ?>
 
 <!DOCTYPE html>
