@@ -269,6 +269,7 @@ if (isset($_GET["id"])) {
 
             if (commentResult.status === "success") {
                 textarea.value = "" ;
+                renderComments() ;
             } else {
                 return ;
             }
@@ -294,6 +295,7 @@ if (isset($_GET["id"])) {
             const commentResult = await commentResponse.json();
 
             if (commentResult.status === "success") {
+                renderComments() ;
                 return ;
             } else {
                 return ;
