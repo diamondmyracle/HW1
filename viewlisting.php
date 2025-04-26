@@ -15,30 +15,30 @@ if (isset($_GET["id"])) {
     exit;
 }
 
-// Handle comment submission
-if (isset($_POST['submit_comment'])) {
-    $comment = $_POST['comment'];
-    $username = $_SESSION['username'] ?? 'Anonymous';
-    $parent_id = $_POST['parent_id'] ?? null;
-    $parent_id = ($parent_id === '') ? null : (int)$parent_id;
+// // Handle comment submission
+// if (isset($_POST['submit_comment'])) {
+//     $comment = $_POST['comment'];
+//     $username = $_SESSION['username'] ?? 'Anonymous';
+//     $parent_id = $_POST['parent_id'] ?? null;
+//     $parent_id = ($parent_id === '') ? null : (int)$parent_id;
 
-    if ($parent_id === null) {
-        $stmt = $db->prepare("INSERT INTO comments (listing_id, username, comment) VALUES (?, ?, ?)");
-        $stmt->bind_param("iss", $list_id, $username, $comment);
-    } else {
-        $stmt = $db->prepare("INSERT INTO comments (listing_id, username, comment, parent_id) VALUES (?, ?, ?, ?)");
-        $stmt->bind_param("issi", $list_id, $username, $comment, $parent_id);
-    }
-    $stmt->execute();
-}
+//     if ($parent_id === null) {
+//         $stmt = $db->prepare("INSERT INTO comments (listing_id, username, comment) VALUES (?, ?, ?)");
+//         $stmt->bind_param("iss", $list_id, $username, $comment);
+//     } else {
+//         $stmt = $db->prepare("INSERT INTO comments (listing_id, username, comment, parent_id) VALUES (?, ?, ?, ?)");
+//         $stmt->bind_param("issi", $list_id, $username, $comment, $parent_id);
+//     }
+//     $stmt->execute();
+// }
 
-// Handle comment deletion
-if (isset($_POST['delete_comment']) && isset($_POST['comment_id'])) {
-    $comment_id = $_POST['comment_id'];
-    $stmt = $db->prepare("DELETE FROM comments WHERE id = ? AND username = ?");
-    $stmt->bind_param("is", $comment_id, $_SESSION['username']);
-    $stmt->execute();
-}
+// // Handle comment deletion
+// if (isset($_POST['delete_comment']) && isset($_POST['comment_id'])) {
+//     $comment_id = $_POST['comment_id'];
+//     $stmt = $db->prepare("DELETE FROM comments WHERE id = ? AND username = ?");
+//     $stmt->bind_param("is", $comment_id, $_SESSION['username']);
+//     $stmt->execute();
+// }
 
 // Recursive comment renderer
 function displayComments($db, $list_id, $parent_id = null)
