@@ -26,7 +26,7 @@ class CommentModel extends Database
 
     public function getCommentsByListing($list_id)
     {
-        return $this->select("SELECT * FROM comments WHERE list_id = ?", ["i", $list_id]) ;
+        return $this->select("SELECT * FROM comments WHERE listing_id = ?", ["i", $list_id]) ;
     }
 }
 ?>
