@@ -147,9 +147,7 @@ if (isset($_GET["id"])) {
                 <button class="submit-comment" name="submit_comment">Post Comment</button>
             </div>
 
-            <div class="comments-list" id="comments-list">
-                <?php displayComments($db, $list_id); ?>
-            </div>
+            <div class="comments-list" id="comments-list"></div>
         <!-- </form> -->
     </div>
     </div>
@@ -231,49 +229,57 @@ if (isset($_GET["id"])) {
     }
 
     function printComment(comment) {
+        //Create the comment div
         const commentDiv = document.createElement("div") ;
         commentDiv.classList.add("comment") ;
 
+        //Add the username
         const usernameP = document.createElement("p") ;
         const usernameText = document.createElement("strong") ;
-
         usernameText.textContent = comment.username ;
         usernameP.appendChild(usernameText) ;
         commentDiv.appendChild(usernameP) ;
 
+        //Add the comment text
         const commentText = document.createElement("p") ;
         commentText.textContent = comment.comment ;
         commentDiv.appendChild(commentText) ;
 
+        //Add the hidden comment id
         const commentId = document.createElement("input") ;
         commentId.setAttribute("type", "hidden") ;
         commentId.setAttribute("name", "comment_id") ;
         commentId.setAttribute("value", comment.id) ;
         commentDiv.appendChild(commentId) ;
 
+        //Add the delete button
         const deleteButton = document.createElement("button") ;
         deleteButton.setAttribute("class", "delete-comment") ;
         deleteButton.setAttribute("name", "delete_comment") ;
         deleteButton.textContent = "Delete" ;
         commentDiv.appendChild(deleteButton) ;
 
+        //Add the hidden parent id (it's really just comment id)
         const parentId = document.createElement("input") ;
         parentId.setAttribute("type", "hidden") ;
         parentId.setAttribute("name", "parent_id") ;
-        parentId.setAttribute("value", comment.parent_id) ;
+        parentId.setAttribute("value", comment.id) ;
         commentDiv.appendChild(parentId) ;
 
+        //Add the reply text area
         const textArea = document.createElement("textarea") ;
         textArea.setAttribute("name", "comment") ;
         textArea.setAttribute("placeholder", "Reply to this comment") ;
         commentDiv.appendChild(textArea) ;
 
+        //Add the reply button
         const submitButton = document.createElement("button") ;
         submitButton.setAttribute("class", "submit-comment") ;
         submitButton.setAttribute("name", "submit_comment") ;
         submitButton.textContent = "Reply" ;
         commentDiv.appendChild(submitButton) ;
 
+        //Do recursion on children
         if (comment.children && comment.children.length > 0) {
             comment.children.forEach(child => {
                 const childDiv = printComment(child) ;
@@ -282,17 +288,6 @@ if (isset($_GET["id"])) {
         }
 
         return commentDiv ;
-
-        // parentDiv.innerHTML += `
-        // <div class="comment">
-        // <p><strong>USERNAME</strong></p>
-        // <p>COMMENT</p>
-        // <input type="hidden" name="comment_id" value="">
-        // <button class="delete-comment" name="delete_comment">Delete</button>
-        // <input type="hidden" name="parent_id" value="">
-        // <textarea name="comment" placeholder="Reply to this comment"></textarea>
-        // <button class="submit-comment" name="submit_comment">Reply</button>
-        // </div>` ;
     }
 
     //Should make a tree of the comments and return the roots
