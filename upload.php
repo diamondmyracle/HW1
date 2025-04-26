@@ -41,6 +41,12 @@ session_start();
                                 $objFeedController->deleteCommentById() ;
                                 exit() ;
                                 break ;
+                            case "list":
+                                require PROJECT_ROOT_PATH . "/Controller/Api/CommentController.php" ;
+                                $objFeedController = new CommentController() ;
+                                $objFeedController->getListingComments() ;
+                                exit() ;
+                                break ;
                             default:
                                 header("HTTP/1.1 404 Not Found") ;
                                 exit() ;
