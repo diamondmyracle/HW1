@@ -207,6 +207,11 @@ if (isset($_GET["id"])) {
 
         commentDiv.appendChild(replyButton) ;
 
+        //Add the reply text thingy
+        const textDiv = document.createElement("div") ;
+        textDiv.setAttribute("class", "reply_box") ;
+        commentDiv.appendChild(textDiv) ;
+
         //Do recursion on children
         if (comment.children && comment.children.length > 0) {
             comment.children.forEach(child => {
@@ -224,21 +229,21 @@ if (isset($_GET["id"])) {
             return ;
         }
 
-
+        const textDiv = commentDiv.querySelector(".reply_box") ;
 
         //Add the reply text area
         const textArea = document.createElement("textarea") ;
         textArea.setAttribute("name", "comment") ;
         textArea.setAttribute("placeholder", "Reply to this comment") ;
         textArea.setAttribute("class", "reply_textbox")
-        commentDiv.appendChild(textArea) ;
+        textDiv.appendChild(textArea) ;
 
         //Add the post button
         const submitButton = document.createElement("button") ;
         submitButton.setAttribute("class", "submit-comment") ;
         submitButton.setAttribute("name", "submit_comment") ;
         submitButton.textContent = "Post comment" ;
-        commentDiv.appendChild(submitButton) ;
+        textDiv.appendChild(submitButton) ;
 
         //Add the cancel button
         const cancelButton = document.createElement("button") ;
@@ -252,7 +257,7 @@ if (isset($_GET["id"])) {
             cancelButton.remove() ;
         }) ;
 
-        commentDiv.appendChild(cancelButton) ;
+        textDiv.appendChild(cancelButton) ;
     }
 
     //Should make a tree of the comments and return the roots
