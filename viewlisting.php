@@ -188,6 +188,18 @@ if (isset($_GET["id"])) {
         commentId.setAttribute("value", comment.id) ;
         commentDiv.appendChild(commentId) ;
 
+        //Add the reply button
+        const replyButton = document.createElement("button") ;
+        replyButton.setAttribute("class", "reply") ;
+        replyButton.setAttribute("name", "reply") ;
+        replyButton.textContent = "Reply" ;
+
+        replyButton.addEventListener("click", () => {
+            addTextboxToComment(commentDiv) ;
+        }) ;
+
+        commentDiv.appendChild(replyButton) ;
+
         //Add the delete button
         const deleteButton = document.createElement("button") ;
         deleteButton.setAttribute("class", "delete-comment") ;
@@ -195,18 +207,10 @@ if (isset($_GET["id"])) {
         deleteButton.textContent = "Delete" ;
         commentDiv.appendChild(deleteButton) ;
 
-        //Add the reply text area
-        const textArea = document.createElement("textarea") ;
-        textArea.setAttribute("name", "comment") ;
-        textArea.setAttribute("placeholder", "Reply to this comment") ;
-        commentDiv.appendChild(textArea) ;
-
-        //Add the reply button
-        const submitButton = document.createElement("button") ;
-        submitButton.setAttribute("class", "submit-comment") ;
-        submitButton.setAttribute("name", "submit_comment") ;
-        submitButton.textContent = "Reply" ;
-        commentDiv.appendChild(submitButton) ;
+        //Add the reply text thingy
+        const textDiv = document.createElement("div") ;
+        textDiv.setAttribute("class", "reply_box") ;
+        commentDiv.appendChild(textDiv) ;
 
         //Do recursion on children
         if (comment.children && comment.children.length > 0) {
@@ -217,6 +221,43 @@ if (isset($_GET["id"])) {
         }
 
         return commentDiv ;
+    }
+
+    function addTextboxToComment(commentDiv) {
+        //Return if there's already a text box
+        if (commentDiv.querySelector(".reply_textbox")) {
+            return ;
+        }
+
+        const textDiv = commentDiv.querySelector(".reply_box") ;
+
+        //Add the reply text area
+        const textArea = document.createElement("textarea") ;
+        textArea.setAttribute("name", "comment") ;
+        textArea.setAttribute("placeholder", "Reply to this comment") ;
+        textArea.setAttribute("class", "reply_textbox")
+        textDiv.appendChild(textArea) ;
+
+        //Add the post button
+        const submitButton = document.createElement("button") ;
+        submitButton.setAttribute("class", "submit-comment") ;
+        submitButton.setAttribute("name", "submit_comment") ;
+        submitButton.textContent = "Post comment" ;
+        textDiv.appendChild(submitButton) ;
+
+        //Add the cancel button
+        const cancelButton = document.createElement("button") ;
+        cancelButton.setAttribute("class", "cancel-comment") ;
+        cancelButton.setAttribute("name", "cancel_comment") ;
+        cancelButton.textContent = "Cancel" ;
+
+        cancelButton.addEventListener("click", () => {
+            textArea.remove() ;
+            submitButton.remove() ;
+            cancelButton.remove() ;
+        }) ;
+
+        textDiv.appendChild(cancelButton) ;
     }
 
     //Should make a tree of the comments and return the roots
