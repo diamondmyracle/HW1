@@ -188,13 +188,6 @@ if (isset($_GET["id"])) {
         commentId.setAttribute("value", comment.id) ;
         commentDiv.appendChild(commentId) ;
 
-        //Add the delete button
-        const deleteButton = document.createElement("button") ;
-        deleteButton.setAttribute("class", "delete-comment") ;
-        deleteButton.setAttribute("name", "delete_comment") ;
-        deleteButton.textContent = "Delete" ;
-        commentDiv.appendChild(deleteButton) ;
-
         //Add the reply button
         const replyButton = document.createElement("button") ;
         replyButton.setAttribute("class", "reply") ;
@@ -206,6 +199,13 @@ if (isset($_GET["id"])) {
         }) ;
 
         commentDiv.appendChild(replyButton) ;
+
+        //Add the delete button
+        const deleteButton = document.createElement("button") ;
+        deleteButton.setAttribute("class", "delete-comment") ;
+        deleteButton.setAttribute("name", "delete_comment") ;
+        deleteButton.textContent = "Delete" ;
+        commentDiv.appendChild(deleteButton) ;
 
         //Add the reply text thingy
         const textDiv = document.createElement("div") ;

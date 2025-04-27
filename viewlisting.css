@@ -206,6 +206,7 @@ body {
 .comment-section textarea {
     width: 100%;
     height: 150px;
+    margin-top: 8px ;
     padding: 10px;
     font-family: "Outfit", sans-serif;
     font-size: 1em;
@@ -216,21 +217,31 @@ body {
 }
 
 .comment-section button {
-    margin-top: 10px;
-    padding: 10px 15px;
-    font-size: 1em;
+    margin-top: 8px ;
+    margin-right: 8px ;
+    padding: 0px 8px ;
+    font-size: 1em ;
     font-family: "Outfit", sans-serif;
-    background-color: #ffa749;
+    background-color: #f3f3f3;
     color: black;
-    border: 2px solid rgb(255, 126, 71);
-    border-radius: 1em;
+    border: none ;
+    border-radius: 0.25em;
     cursor: pointer;
     transition-duration: 0.125s;
 }
 
 .comment-section button:hover {
-    background-color: #ff7c44;
-    border: 2px solid rgb(255, 89, 60);
+    background-color: rgb(197, 197, 197) ;
+}
+
+.comment-section .submit-comment {
+    background-color: #ffa749 ;
+    border: 2px solid rgb(255, 126, 71) ;
+}
+
+.comment-section .submit-comment:hover {
+    background-color: #ff7c44 ;
+    border: 2px solid rgb(255, 89, 60) ;
 }
 
 .comment {
