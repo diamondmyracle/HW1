@@ -243,6 +243,14 @@ if (isset($_GET["id"])) {
 
     document.getElementById("comment-section").addEventListener("click", async (event) => {
         if (event.target.matches('.submit-comment')) {
+            <?php
+                //If the user isn't logged in, redirect them to login
+                if (!isset($_SESSION["username"])) {
+                    echo "window.location.href = '/login.php' ;" ;
+                    echo "return ;" ;
+                }
+            ?>
+
             //Submission of a comment
             const button = event.target ;
             const commentDiv = button.closest('div.comment') ;
@@ -254,7 +262,13 @@ if (isset($_GET["id"])) {
 
             const commentData = {
                 list_id: <?php echo $list_id ?>,
-                username: "<?php echo htmlspecialchars($_SESSION["username"]) ?>",
+                <?php 
+                    if (isset($_SESSION["username"])) {
+                        echo "username: " . "'" . htmlspecialchars($_SESSION["username"]) . "'," ;
+                    } else {
+                        echo "username: null," ;
+                    }
+                ?>
                 comment: text,
                 parent_id: parentId.value
             } ;
