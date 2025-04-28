@@ -350,6 +350,7 @@ body {
     top: 100% ;
     transition: opacity 0.2s ease;
     z-index: 1000 ;
+    white-space: nowrap ;
   }
 
   .react-list p {

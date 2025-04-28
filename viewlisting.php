@@ -71,7 +71,7 @@ if (isset($_GET["id"])) {
                         <div style="margin-top: 10px; text-align: center;">
                             <button id="favoriteButton" style="background: none; border: none; cursor: pointer; 
                             display: flex; align-items: center; gap: 8px;">
-                            <img id="favoriteIcon" src="minecraft-black-heart.png" alt="Favorite" width="32" height="32">
+                            <img id="favoriteIcon" src="minecraft-black-heart.png" alt="Favorite" width="32" height="32" style="image-rendering: pixelated ;">
                             <span id="favoriteText" style="font-size: 1em; color: black;">Add to Favorites</span>
                             </button>
                         </div>
@@ -633,7 +633,7 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(data => {
         if (data.favorited) {
             favoriteIcon.src = 'minecraft-red-heart.png';
-            favoriteText.textContent = 'Remove from Favorites';
+            favoriteText.textContent = 'Added to Favorites';
         } else {
             favoriteIcon.src = 'minecraft-black-heart.png';
             favoriteText.textContent = 'Add to Favorites';
