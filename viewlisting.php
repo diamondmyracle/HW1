@@ -208,7 +208,7 @@ if (isset($_GET["id"])) {
         const userLike = reacts.like.includes(username) ;
         const userLove = reacts.love.includes(username) ;
         const userLaugh = reacts.laugh.includes(username) ;
-        const userMad = reacts.laugh.includes(username) ;
+        const userMad = reacts.mad.includes(username) ;
 
         //Create the react button container
         const reactContainer = document.createElement("div") ;
@@ -217,7 +217,26 @@ if (isset($_GET["id"])) {
         const reactButton = document.createElement("button") ;
         reactButton.setAttribute("class", "react-comment") ;
         reactButton.setAttribute("name", "react_comment") ;
-        reactButton.textContent = "Like" ;
+        if (userLike) {
+            reactButton.innerHTML = "<img src='/like.png' alt='like' class='react-button-img'>" ;
+            reactButton.setAttribute("data-type", "none") ;
+        } else if (userLove) {
+            reactButton.innerHTML = "<img src='/love.png' alt='love' class='react-button-img'>" ;
+            reactButton.setAttribute("data-type", "none") ;
+        } else if (userLaugh) {
+            reactButton.innerHTML = "<img src='/laugh.png' alt='laugh' class='react-button-img'>" ;
+            reactButton.setAttribute("data-type", "none") ;
+        } else if (userMad) {
+            reactButton.innerHTML = "<img src='/mad.png' alt='mad' class='react-button-img'>" ;
+            reactButton.setAttribute("data-type", "none") ;
+        } else {
+            reactButton.textContent = "Like" ;
+            reactButton.setAttribute("data-type", "like") ;
+        }
+        reactButton.setAttribute("data-id", comment.id) ;
+        reactButton.addEventListener("click", () => {
+            updateReaction(reactButton) ;
+        }) ;
         reactContainer.appendChild(reactButton) ;
         //Create the options container
         const reactOptions = document.createElement("div") ;
