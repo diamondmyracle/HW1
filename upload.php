@@ -47,6 +47,12 @@ session_start();
                                 $objFeedController->getListingComments() ;
                                 exit() ;
                                 break ;
+                            case "react":
+                                require PROJECT_ROOT_PATH . "/Controller/Api/CommentController.php" ;
+                                $objFeedController = new CommentController() ;
+                                $objFeedController->setReaction() ;
+                                exit() ;
+                                break ;
                             default:
                                 header("HTTP/1.1 404 Not Found") ;
                                 exit() ;

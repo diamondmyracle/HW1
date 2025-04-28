@@ -15,7 +15,7 @@
 
                     $commentModel = new CommentModel();
                     $comments = $commentModel->getCommentsByListing($list_id) ;
-                    $responseData = json_encode($comments);
+                    $responseData = json_encode($comments) ;
                 } catch (Error $e) {
                     $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
                     $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
@@ -191,6 +191,80 @@
                 }
 
                 $commentModel->deleteComment($comment_id) ;
+        }
+
+        public function setReaction()
+        {
+            $strErrorDesc = '' ;
+            $requestMethod = $_SERVER["REQUEST_METHOD"] ;
+            if (strtoupper($requestMethod) == 'POST') {
+                try 
+                {
+                    $json = file_get_contents("php://input") ;
+                    $data = json_decode($json, true) ;
+
+                    $comment_id = $data["comment_id"] ;
+                    $reactType = $data["reactType"] ;
+                    $username = $data["username"] ;
+
+                    $reactions = $this->getReactionsFromComment($comment_id) ;
+                    $reactions = json_decode($reactions, true) ;
+                    $clearReactions = $this->clearReactionsOfUser($reactions, $username) ;
+
+                    if ($reactType !== "none") {
+                        $clearReactions[$reactType][] = $username ;
+                    }
+
+                    $commentModel = new CommentModel();
+                    $commentModel->updateReactionById($comment_id, json_encode($clearReactions)) ;
+                } catch (Error $e) {
+                    $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
+                    $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
+                }
+            } else {
+                $strErrorDesc = 'Method not supported';
+                $strErrorHeader = 'HTTP/1.1 422 Unprocessable Entity';
+            }
+
+            // send output 
+            if (!$strErrorDesc) {
+                $this->sendOutput(
+                    json_encode([
+                        "status" => "success",
+                        "message" => "Reaction was set."
+                    ]),
+                    array('Content-Type: application/json', 'HTTP/1.1 201 OK')
+                );
+            } else {
+                $this->sendOutput(
+                    json_encode([
+                        "status" => "error",
+                        ["error" => $strErrorDesc]
+                    ]),
+                    array('Content-Type: application/json', $strErrorHeader)
+                );
+            }
+        }
+
+        private function getReactionsFromComment($comment_id)
+        {
+            $commentModel = new CommentModel();
+            $comments = $commentModel->getCommentById($comment_id) ;
+            return $comments[0]["reactions"] ;
+        }
+
+        private function clearReactionsOfUser($reactions, $username)
+        {
+            foreach ($reactions as $type => $users) {
+                $index = array_search($username, $users) ;
+
+                if ($index !== false) {
+                    unset($reactions[$type][$index]) ;
+                    $reactions[$type] = array_values($reactions[$type]) ;
+                }
+            }
+
+            return $reactions ;
         }
     }
 ?>

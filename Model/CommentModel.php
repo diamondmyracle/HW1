@@ -28,5 +28,15 @@ class CommentModel extends Database
     {
         return $this->select("SELECT * FROM comments WHERE listing_id = ?", ["i", $list_id]) ;
     }
+
+    public function getCommentById($comment_id)
+    {
+        return $this->select("SELECT * FROM comments WHERE id = ?", ["i", $comment_id]) ;
+    }
+
+    public function updateReactionById($comment_id, $reactions)
+    {
+        return $this->update("UPDATE comments SET reactions = ? WHERE id = ?", ["si", $reactions, $comment_id]) ;
+    }
 }
 ?>
