@@ -188,6 +188,13 @@ if (isset($_GET["id"])) {
         commentId.setAttribute("value", comment.id) ;
         commentDiv.appendChild(commentId) ;
 
+        //Add the delete button
+        const likeButton = document.createElement("button") ;
+        likeButton.setAttribute("class", "like-comment") ;
+        likeButton.setAttribute("name", "like_comment") ;
+        likeButton.textContent = "Like" ;
+        commentDiv.appendChild(likeButton) ;
+
         //Add the reply button
         const replyButton = document.createElement("button") ;
         replyButton.setAttribute("class", "reply") ;
