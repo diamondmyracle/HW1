@@ -291,11 +291,25 @@ body {
     border-radius: 0.75em;
     padding: 4px;
     position: absolute ;
-    bottom: -130% ;
+    top: 100% ;
     transition: opacity 0.2s ease;
   }
 
   .react-container:hover .react-options {
     pointer-events: auto ;
     opacity: 1 ;
+  }
+
+  .react-options button {
+    background: none ;
+    border: none ;
+    padding: 5 px ;
+    cursor: pointer ;
+  }
+
+  .react-img {
+    width: 48px ;
+    height: 48px ;
+    display: block ;
+    image-rendering: pixelated ;
   }
