@@ -188,12 +188,46 @@ if (isset($_GET["id"])) {
         commentId.setAttribute("value", comment.id) ;
         commentDiv.appendChild(commentId) ;
 
-        //Add the delete button
+        //Create the like button container
+        const reactContainer = document.createElement("div") ;
+        reactContainer.setAttribute("class", "react-container") ;
+        //Add the basic like button
+        const reactButton = document.createElement("button") ;
+        reactButton.setAttribute("class", "react-comment") ;
+        reactButton.setAttribute("name", "react_comment") ;
+        reactButton.textContent = "Like" ;
+        reactContainer.appendChild(reactButton) ;
+        //Create the options container
+        const reactOptions = document.createElement("div") ;
+        reactOptions.setAttribute("class", "react-options hidden") ;
+        //Add the like button
         const likeButton = document.createElement("button") ;
         likeButton.setAttribute("class", "like-comment") ;
         likeButton.setAttribute("name", "like_comment") ;
         likeButton.textContent = "Like" ;
-        commentDiv.appendChild(likeButton) ;
+        reactOptions.appendChild(likeButton) ;
+        //Add the love button
+        const loveButton = document.createElement("button") ;
+        loveButton.setAttribute("class", "love-comment") ;
+        loveButton.setAttribute("name", "love_comment") ;
+        loveButton.textContent = "Love" ;
+        reactOptions.appendChild(loveButton) ;
+        //Add the laugh button
+        const laughButton = document.createElement("button") ;
+        laughButton.setAttribute("class", "laugh-comment") ;
+        laughButton.setAttribute("name", "laugh_comment") ;
+        laughButton.textContent = "Laugh" ;
+        reactOptions.appendChild(laughButton) ;
+        //Add the hate button
+        const hateButton = document.createElement("button") ;
+        hateButton.setAttribute("class", "hate-comment") ;
+        hateButton.setAttribute("name", "hate_comment") ;
+        hateButton.textContent = "Hate" ;
+        reactOptions.appendChild(hateButton) ;
+        //Add this to the comment div
+        reactContainer.appendChild(reactOptions) ;
+        commentDiv.appendChild(reactContainer) ;
+
 
         //Add the reply button
         const replyButton = document.createElement("button") ;

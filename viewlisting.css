@@ -276,3 +276,20 @@ body {
     0% { transform: rotate(0deg) ; }
     100% { transform: rotate(360deg) ; }
   }
+
+  .react-container {
+    display: inline-block ;
+  }
+
+  .react-options {
+    display: flex ;
+    pointer-events: none ;
+    opacity: 0 ;
+    position: absolute ;
+    bottom: -100% ;
+  }
+
+  .react-container:hover .react-options {
+    pointer-events: auto ;
+    opacity: 1 ;
+  }
