@@ -379,3 +379,23 @@ body {
     font-size: 0.75em ;
     color: rgb(121, 121, 121)
   }
+
+  .time-created-container {
+    display: block ;
+    pointer-events: none ;
+    opacity: 0 ;
+    background-color: #f3f3f3;
+    border: 1px solid rgb(190, 190, 190);
+    border-radius: 0.75em;
+    padding: 4px;
+    position: absolute ;
+    bottom: 100% ;
+    transition: opacity 0.2s ease;
+    z-index: 1000 ;
+    white-space: nowrap ;
+  }
+
+  .timestamp-container:hover .time-created-container {
+    pointer-events: auto ;
+    opacity: 1 ;
+  }
