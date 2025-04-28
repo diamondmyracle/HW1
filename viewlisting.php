@@ -175,12 +175,26 @@ if (isset($_GET["id"])) {
         const commentDiv = document.createElement("div") ;
         commentDiv.classList.add("comment") ;
 
+        //Create the name container
+        const nameContainer = document.createElement("div") ;
+        nameContainer.setAttribute("class", "username-container") ;
+
         //Add the username
         const usernameP = document.createElement("p") ;
         const usernameText = document.createElement("strong") ;
         usernameText.textContent = comment.username ;
         usernameP.appendChild(usernameText) ;
-        commentDiv.appendChild(usernameP) ;
+        nameContainer.appendChild(usernameP) ;
+        commentDiv.appendChild(nameContainer) ;
+
+        //Add the timestamp container
+        const timestampContainer = document.createElement("div") ;
+        timestampContainer.setAttribute("class", "timestamp-container") ;
+
+        const timeElapsed = document.createElement("p") ;
+        timeElapsed.innerHTML = "10 seconds ago" ;
+        timestampContainer.appendChild(timeElapsed) ;
+        commentDiv.appendChild(timestampContainer) ;
 
         //Add the comment text
         const commentText = document.createElement("p") ;

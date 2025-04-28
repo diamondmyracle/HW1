@@ -362,3 +362,19 @@ body {
     pointer-events: auto ;
     opacity: 1 ;
   }
+
+  .timestamp-container {
+    display: inline-block ;
+    position: relative ;
+    margin-left: 32px ;
+  }
+
+  .username-container {
+    display: inline-block ;
+    position: relative ;
+  }
+
+  .timestamp-container p {
+    font-size: 0.75em ;
+    color: rgb(121, 121, 121)
+  }
