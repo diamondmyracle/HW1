@@ -192,7 +192,8 @@ if (isset($_GET["id"])) {
         timestampContainer.setAttribute("class", "timestamp-container") ;
 
         const timeElapsed = document.createElement("p") ;
-        timeElapsed.innerHTML = "10 seconds ago" ;
+        timeElapsed.innerHTML = timeAgo(comment.created_at) ;
+        //timeElapsed.innerHTML = timeAgo("2024-4-29 15:15:00") ;
         timestampContainer.appendChild(timeElapsed) ;
         commentDiv.appendChild(timestampContainer) ;
 
@@ -435,6 +436,30 @@ if (isset($_GET["id"])) {
         }
 
         return commentDiv ;
+    }
+
+    function timeAgo(timestamp) {
+        const now = new Date() ;
+        const past = new Date(timestamp) ;
+
+        const secsAgo = Math.floor((now - past) / 1000) ;
+        if (secsAgo < 60) return `${secsAgo} seconds ago` ;
+
+        const minsAgo = Math.floor(secsAgo / 60) ;
+        if (minsAgo < 60) return `${minsAgo} minutes ago` ;
+
+        const hoursAgo = Math.floor(minsAgo / 60) ;
+        if (hoursAgo < 24) return `${hoursAgo} hours ago` ;
+
+        const daysAgo = Math.floor(hoursAgo / 24) ;
+        if (daysAgo < 30) return `${daysAgo} days ago` ;
+
+        const monthsAgo = now.getMonth() - past.getMonth() + 
+                            12 * (now.getFullYear() - past.getFullYear()) ;
+        if (monthsAgo < 12) return `${monthsAgo} months ago` ;
+
+        const yearsAgo = now.getFullYear() - past.getFullYear() ;
+        return `${yearsAgo} years ago` ;
     }
 
     async function updateReaction(button) {

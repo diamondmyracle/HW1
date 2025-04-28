@@ -293,6 +293,7 @@ body {
     position: absolute ;
     top: 100% ;
     transition: opacity 0.2s ease;
+    z-index: 1000 ;
   }
 
   .react-container:hover .react-options {
