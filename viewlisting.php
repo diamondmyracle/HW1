@@ -326,7 +326,7 @@ if (isset($_GET["id"])) {
         commentDiv.appendChild(replyButton) ;
 
         //Add the delete button if the user is signed in
-        if (username) {
+        if (username == comment.username) {
             const deleteButton = document.createElement("button") ;
             deleteButton.setAttribute("class", "delete-comment") ;
             deleteButton.setAttribute("name", "delete_comment") ;
