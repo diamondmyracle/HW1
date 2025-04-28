@@ -399,3 +399,23 @@ body {
     pointer-events: auto ;
     opacity: 1 ;
   }
+
+  .edit-listing-button {
+        margin-bottom: 10px ;
+  }
+
+  .edit-listing-button a {
+    padding:0px 4px ;
+    padding-right: 8px ;
+    margin-left: 10px ;
+    margin-bottom: 10px ;
+    background:green ; 
+    color:white ; 
+    border-radius:5px ;
+    font-size: 1em ;
+    text-decoration: none ;
+  }
+
+  .edit-listing-button a:hover {
+    background:rgb(0, 109, 0) ; 
+  }

@@ -306,7 +306,7 @@
 
     //Was it successful?
     if (editJson.success) {
-        window.location.href = "/listings.php" ;
+        window.location.href = "/viewlisting.php?id=" + data["id"] ;
         return ;
     } else {
         alert(editJson.message || "Edit failed.") ;
