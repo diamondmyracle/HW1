@@ -194,6 +194,125 @@ if (isset($_GET["id"])) {
         commentId.setAttribute("value", comment.id) ;
         commentDiv.appendChild(commentId) ;
 
+        //Get reaction counts
+        const reacts = JSON.parse(comment.reactions) ;
+        const numLikes = reacts.like.length ;
+        const numLoves = reacts.love.length ;
+        const numLaughs = reacts.laugh.length ;
+        const numMad = reacts.mad.length ;
+        const numReactions = numLikes + numLoves + numLaughs + numMad ;
+
+        //Get the user reaction data
+        <?php
+            //If the user isn't logged in, redirect them to login
+            if (isset($_SESSION["username"])) {
+                echo "const username = '" . $_SESSION["username"] . "' ;" ;
+            } else {
+                echo "const username = '' ;" ;
+            }
+        ?>
+        const userLike = reacts.like.includes(username) ;
+        const userLove = reacts.love.includes(username) ;
+        const userLaugh = reacts.laugh.includes(username) ;
+        const userMad = reacts.mad.includes(username) ;
+
+        //Create the react button container
+        const reactContainer = document.createElement("div") ;
+        reactContainer.setAttribute("class", "react-container") ;
+        //Add the basic react button
+        const reactButton = document.createElement("button") ;
+        reactButton.setAttribute("class", "react-comment") ;
+        reactButton.setAttribute("name", "react_comment") ;
+        if (userLike) {
+            reactButton.innerHTML = "<img src='/like.png' alt='like' class='react-button-img'>" ;
+            reactButton.setAttribute("data-type", "none") ;
+        } else if (userLove) {
+            reactButton.innerHTML = "<img src='/love.png' alt='love' class='react-button-img'>" ;
+            reactButton.setAttribute("data-type", "none") ;
+        } else if (userLaugh) {
+            reactButton.innerHTML = "<img src='/laugh.png' alt='laugh' class='react-button-img'>" ;
+            reactButton.setAttribute("data-type", "none") ;
+        } else if (userMad) {
+            reactButton.innerHTML = "<img src='/mad.png' alt='mad' class='react-button-img'>" ;
+            reactButton.setAttribute("data-type", "none") ;
+        } else {
+            reactButton.textContent = "Like" ;
+            reactButton.setAttribute("data-type", "like") ;
+        }
+        reactButton.setAttribute("data-id", comment.id) ;
+        reactButton.addEventListener("click", () => {
+            updateReaction(reactButton) ;
+        }) ;
+        reactContainer.appendChild(reactButton) ;
+
+        //Create the options container
+        const reactOptions = document.createElement("div") ;
+        reactOptions.setAttribute("class", "react-options hidden") ;
+        //Add the like button
+        const likeButton = document.createElement("button") ;
+        likeButton.setAttribute("class", "like-comment") ;
+        likeButton.setAttribute("name", "like_comment") ;
+        if (userLike) {
+            likeButton.setAttribute("data-type", "none") ;
+        } else {
+            likeButton.setAttribute("data-type", "like") ;
+        }
+        likeButton.setAttribute("data-id", comment.id) ;
+        likeButton.innerHTML = "<img src='/like.png' alt='like' class='react-img'>" ;
+        likeButton.addEventListener("click", () => {
+            updateReaction(likeButton) ;
+        }) ;
+        reactOptions.appendChild(likeButton) ;
+        //Add the love button
+        const loveButton = document.createElement("button") ;
+        loveButton.setAttribute("class", "love-comment") ;
+        loveButton.setAttribute("name", "love_comment") ;
+        if (userLove) {
+            loveButton.setAttribute("data-type", "none") ;
+        } else {
+            loveButton.setAttribute("data-type", "love") ;
+        }
+        loveButton.setAttribute("data-id", comment.id) ;
+        loveButton.innerHTML = "<img src='/love.png' alt='love' class='react-img'>" ;
+        loveButton.addEventListener("click", () => {
+            updateReaction(loveButton) ;
+        }) ;
+        reactOptions.appendChild(loveButton) ;
+        //Add the laugh button
+        const laughButton = document.createElement("button") ;
+        laughButton.setAttribute("class", "laugh-comment") ;
+        laughButton.setAttribute("name", "laugh_comment") ;
+        if (userLaugh) {
+            laughButton.setAttribute("data-type", "none") ;
+        } else {
+            laughButton.setAttribute("data-type", "laugh") ;
+        }
+        laughButton.setAttribute("data-id", comment.id) ;
+        laughButton.innerHTML = "<img src='/laugh.png' alt='laugh' class='react-img'>" ;
+        laughButton.addEventListener("click", () => {
+            updateReaction(laughButton) ;
+        }) ;
+        reactOptions.appendChild(laughButton) ;
+        //Add the hate button
+        const hateButton = document.createElement("button") ;
+        hateButton.setAttribute("class", "mad-comment") ;
+        hateButton.setAttribute("name", "mad_comment") ;
+        if (userMad) {
+            hateButton.setAttribute("data-type", "none") ;
+        } else {
+            hateButton.setAttribute("data-type", "mad") ;
+        }
+        hateButton.setAttribute("data-id", comment.id) ;
+        hateButton.innerHTML = "<img src='/mad.png' alt='mad' class='react-img'>" ;
+        hateButton.addEventListener("click", () => {
+            updateReaction(hateButton) ;
+        }) ;
+        reactOptions.appendChild(hateButton) ;
+        //Add this to the comment div
+        reactContainer.appendChild(reactOptions) ;
+        commentDiv.appendChild(reactContainer) ;
+
+
         //Add the reply button
         const replyButton = document.createElement("button") ;
         replyButton.setAttribute("class", "reply") ;
@@ -213,6 +332,79 @@ if (isset($_GET["id"])) {
         deleteButton.textContent = "Delete" ;
         commentDiv.appendChild(deleteButton) ;
 
+        //Add reaction counter if there are reactions
+        if (numReactions > 0) {
+            const reactListContainer = document.createElement("div") ;
+            reactListContainer.setAttribute("class", "react-list-container") ;
+
+            const reactCounter = document.createElement("p") ;
+            reactCounter.setAttribute("class", "react-p") ;
+            switch (numReactions) {
+                case 1:
+                    reactCounter.textContent = numReactions + " reaction" ;
+                    break ;
+                default:
+                    reactCounter.textContent = numReactions + " reactions" ;
+                    break ;
+            }
+            reactListContainer.appendChild(reactCounter) ;
+
+            //Create the reaction list container
+            const reactList = document.createElement("div") ;
+            reactList.setAttribute("class", "react-list hidden") ;
+
+            const reactLikeCount = document.createElement("p") ;
+            reactLikeCount.setAttribute("class", "react-p") ;
+            switch (numLikes) {
+                case 1:
+                    reactLikeCount.textContent = numLikes + " like" ;
+                    break ;
+                default:
+                    reactLikeCount.textContent = numLikes + " likes" ;
+                    break ;
+            }
+            reactList.appendChild(reactLikeCount) ;
+
+            const reactLoveCount = document.createElement("p") ;
+            reactLoveCount.setAttribute("class", "react-p") ;
+            switch (numLoves) {
+                case 1:
+                    reactLoveCount.textContent = numLoves + " love" ;
+                    break ;
+                default:
+                    reactLoveCount.textContent = numLoves + " loves" ;
+                    break ;
+            }
+            reactList.appendChild(reactLoveCount) ;
+
+            const reactLaughCount = document.createElement("p") ;
+            reactLaughCount.setAttribute("class", "react-p") ;
+            switch (numLaughs) {
+                case 1:
+                    reactLaughCount.textContent = numLaughs + " laugh" ;
+                    break ;
+                default:
+                    reactLaughCount.textContent = numLaughs + " laughs" ;
+                    break ;
+            }
+            reactList.appendChild(reactLaughCount) ;
+
+            const reactMadCount = document.createElement("p") ;
+            reactMadCount.setAttribute("class", "react-p") ;
+            switch (numMad) {
+                case 1:
+                    reactMadCount.textContent = numMad + " mad" ;
+                    break ;
+                default:
+                    reactMadCount.textContent = numMad + " mads" ;
+                    break ;
+            }
+            reactList.appendChild(reactMadCount) ;
+
+            reactCounter.appendChild(reactList) ;
+            commentDiv.appendChild(reactListContainer) ;
+        }
+
         //Add the reply text thingy
         const textDiv = document.createElement("div") ;
         textDiv.setAttribute("class", "reply_box") ;
@@ -227,6 +419,49 @@ if (isset($_GET["id"])) {
         }
 
         return commentDiv ;
+    }
+
+    async function updateReaction(button) {
+        <?php
+            //If the user isn't logged in, redirect them to login
+            if (!isset($_SESSION["username"])) {
+                echo "window.location.href = '/login.php' ;" ;
+                echo "return ;" ;
+            }
+        ?>
+
+        const reactionType = button.getAttribute("data-type") ;
+        const commentId = button.getAttribute("data-id") ;
+
+        const reactData = {
+            comment_id: commentId,
+            reactType: reactionType,
+            <?php 
+                if (isset($_SESSION["username"])) {
+                    echo "username: " . "'" . htmlspecialchars($_SESSION["username"]) . "'," ;
+                } else {
+                    echo "username: null," ;
+                }
+            ?>
+        } ;
+
+        const reactResponse = await fetch('upload.php/comment/react', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(reactData)
+        }).catch(err => console.error("Fetch error:", err)) ;
+
+        const reactResult = await reactResponse.json();
+
+        if (reactResult.status === "success") {
+            renderComments() ;
+        } else {
+            return ;
+        }
+
     }
 
     function addTextboxToComment(commentDiv) {

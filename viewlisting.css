@@ -217,7 +217,7 @@ body {
 }
 
 .comment-section button {
-    margin-top: 8px ;
+    margin-top: 0px ;
     margin-right: 8px ;
     padding: 0px 8px ;
     font-size: 1em ;
@@ -275,4 +275,89 @@ body {
   @keyframes spin {
     0% { transform: rotate(0deg) ; }
     100% { transform: rotate(360deg) ; }
+  }
+
+  .react-container {
+    display: inline-block ;
+    position: relative ;
+  }
+
+  .react-options {
+    display: flex ;
+    pointer-events: none ;
+    opacity: 0 ;
+    background-color: #f3f3f3;
+    border: 1px solid rgb(190, 190, 190);
+    border-radius: 0.75em;
+    padding: 4px;
+    position: absolute ;
+    top: 100% ;
+    transition: opacity 0.2s ease;
+  }
+
+  .react-container:hover .react-options {
+    pointer-events: auto ;
+    opacity: 1 ;
+  }
+
+  .react-options button {
+    background: none ;
+    border: none ;
+    padding: 5px ;
+    cursor: pointer ;
+  }
+
+  .react-img {
+    width: 48px ;
+    height: 48px ;
+    display: block ;
+    image-rendering: pixelated ;
+  }
+
+  .react-button-img {
+    position: absolute ;
+    top: -10% ;
+    left: 20% ;
+    width: 32px ;
+    height: 32px ;
+    display: block ;
+    image-rendering: pixelated ;
+  }
+
+  .react-comment {
+    width: 50px ;
+  }
+
+  .react-list-container {
+    display: inline-block ;
+    position: relative ;
+  }
+
+  .react-p {
+    font-size: 0.75em ;
+    color: rgb(121, 121, 121)
+  }
+
+  .react-list {
+    display: block ;
+    pointer-events: none ;
+    opacity: 0 ;
+    background-color: #f3f3f3;
+    border: 1px solid rgb(190, 190, 190);
+    border-radius: 0.75em;
+    padding: 4px;
+    position: absolute ;
+    top: 100% ;
+    transition: opacity 0.2s ease;
+    z-index: 1000 ;
+  }
+
+  .react-list p {
+    font-size: 1em ;
+    color: black ;
+  }
+
+  .react-list-container:hover .react-list {
+    pointer-events: auto ;
+    opacity: 1 ;
   }
