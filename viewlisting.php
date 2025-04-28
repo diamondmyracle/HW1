@@ -204,25 +204,45 @@ if (isset($_GET["id"])) {
         const likeButton = document.createElement("button") ;
         likeButton.setAttribute("class", "like-comment") ;
         likeButton.setAttribute("name", "like_comment") ;
+        likeButton.setAttribute("data-type", "like") ;
+        likeButton.setAttribute("data-id", comment.id) ;
         likeButton.innerHTML = "<img src='/like.png' alt='like' class='react-img'>" ;
+        likeButton.addEventListener("click", () => {
+            updateReaction(likeButton) ;
+        }) ;
         reactOptions.appendChild(likeButton) ;
         //Add the love button
         const loveButton = document.createElement("button") ;
         loveButton.setAttribute("class", "love-comment") ;
         loveButton.setAttribute("name", "love_comment") ;
+        loveButton.setAttribute("data-type", "love") ;
+        loveButton.setAttribute("data-id", comment.id) ;
         loveButton.innerHTML = "<img src='/love.png' alt='love' class='react-img'>" ;
+        loveButton.addEventListener("click", () => {
+            updateReaction(loveButton) ;
+        }) ;
         reactOptions.appendChild(loveButton) ;
         //Add the laugh button
         const laughButton = document.createElement("button") ;
         laughButton.setAttribute("class", "laugh-comment") ;
         laughButton.setAttribute("name", "laugh_comment") ;
+        laughButton.setAttribute("data-type", "laugh") ;
+        laughButton.setAttribute("data-id", comment.id) ;
         laughButton.innerHTML = "<img src='/laugh.png' alt='laugh' class='react-img'>" ;
+        laughButton.addEventListener("click", () => {
+            updateReaction(laughButton) ;
+        }) ;
         reactOptions.appendChild(laughButton) ;
         //Add the hate button
         const hateButton = document.createElement("button") ;
         hateButton.setAttribute("class", "mad-comment") ;
         hateButton.setAttribute("name", "mad_comment") ;
+        hateButton.setAttribute("data-type", "mad") ;
+        hateButton.setAttribute("data-id", comment.id) ;
         hateButton.innerHTML = "<img src='/mad.png' alt='mad' class='react-img'>" ;
+        hateButton.addEventListener("click", () => {
+            updateReaction(hateButton) ;
+        }) ;
         reactOptions.appendChild(hateButton) ;
         //Add this to the comment div
         reactContainer.appendChild(reactOptions) ;
@@ -262,6 +282,49 @@ if (isset($_GET["id"])) {
         }
 
         return commentDiv ;
+    }
+
+    async function updateReaction(button) {
+        <?php
+            //If the user isn't logged in, redirect them to login
+            if (!isset($_SESSION["username"])) {
+                echo "window.location.href = '/login.php' ;" ;
+                echo "return ;" ;
+            }
+        ?>
+
+        const reactionType = button.getAttribute("data-type") ;
+        const commentId = button.getAttribute("data-id") ;
+
+        const reactData = {
+            comment_id: commentId,
+            reactType: reactionType,
+            <?php 
+                if (isset($_SESSION["username"])) {
+                    echo "username: " . "'" . htmlspecialchars($_SESSION["username"]) . "'," ;
+                } else {
+                    echo "username: null," ;
+                }
+            ?>
+        } ;
+
+        const reactResponse = await fetch('upload.php/comment/react', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(reactData)
+        }).catch(err => console.error("Fetch error:", err)) ;
+
+        const reactResult = await reactResponse.json();
+
+        if (reactResult.status === "success") {
+            renderComments() ;
+        } else {
+            return ;
+        }
+
     }
 
     function addTextboxToComment(commentDiv) {
