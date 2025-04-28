@@ -112,6 +112,19 @@ CREATE TABLE `app-db`.`comments` (
     FOREIGN KEY (parent_id) REFERENCES comments(id) ON DELETE SET NULL
 );
 ```
+
+**Create `favorites` Table**
+```sql
+CREATE TABLE  `app-db`.`favorites` (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    listing_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE,
+    FOREIGN KEY (listing_id) REFERENCES listings(id) ON DELETE CASCADE
+);
+
+```
  
  Pic of our local development environment!!
  
