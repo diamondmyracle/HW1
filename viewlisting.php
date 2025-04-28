@@ -175,12 +175,36 @@ if (isset($_GET["id"])) {
         const commentDiv = document.createElement("div") ;
         commentDiv.classList.add("comment") ;
 
+        //Create the name container
+        const nameContainer = document.createElement("div") ;
+        nameContainer.setAttribute("class", "username-container") ;
+
         //Add the username
         const usernameP = document.createElement("p") ;
         const usernameText = document.createElement("strong") ;
         usernameText.textContent = comment.username ;
         usernameP.appendChild(usernameText) ;
-        commentDiv.appendChild(usernameP) ;
+        nameContainer.appendChild(usernameP) ;
+        commentDiv.appendChild(nameContainer) ;
+
+        //Add the timestamp container
+        const timestampContainer = document.createElement("div") ;
+        timestampContainer.setAttribute("class", "timestamp-container") ;
+
+        const timeElapsed = document.createElement("p") ;
+        timeElapsed.innerHTML = timeAgo(comment.created_at) ;
+        //timeElapsed.innerHTML = timeAgo("2024-4-29 15:15:00") ;
+        timestampContainer.appendChild(timeElapsed) ;
+
+        //Create the options container
+        const timeCreatedContainer = document.createElement("div") ;
+        timeCreatedContainer.setAttribute("class", "time-created-container hidden") ;
+
+        const timeCreated = document.createElement("p") ;
+        timeCreated.innerHTML = comment.created_at ;
+        timeCreatedContainer.appendChild(timeCreated) ;
+        timestampContainer.appendChild(timeCreatedContainer) ;
+        commentDiv.appendChild(timestampContainer) ;
 
         //Add the comment text
         const commentText = document.createElement("p") ;
@@ -355,50 +379,50 @@ if (isset($_GET["id"])) {
             const reactList = document.createElement("div") ;
             reactList.setAttribute("class", "react-list hidden") ;
 
-            const reactLikeCount = document.createElement("p") ;
+            const reactLikeCount = document.createElement("div") ;
             reactLikeCount.setAttribute("class", "react-p") ;
             switch (numLikes) {
                 case 1:
-                    reactLikeCount.textContent = numLikes + " like" ;
+                    reactLikeCount.innerHTML = "<img src='/like.png' alt='like' class='react-list-img'>" + numLikes + " like" ;
                     break ;
                 default:
-                    reactLikeCount.textContent = numLikes + " likes" ;
+                    reactLikeCount.innerHTML = "<img src='/like.png' alt='like' class='react-list-img'>" + numLikes + " likes" ;
                     break ;
             }
             reactList.appendChild(reactLikeCount) ;
 
-            const reactLoveCount = document.createElement("p") ;
+            const reactLoveCount = document.createElement("div") ;
             reactLoveCount.setAttribute("class", "react-p") ;
             switch (numLoves) {
                 case 1:
-                    reactLoveCount.textContent = numLoves + " love" ;
+                    reactLoveCount.innerHTML = "<img src='/love.png' alt='love' class='react-list-img'>" + numLoves + " love" ;
                     break ;
                 default:
-                    reactLoveCount.textContent = numLoves + " loves" ;
+                    reactLoveCount.innerHTML = "<img src='/love.png' alt='love' class='react-list-img'>" + numLoves + " loves" ;
                     break ;
             }
             reactList.appendChild(reactLoveCount) ;
 
-            const reactLaughCount = document.createElement("p") ;
+            const reactLaughCount = document.createElement("div") ;
             reactLaughCount.setAttribute("class", "react-p") ;
             switch (numLaughs) {
                 case 1:
-                    reactLaughCount.textContent = numLaughs + " laugh" ;
+                    reactLaughCount.innerHTML = "<img src='/laugh.png' alt='laugh' class='react-list-img'>" + numLaughs + " laugh" ;
                     break ;
                 default:
-                    reactLaughCount.textContent = numLaughs + " laughs" ;
+                    reactLaughCount.innerHTML = "<img src='/laugh.png' alt='laugh' class='react-list-img'>" + numLaughs + " laughs" ;
                     break ;
             }
             reactList.appendChild(reactLaughCount) ;
 
-            const reactMadCount = document.createElement("p") ;
+            const reactMadCount = document.createElement("div") ;
             reactMadCount.setAttribute("class", "react-p") ;
             switch (numMad) {
                 case 1:
-                    reactMadCount.textContent = numMad + " mad" ;
+                    reactMadCount.innerHTML = "<img src='/mad.png' alt='mad' class='react-list-img'>" + numMad + " mad" ;
                     break ;
                 default:
-                    reactMadCount.textContent = numMad + " mads" ;
+                    reactMadCount.innerHTML = "<img src='/mad.png' alt='mad' class='react-list-img'>" + numMad + " mads" ;
                     break ;
             }
             reactList.appendChild(reactMadCount) ;
@@ -421,6 +445,30 @@ if (isset($_GET["id"])) {
         }
 
         return commentDiv ;
+    }
+
+    function timeAgo(timestamp) {
+        const now = new Date() ;
+        const past = new Date(timestamp) ;
+
+        const secsAgo = Math.floor((now - past) / 1000) ;
+        if (secsAgo < 60) return `${secsAgo} seconds ago` ;
+
+        const minsAgo = Math.floor(secsAgo / 60) ;
+        if (minsAgo < 60) return `${minsAgo} minutes ago` ;
+
+        const hoursAgo = Math.floor(minsAgo / 60) ;
+        if (hoursAgo < 24) return `${hoursAgo} hours ago` ;
+
+        const daysAgo = Math.floor(hoursAgo / 24) ;
+        if (daysAgo < 30) return `${daysAgo} days ago` ;
+
+        const monthsAgo = now.getMonth() - past.getMonth() + 
+                            12 * (now.getFullYear() - past.getFullYear()) ;
+        if (monthsAgo < 12) return `${monthsAgo} months ago` ;
+
+        const yearsAgo = now.getFullYear() - past.getFullYear() ;
+        return `${yearsAgo} years ago` ;
     }
 
     async function updateReaction(button) {
