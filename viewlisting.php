@@ -14,7 +14,6 @@ if (isset($_GET["id"])) {
     header("location: listings.php");
     exit;
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -69,6 +68,13 @@ if (isset($_GET["id"])) {
                             </ul>
                         </div>
                         <button type="button" class="buy">Buy now!</button>
+                        <div style="margin-top: 10px; text-align: center;">
+                            <button id="favoriteButton" style="background: none; border: none; cursor: pointer; 
+                            display: flex; align-items: center; gap: 8px;">
+                            <img id="favoriteIcon" src="minecraft-black-heart.png" alt="Favorite" width="32" height="32">
+                            <span id="favoriteText" style="font-size: 1em; color: black;">Add to Favorites</span>
+                            </button>
+                        </div>
                     </div>
                 </li>
             </ul>
@@ -360,4 +366,76 @@ if (isset($_GET["id"])) {
             }
         }
     }) ;
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const favoriteButton = document.getElementById('favoriteButton');
+    const favoriteIcon = document.getElementById('favoriteIcon');
+    const favoriteText = document.getElementById('favoriteText');
+    const listingId = <?php echo json_encode($list_id); ?>;
+    const loggedInUsername = <?php echo json_encode($_SESSION['username'] ?? ''); ?>;
+
+    if (!loggedInUsername) {
+        favoriteButton.addEventListener('click', function() {
+            window.location.href = '/login.php'; // Redirect if not logged in
+        });
+        return;
+    }
+
+    // Check if already favorited
+    fetch('favorite_action.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            listing_id: listingId,
+            favorite_action: 'check'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.favorited) {
+            favoriteIcon.src = 'minecraft-red-heart.png';
+            favoriteText.textContent = 'Remove from Favorites';
+        } else {
+            favoriteIcon.src = 'minecraft-black-heart.png';
+            favoriteText.textContent = 'Add to Favorites';
+        }
+    });
+
+    favoriteButton.addEventListener('click', function() {
+        const isFavorited = favoriteIcon.src.includes('red-heart');
+
+        fetch('favorite_action.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                listing_id: listingId,
+                favorite_action: isFavorited ? 'unfavorite' : 'favorite'
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                if (isFavorited) {
+                    favoriteIcon.src = 'minecraft-black-heart.png';
+                    favoriteText.textContent = 'Add to Favorites';
+                } else {
+                    favoriteIcon.src = 'minecraft-red-heart.png';
+                    favoriteText.textContent = 'Added to Favorites';
+                }
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred.');
+        });
+    });
+});
 </script>
