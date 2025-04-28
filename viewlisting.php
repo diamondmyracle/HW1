@@ -633,7 +633,7 @@ document.addEventListener('DOMContentLoaded', function() {
     .then(data => {
         if (data.favorited) {
             favoriteIcon.src = 'minecraft-red-heart.png';
-            favoriteText.textContent = 'Remove from Favorites';
+            favoriteText.textContent = 'Added to Favorites';
         } else {
             favoriteIcon.src = 'minecraft-black-heart.png';
             favoriteText.textContent = 'Add to Favorites';
