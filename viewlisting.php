@@ -114,8 +114,9 @@ if (isset($_GET["id"])) {
 
             if (loggedInUsername === item.username) {
                 const editButton = document.createElement("div");
-                editButton.innerHTML = `<a href="editlisting.php?id=${item.id}" style="margin:15px 0; padding:8px 12px; background:green; color:white; border-radius:5px;">✏️ Edit Listing</a>`;
-                document.getElementById("listing-info").appendChild(editButton);
+                editButton.setAttribute("class", "edit-listing-button") ;
+                editButton.innerHTML = `<a href="editlisting.php?id=${item.id}">✏️ Edit Listing</a>`;
+                document.getElementById("listing-image").append(editButton);
             }
         })
         .catch(err => {
