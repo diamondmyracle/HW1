@@ -204,25 +204,25 @@ if (isset($_GET["id"])) {
         const likeButton = document.createElement("button") ;
         likeButton.setAttribute("class", "like-comment") ;
         likeButton.setAttribute("name", "like_comment") ;
-        likeButton.textContent = "Like" ;
+        likeButton.innerHTML = "<img src='/like.png' alt='like' class='react-img'>" ;
         reactOptions.appendChild(likeButton) ;
         //Add the love button
         const loveButton = document.createElement("button") ;
         loveButton.setAttribute("class", "love-comment") ;
         loveButton.setAttribute("name", "love_comment") ;
-        loveButton.textContent = "Love" ;
+        loveButton.innerHTML = "<img src='/love.png' alt='love' class='react-img'>" ;
         reactOptions.appendChild(loveButton) ;
         //Add the laugh button
         const laughButton = document.createElement("button") ;
         laughButton.setAttribute("class", "laugh-comment") ;
         laughButton.setAttribute("name", "laugh_comment") ;
-        laughButton.textContent = "Laugh" ;
+        laughButton.innerHTML = "<img src='/laugh.png' alt='laugh' class='react-img'>" ;
         reactOptions.appendChild(laughButton) ;
         //Add the hate button
         const hateButton = document.createElement("button") ;
-        hateButton.setAttribute("class", "hate-comment") ;
-        hateButton.setAttribute("name", "hate_comment") ;
-        hateButton.textContent = "Hate" ;
+        hateButton.setAttribute("class", "mad-comment") ;
+        hateButton.setAttribute("name", "mad_comment") ;
+        hateButton.innerHTML = "<img src='/mad.png' alt='mad' class='react-img'>" ;
         reactOptions.appendChild(hateButton) ;
         //Add this to the comment div
         reactContainer.appendChild(reactOptions) ;

@@ -217,7 +217,7 @@ body {
 }
 
 .comment-section button {
-    margin-top: 8px ;
+    margin-top: 0px ;
     margin-right: 8px ;
     padding: 0px 8px ;
     font-size: 1em ;
@@ -279,14 +279,20 @@ body {
 
   .react-container {
     display: inline-block ;
+    position: relative ;
   }
 
   .react-options {
     display: flex ;
     pointer-events: none ;
     opacity: 0 ;
+    background-color: #f3f3f3;
+    border: 1px solid rgb(190, 190, 190);
+    border-radius: 0.75em;
+    padding: 4px;
     position: absolute ;
-    bottom: -100% ;
+    bottom: -130% ;
+    transition: opacity 0.2s ease;
   }
 
   .react-container:hover .react-options {
