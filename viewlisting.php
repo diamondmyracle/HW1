@@ -333,7 +333,14 @@ if (isset($_GET["id"])) {
 
             const reactCounter = document.createElement("p") ;
             reactCounter.setAttribute("class", "react-p") ;
-            reactCounter.textContent = numReactions + " reactions" ;
+            switch (numReactions) {
+                case 1:
+                    reactCounter.textContent = numReactions + " reaction" ;
+                    break ;
+                default:
+                    reactCounter.textContent = numReactions + " reactions" ;
+                    break ;
+            }
             reactListContainer.appendChild(reactCounter) ;
 
             //Create the reaction list container
@@ -342,22 +349,50 @@ if (isset($_GET["id"])) {
 
             const reactLikeCount = document.createElement("p") ;
             reactLikeCount.setAttribute("class", "react-p") ;
-            reactLikeCount.textContent = numLikes + " likes" ;
+            switch (numLikes) {
+                case 1:
+                    reactLikeCount.textContent = numLikes + " like" ;
+                    break ;
+                default:
+                    reactLikeCount.textContent = numLikes + " likes" ;
+                    break ;
+            }
             reactList.appendChild(reactLikeCount) ;
 
             const reactLoveCount = document.createElement("p") ;
             reactLoveCount.setAttribute("class", "react-p") ;
-            reactLoveCount.textContent = numLoves + " loves" ;
+            switch (numLoves) {
+                case 1:
+                    reactLoveCount.textContent = numLoves + " love" ;
+                    break ;
+                default:
+                    reactLoveCount.textContent = numLoves + " loves" ;
+                    break ;
+            }
             reactList.appendChild(reactLoveCount) ;
 
             const reactLaughCount = document.createElement("p") ;
             reactLaughCount.setAttribute("class", "react-p") ;
-            reactLaughCount.textContent = numLaughs + " laughs" ;
+            switch (numLaughs) {
+                case 1:
+                    reactLaughCount.textContent = numLaughs + " laugh" ;
+                    break ;
+                default:
+                    reactLaughCount.textContent = numLaughs + " laughs" ;
+                    break ;
+            }
             reactList.appendChild(reactLaughCount) ;
 
             const reactMadCount = document.createElement("p") ;
             reactMadCount.setAttribute("class", "react-p") ;
-            reactMadCount.textContent = numMad + " mads" ;
+            switch (numMad) {
+                case 1:
+                    reactMadCount.textContent = numMad + " mad" ;
+                    break ;
+                default:
+                    reactMadCount.textContent = numMad + " mads" ;
+                    break ;
+            }
             reactList.appendChild(reactMadCount) ;
 
             reactCounter.appendChild(reactList) ;
