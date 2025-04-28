@@ -109,7 +109,8 @@ CREATE TABLE `app-db`.`comments` (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (listing_id) REFERENCES listings(id) ON DELETE CASCADE,
     FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE,
-    FOREIGN KEY (parent_id) REFERENCES comments(id) ON DELETE SET NULL
+    FOREIGN KEY (parent_id) REFERENCES comments(id) ON DELETE SET NULL,
+    reactions JSON NOT NULL
 );
 ```
 
