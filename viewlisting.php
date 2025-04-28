@@ -188,10 +188,32 @@ if (isset($_GET["id"])) {
         commentId.setAttribute("value", comment.id) ;
         commentDiv.appendChild(commentId) ;
 
-        //Create the like button container
+        //Get reaction counts
+        const reacts = JSON.parse(comment.reactions) ;
+        const numLikes = reacts.like.length ;
+        const numLoves = reacts.love.length ;
+        const numLaughs = reacts.laugh.length ;
+        const numMad = reacts.mad.length ;
+        const numReactions = numLikes + numLoves + numLaughs + numMad ;
+
+        //Get the user reaction data
+        <?php
+            //If the user isn't logged in, redirect them to login
+            if (isset($_SESSION["username"])) {
+                echo "const username = '" . $_SESSION["username"] . "' ;" ;
+            } else {
+                echo "const username = ''" ;
+            }
+        ?>
+        const userLike = reacts.like.includes(username) ;
+        const userLove = reacts.love.includes(username) ;
+        const userLaugh = reacts.laugh.includes(username) ;
+        const userMad = reacts.laugh.includes(username) ;
+
+        //Create the react button container
         const reactContainer = document.createElement("div") ;
         reactContainer.setAttribute("class", "react-container") ;
-        //Add the basic like button
+        //Add the basic react button
         const reactButton = document.createElement("button") ;
         reactButton.setAttribute("class", "react-comment") ;
         reactButton.setAttribute("name", "react_comment") ;
@@ -204,7 +226,11 @@ if (isset($_GET["id"])) {
         const likeButton = document.createElement("button") ;
         likeButton.setAttribute("class", "like-comment") ;
         likeButton.setAttribute("name", "like_comment") ;
-        likeButton.setAttribute("data-type", "like") ;
+        if (userLike) {
+            likeButton.setAttribute("data-type", "none") ;
+        } else {
+            likeButton.setAttribute("data-type", "like") ;
+        }
         likeButton.setAttribute("data-id", comment.id) ;
         likeButton.innerHTML = "<img src='/like.png' alt='like' class='react-img'>" ;
         likeButton.addEventListener("click", () => {
@@ -215,7 +241,11 @@ if (isset($_GET["id"])) {
         const loveButton = document.createElement("button") ;
         loveButton.setAttribute("class", "love-comment") ;
         loveButton.setAttribute("name", "love_comment") ;
-        loveButton.setAttribute("data-type", "love") ;
+        if (userLove) {
+            loveButton.setAttribute("data-type", "none") ;
+        } else {
+            loveButton.setAttribute("data-type", "love") ;
+        }
         loveButton.setAttribute("data-id", comment.id) ;
         loveButton.innerHTML = "<img src='/love.png' alt='love' class='react-img'>" ;
         loveButton.addEventListener("click", () => {
@@ -226,7 +256,11 @@ if (isset($_GET["id"])) {
         const laughButton = document.createElement("button") ;
         laughButton.setAttribute("class", "laugh-comment") ;
         laughButton.setAttribute("name", "laugh_comment") ;
-        laughButton.setAttribute("data-type", "laugh") ;
+        if (userLaugh) {
+            laughButton.setAttribute("data-type", "none") ;
+        } else {
+            laughButton.setAttribute("data-type", "laugh") ;
+        }
         laughButton.setAttribute("data-id", comment.id) ;
         laughButton.innerHTML = "<img src='/laugh.png' alt='laugh' class='react-img'>" ;
         laughButton.addEventListener("click", () => {
@@ -237,7 +271,11 @@ if (isset($_GET["id"])) {
         const hateButton = document.createElement("button") ;
         hateButton.setAttribute("class", "mad-comment") ;
         hateButton.setAttribute("name", "mad_comment") ;
-        hateButton.setAttribute("data-type", "mad") ;
+        if (userMad) {
+            hateButton.setAttribute("data-type", "none") ;
+        } else {
+            hateButton.setAttribute("data-type", "mad") ;
+        }
         hateButton.setAttribute("data-id", comment.id) ;
         hateButton.innerHTML = "<img src='/mad.png' alt='mad' class='react-img'>" ;
         hateButton.addEventListener("click", () => {
