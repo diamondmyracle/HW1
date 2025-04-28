@@ -327,3 +327,37 @@ body {
   .react-comment {
     width: 50px ;
   }
+
+  .react-list-container {
+    display: inline-block ;
+    position: relative ;
+  }
+
+  .react-p {
+    font-size: 0.75em ;
+    color: rgb(121, 121, 121)
+  }
+
+  .react-list {
+    display: block ;
+    pointer-events: none ;
+    opacity: 0 ;
+    background-color: #f3f3f3;
+    border: 1px solid rgb(190, 190, 190);
+    border-radius: 0.75em;
+    padding: 4px;
+    position: absolute ;
+    top: 100% ;
+    transition: opacity 0.2s ease;
+    z-index: 1000 ;
+  }
+
+  .react-list p {
+    font-size: 1em ;
+    color: black ;
+  }
+
+  .react-list-container:hover .react-list {
+    pointer-events: auto ;
+    opacity: 1 ;
+  }

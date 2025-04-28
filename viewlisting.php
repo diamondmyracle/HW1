@@ -202,7 +202,7 @@ if (isset($_GET["id"])) {
             if (isset($_SESSION["username"])) {
                 echo "const username = '" . $_SESSION["username"] . "' ;" ;
             } else {
-                echo "const username = ''" ;
+                echo "const username = '' ;" ;
             }
         ?>
         const userLike = reacts.like.includes(username) ;
@@ -238,6 +238,7 @@ if (isset($_GET["id"])) {
             updateReaction(reactButton) ;
         }) ;
         reactContainer.appendChild(reactButton) ;
+
         //Create the options container
         const reactOptions = document.createElement("div") ;
         reactOptions.setAttribute("class", "react-options hidden") ;
@@ -324,6 +325,44 @@ if (isset($_GET["id"])) {
         deleteButton.setAttribute("name", "delete_comment") ;
         deleteButton.textContent = "Delete" ;
         commentDiv.appendChild(deleteButton) ;
+
+        //Add reaction counter if there are reactions
+        if (numReactions > 0) {
+            const reactListContainer = document.createElement("div") ;
+            reactListContainer.setAttribute("class", "react-list-container") ;
+
+            const reactCounter = document.createElement("p") ;
+            reactCounter.setAttribute("class", "react-p") ;
+            reactCounter.textContent = numReactions + " reactions" ;
+            reactListContainer.appendChild(reactCounter) ;
+
+            //Create the reaction list container
+            const reactList = document.createElement("div") ;
+            reactList.setAttribute("class", "react-list hidden") ;
+
+            const reactLikeCount = document.createElement("p") ;
+            reactLikeCount.setAttribute("class", "react-p") ;
+            reactLikeCount.textContent = numLikes + " likes" ;
+            reactList.appendChild(reactLikeCount) ;
+
+            const reactLoveCount = document.createElement("p") ;
+            reactLoveCount.setAttribute("class", "react-p") ;
+            reactLoveCount.textContent = numLoves + " loves" ;
+            reactList.appendChild(reactLoveCount) ;
+
+            const reactLaughCount = document.createElement("p") ;
+            reactLaughCount.setAttribute("class", "react-p") ;
+            reactLaughCount.textContent = numLaughs + " laughs" ;
+            reactList.appendChild(reactLaughCount) ;
+
+            const reactMadCount = document.createElement("p") ;
+            reactMadCount.setAttribute("class", "react-p") ;
+            reactMadCount.textContent = numMad + " mads" ;
+            reactList.appendChild(reactMadCount) ;
+
+            reactCounter.appendChild(reactList) ;
+            commentDiv.appendChild(reactListContainer) ;
+        }
 
         //Add the reply text thingy
         const textDiv = document.createElement("div") ;
