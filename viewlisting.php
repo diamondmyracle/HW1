@@ -536,13 +536,37 @@ if (isset($_GET["id"])) {
 
         const commentP = commentDiv.querySelector(".comment-text") ;
 
+        const editContaier = document.createElement("div") ;
+        commentP.after(editContaier)
+
         //Add the edit text area
         const textArea = document.createElement("textarea") ;
         textArea.setAttribute("name", "comment") ;
         textArea.setAttribute("placeholder", "Edit this comment") ;
         textArea.setAttribute("class", "edit_textbox") ;
         textArea.textContent = commentP.textContent ;
-        commentP.after(textArea) ;
+        editContaier.appendChild(textArea) ;
+
+        //Add the save button
+        const saveButton = document.createElement("button") ;
+        saveButton.setAttribute("class", "save-comment") ;
+        saveButton.setAttribute("name", "save_comment") ;
+        saveButton.textContent = "Save edits" ;
+        editContaier.appendChild(saveButton) ;
+
+        //Add the cancel button
+        const cancelButton = document.createElement("button") ;
+        cancelButton.setAttribute("class", "cancel-comment") ;
+        cancelButton.setAttribute("name", "cancel_comment") ;
+        cancelButton.textContent = "Cancel" ;
+
+        cancelButton.addEventListener("click", () => {
+            renderComments() ;
+        }) ;
+
+        editContaier.appendChild(cancelButton) ;
+
+        commentP.remove() ;
     }
 
     function addTextboxToComment(commentDiv) {

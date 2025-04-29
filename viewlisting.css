@@ -244,6 +244,16 @@ body {
     border: 2px solid rgb(255, 89, 60) ;
 }
 
+.comment-section .save-comment {
+  background-color: #ffa749 ;
+  border: 2px solid rgb(255, 126, 71) ;
+}
+
+.comment-section .save-comment:hover {
+  background-color: #ff7c44 ;
+  border: 2px solid rgb(255, 89, 60) ;
+}
+
 .comment {
     background-color: #f3f3f3;
     border: 1px solid rgb(190, 190, 190);
