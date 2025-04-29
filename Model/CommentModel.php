@@ -38,5 +38,10 @@ class CommentModel extends Database
     {
         return $this->update("UPDATE comments SET reactions = ? WHERE id = ?", ["si", $reactions, $comment_id]) ;
     }
+
+    public function saveEditsToComment($comment_id, $comment)
+    {
+        return $this->update("UPDATE comments SET comment = ? WHERE id = ?", ["si", $comment, $comment_id]) ;
+    }
 }
 ?>

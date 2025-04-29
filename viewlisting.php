@@ -209,6 +209,7 @@ if (isset($_GET["id"])) {
 
         //Add the comment text
         const commentText = document.createElement("p") ;
+        commentText.setAttribute("class", "comment-text") ;
         commentText.textContent = comment.comment ;
         commentDiv.appendChild(commentText) ;
 
@@ -350,13 +351,25 @@ if (isset($_GET["id"])) {
 
         commentDiv.appendChild(replyButton) ;
 
-        //Add the delete button if the user is signed in
+        //Add the delete button if the user is signed in as op
         if (username == comment.username) {
             const deleteButton = document.createElement("button") ;
             deleteButton.setAttribute("class", "delete-comment") ;
             deleteButton.setAttribute("name", "delete_comment") ;
             deleteButton.textContent = "Delete" ;
             commentDiv.appendChild(deleteButton) ;
+        }
+
+        //Add the edit button if the user is signed in as op
+        if (username == comment.username) {
+            const editCommentButton = document.createElement("button") ;
+            editCommentButton.setAttribute("class", "edit-comment") ;
+            editCommentButton.setAttribute("name", "edit_comment") ;
+            editCommentButton.textContent = "Edit" ;
+            editCommentButton.addEventListener("click", () => {
+                addEditTextbox(commentDiv) ;
+            }) ;
+            commentDiv.appendChild(editCommentButton) ;
         }
 
         //Add reaction counter if there are reactions
@@ -515,6 +528,47 @@ if (isset($_GET["id"])) {
 
     }
 
+    function addEditTextbox(commentDiv) {
+        //Return if there's already a text box
+        if (commentDiv.querySelector(".edit_textbox")) {
+            return ;
+        }
+
+        const commentP = commentDiv.querySelector(".comment-text") ;
+
+        const editContaier = document.createElement("div") ;
+        commentP.after(editContaier)
+
+        //Add the edit text area
+        const textArea = document.createElement("textarea") ;
+        textArea.setAttribute("name", "comment") ;
+        textArea.setAttribute("placeholder", "Edit this comment") ;
+        textArea.setAttribute("class", "edit_textbox") ;
+        textArea.textContent = commentP.textContent ;
+        editContaier.appendChild(textArea) ;
+
+        //Add the save button
+        const saveButton = document.createElement("button") ;
+        saveButton.setAttribute("class", "save-comment") ;
+        saveButton.setAttribute("name", "save_comment") ;
+        saveButton.textContent = "Save edits" ;
+        editContaier.appendChild(saveButton) ;
+
+        //Add the cancel button
+        const cancelButton = document.createElement("button") ;
+        cancelButton.setAttribute("class", "cancel-comment") ;
+        cancelButton.setAttribute("name", "cancel_comment") ;
+        cancelButton.textContent = "Cancel" ;
+
+        cancelButton.addEventListener("click", () => {
+            renderComments() ;
+        }) ;
+
+        editContaier.appendChild(cancelButton) ;
+
+        commentP.remove() ;
+    }
+
     function addTextboxToComment(commentDiv) {
         //Return if there's already a text box
         if (commentDiv.querySelector(".reply_textbox")) {
@@ -634,6 +688,36 @@ if (isset($_GET["id"])) {
             } ;
 
             const commentResponse = await fetch('upload.php/comment/delete', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify(commentData)
+            }).catch(err => console.error("Fetch error:", err)) ;
+
+            const commentResult = await commentResponse.json();
+
+            if (commentResult.status === "success") {
+                renderComments() ;
+                return ;
+            } else {
+                return ;
+            }
+        } else if (event.target.matches('.save-comment')) {
+            //Edit of a comment
+            const button = event.target ;
+            const commentDiv = button.closest('div.comment') ;
+            const commentId = commentDiv.querySelector('input[type="hidden"][name="comment_id"]') ;
+            const textarea = commentDiv.querySelector('textarea') ;
+            const text = textarea.value.trim() ;
+
+            const commentData = {
+                comment_id: commentId.value,
+                comment: text
+            } ;
+
+            const commentResponse = await fetch('upload.php/comment/edit', {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

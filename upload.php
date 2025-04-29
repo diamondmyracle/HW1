@@ -53,6 +53,12 @@ session_start();
                                 $objFeedController->setReaction() ;
                                 exit() ;
                                 break ;
+                            case "edit":
+                                require PROJECT_ROOT_PATH . "/Controller/Api/CommentController.php" ;
+                                $objFeedController = new CommentController() ;
+                                $objFeedController->saveCommentEdit() ;
+                                exit() ;
+                                break ;
                             default:
                                 header("HTTP/1.1 404 Not Found") ;
                                 exit() ;
