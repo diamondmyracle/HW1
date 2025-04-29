@@ -92,6 +92,18 @@ if (isset($_GET["id"])) {
     </div>
 
     <script>
+        function escapeHTML(str) {
+            if (!str) return "";
+            return str.replace(/[&<>"']/g, function(m) {
+                return {
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#39;'
+                }[m];
+            });
+        }
         const reqBody = { id: <?php echo json_encode($list_id); ?> };
         const loggedInUsername = <?php echo json_encode($_SESSION['username'] ?? ''); ?>;
 
@@ -108,7 +120,7 @@ if (isset($_GET["id"])) {
             const item = data[0];
             document.getElementById("listing-image").innerHTML = `<img src="/uploads/${item.image}" alt="Listing photo">`;
             document.getElementById("listing-name").innerText = item.listing_name;
-            document.getElementById("seller").innerText = item.username;
+            document.getElementById("seller").innerHTML = `<a href="viewprofile.php?username=${encodeURIComponent(item.username)}" style="color: #242526;">${escapeHTML(item.username)}</a>`;
             document.getElementById("listing-descript").innerText = item.listing_descript;
             document.getElementById("cost").innerText = item.price;
 
