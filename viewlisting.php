@@ -704,6 +704,36 @@ if (isset($_GET["id"])) {
             } else {
                 return ;
             }
+        } else if (event.target.matches('.save-comment')) {
+            //Edit of a comment
+            const button = event.target ;
+            const commentDiv = button.closest('div.comment') ;
+            const commentId = commentDiv.querySelector('input[type="hidden"][name="comment_id"]') ;
+            const textarea = commentDiv.querySelector('textarea') ;
+            const text = textarea.value.trim() ;
+
+            const commentData = {
+                comment_id: commentId.value,
+                comment: text
+            } ;
+
+            const commentResponse = await fetch('upload.php/comment/edit', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify(commentData)
+            }).catch(err => console.error("Fetch error:", err)) ;
+
+            const commentResult = await commentResponse.json();
+
+            if (commentResult.status === "success") {
+                renderComments() ;
+                return ;
+            } else {
+                return ;
+            }
         }
     }) ;
 </script>
