@@ -1,0 +1,262 @@
+/* viewprofile.css */
+
+body {
+    font-family: "Outfit", serif;
+    margin: 0px;
+    font-size: 100%;
+}
+
+.site-content {
+    margin: 4%;
+    margin-top: 8%;
+    font-size: 1.25em;
+}
+
+.profile-container { /* Renamed from .profile for better specificity */
+    background-color: #ffffff;
+    border: 2px solid rgb(197, 197, 197);
+    width: 100%;
+    margin: 0px;
+    border-radius: 1em;
+}
+
+.profile-container h1 {
+    margin: 20px 10px;
+}
+
+.profile-container ul {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    margin: 0px;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.profile-container li.li-img, .profile-container li.li-info {
+    display: flex;
+    padding: 0px;
+}
+
+.profile-container li.li-img {
+    width: 35%;
+    background-color: #ffffff;
+}
+
+.profile-container li.li-info {
+    width: 65%;
+    background-color: #ffffff;
+}
+
+.profile-image img {
+    width: auto;
+    max-width: 150px; /* Adjusted size */
+    height: auto;
+    border-radius: 50%;
+    margin: 0 auto;
+    display: block;
+}
+
+.profile-container h2 {
+    margin: 10px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.profile-container p {
+    margin: 10px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.profile-container h2:hover {
+    color: rgb(30, 209, 30);
+    transition: color 0.3s ease; /* Smooth hover transition */
+}
+
+.account-balance {
+    display: flex;
+    align-items: center; /* Adjusted alignment */
+    background-color: #cff0ff;
+    border: 2px solid rgb(144, 196, 255);
+    width: auto;
+    margin: 5px;
+    padding: 0px;
+    border-radius: 1em;
+}
+
+.account-balance p {
+    margin-bottom: 5px;
+    margin-left: 0px;
+    padding-top: 5px;
+    color: rgb(0, 0, 0);
+}
+
+.account-balance span {
+    font-size: 100%;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 0px;
+    color: rgb(0, 0, 0);
+}
+
+.account-balance img {
+    width: 30px; /* Adjusted image size */
+    margin-right: 10px;
+}
+
+
+/* Listings below profile */
+
+.profile-listings-section {
+    background-color: #ffffff;
+    border: 2px solid rgb(197, 197, 197);
+    border-radius: 1em;
+    padding: 20px;
+    margin-top: 40px;
+    font-family: "Outfit", sans-serif;
+}
+
+.profile-listings-section h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-weight: 600;
+    font-size: 1.4em;
+}
+
+.profile-listings {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.profile-listing {
+    flex: 1 1 calc(33.333% - 20px);
+    background-color: #f9f9f9;
+    border: 1px solid rgb(197, 197, 197);
+    border-radius: 1em;
+    padding: 15px;
+    box-sizing: border-box;
+    text-align: center;
+    transition: 0.2s ease-in-out;
+}
+
+.profile-listing:hover {
+    background-color: #f1f1f1;
+}
+
+.profile-listing img {
+    max-width: 100%;
+    border-radius: 0.5em;
+    margin-bottom: 10px;
+}
+
+.profile-listing h3 {
+    margin: 10px 0 5px;
+    font-size: 1.1em;
+}
+
+.profile-listing p {
+    margin: 0;
+    font-size: 0.95em;
+}
+
+/* Responsive tweaks */
+
+@media (max-width: 1000px) {
+    .profile-listing {
+        flex: 1 1 calc(50% - 20px);
+    }
+}
+
+@media (max-width: 768px) {
+    .profile-container li.li-img, .profile-container li.li-info {
+        width: 100%;
+        flex-direction: column; /* Stack elements */
+    }
+    .profile-image img {
+        max-width: 120px; /* Adjust for smaller screens */
+    }
+}
+
+@media (max-width: 600px) {
+    .profile-listing {
+        flex: 1 1 100%;
+    }
+}
+
+/* === Copied from viewlisting.css to support listings in viewprofile.php === */
+
+.profile-container li.li-sell-info {
+    display: inline-block;
+    padding: 0px;
+    width: 20%;
+    background-color: #ffffff;
+}
+
+.listing-sell-info {
+    background-color: #ffffff;
+    border: 2px solid rgb(197, 197, 197);
+    width: auto;
+    margin: 0px;
+    padding: 0px;
+    border-radius: 1em;
+}
+
+.listing-price {
+    display: flex;
+    align-items: center; /* Adjusted alignment */
+    background-color: #cff0ff;
+    border: 2px solid rgb(144, 196, 255);
+    width: auto;
+    margin: 5px;
+    padding: 0px;
+    border-radius: 1em;
+}
+
+.listing-price p {
+    margin-bottom: 5px;
+    margin-left: 30px;
+    padding-top: 0px;
+    color: rgb(0, 0, 0);
+    font-size: 115%;
+}
+
+
+.listing-price span {
+    font-size: 125%;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 0px;
+    color: rgb(0, 0, 0);
+}
+
+.listing-price img {
+    width: 30px; /* Adjusted image size */
+    margin-right: 10px;
+}
+
+.listing-sell-info ul {
+    list-style: none;
+    list-style-position: inside;
+    margin: 0px;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.listing-sell-info h2 {
+    padding-left: 1.25em;
+}
+
+.listing-sell-info li {
+    text-indent: -1em;
+    display: list-item;
+    padding-left: 1.25em;
+    padding-right: 1.25em;
+    padding-bottom: 1em;
+    width: auto;
+}
+
+.listing-title {
+   text-decoration: none; 
+}
