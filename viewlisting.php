@@ -668,8 +668,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         return;
     }
-
-    // Check if already favorited
     fetch('favorite_action.php', {
         method: 'POST',
         headers: {
@@ -690,6 +688,27 @@ document.addEventListener('DOMContentLoaded', function() {
             favoriteText.textContent = 'Add to Favorites';
         }
     });
+
+    // --- Fetch and update the number of favorites ---
+    function updateFavoriteCount() {
+        fetch('favorites_count.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                listing_id: listingId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('num-favourited').innerText = data.count;
+            }
+        });
+    }
+
+    updateFavoriteCount(); // call once on page load
 
     favoriteButton.addEventListener('click', function() {
         const isFavorited = favoriteIcon.src.includes('red-heart');
@@ -714,6 +733,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     favoriteIcon.src = 'minecraft-red-heart.png';
                     favoriteText.textContent = 'Added to Favorites';
                 }
+                updateFavoriteCount(); // refresh favorites count after toggle
             } else {
                 alert('Error: ' + data.message);
             }
