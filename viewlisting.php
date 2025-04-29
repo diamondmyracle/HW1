@@ -350,13 +350,22 @@ if (isset($_GET["id"])) {
 
         commentDiv.appendChild(replyButton) ;
 
-        //Add the delete button if the user is signed in
+        //Add the delete button if the user is signed in as op
         if (username == comment.username) {
             const deleteButton = document.createElement("button") ;
             deleteButton.setAttribute("class", "delete-comment") ;
             deleteButton.setAttribute("name", "delete_comment") ;
             deleteButton.textContent = "Delete" ;
             commentDiv.appendChild(deleteButton) ;
+        }
+
+        //Add the edit button if the user is signed in as op
+        if (username == comment.username) {
+            const editCommentButton = document.createElement("button") ;
+            editCommentButton.setAttribute("class", "edit-comment") ;
+            editCommentButton.setAttribute("name", "edit_comment") ;
+            editCommentButton.textContent = "Edit" ;
+            commentDiv.appendChild(editCommentButton) ;
         }
 
         //Add reaction counter if there are reactions
