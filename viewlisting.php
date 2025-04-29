@@ -209,6 +209,7 @@ if (isset($_GET["id"])) {
 
         //Add the comment text
         const commentText = document.createElement("p") ;
+        commentText.setAttribute("class", "comment-text") ;
         commentText.textContent = comment.comment ;
         commentDiv.appendChild(commentText) ;
 
@@ -365,6 +366,9 @@ if (isset($_GET["id"])) {
             editCommentButton.setAttribute("class", "edit-comment") ;
             editCommentButton.setAttribute("name", "edit_comment") ;
             editCommentButton.textContent = "Edit" ;
+            editCommentButton.addEventListener("click", () => {
+                addEditTextbox(commentDiv) ;
+            }) ;
             commentDiv.appendChild(editCommentButton) ;
         }
 
@@ -522,6 +526,23 @@ if (isset($_GET["id"])) {
             return ;
         }
 
+    }
+
+    function addEditTextbox(commentDiv) {
+        //Return if there's already a text box
+        if (commentDiv.querySelector(".edit_textbox")) {
+            return ;
+        }
+
+        const commentP = commentDiv.querySelector(".comment-text") ;
+
+        //Add the edit text area
+        const textArea = document.createElement("textarea") ;
+        textArea.setAttribute("name", "comment") ;
+        textArea.setAttribute("placeholder", "Edit this comment") ;
+        textArea.setAttribute("class", "edit_textbox") ;
+        textArea.textContent = commentP.textContent ;
+        commentP.after(textArea) ;
     }
 
     function addTextboxToComment(commentDiv) {
