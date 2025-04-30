@@ -231,6 +231,58 @@ public function deleteAction()
     }
 }
 
+public function transferOwnershipToBuyer()
+{
+    $requestMethod = $_SERVER["REQUEST_METHOD"];
+    $result = '' ;
+
+    if (strtoupper($requestMethod) === 'PUT') {
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        try {
+            $username = $data["username"] ;
+            $list_id = $data["list_id"] ;
+
+            $listingModel = new ListingModel();
+            $result = $listingModel->updateListing($username, $list_id);
+        } catch (Exception $e) {
+            $this->sendOutput(
+                json_encode([
+                    'success' => false,
+                    'message' => 'Exception: ' . $e->getMessage()
+                ]),
+                ['Content-Type: application/json', 'HTTP/1.1 500 Internal Server Error']
+            );
+        }
+    } else {   
+        $this->sendOutput(
+            json_encode([
+                'success' => false,
+                'message' => 'Method not allowed'
+            ]),
+            ['Content-Type: application/json', 'HTTP/1.1 405 Method Not Allowed']
+        );  
+    }
+
+    if ($result) {
+        $this->sendOutput(
+            json_encode([
+                'success' => true,
+                'message' => 'Listing updated'
+            ]),
+            ['Content-Type: application/json']
+        );
+    } else {
+        $this->sendOutput(
+            json_encode([
+                'success' => false,
+                'message' => 'Ownership could not be transfered.'
+            ]),
+            ['Content-Type: application/json', 'HTTP/1.1 404 Not Found']
+        );
+    }
+}
+
 
 
 }
