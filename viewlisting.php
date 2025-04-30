@@ -812,8 +812,10 @@ document.addEventListener('DOMContentLoaded', function () {
             ? 'favorites_api.php/favorites/remove'
             : 'favorites_api.php/favorites/add';
 
+        const fetchMethod = isFavorited ? 'DELETE' : 'POST'
+
         fetch(endpoint, {
-            method: 'POST',
+            method: fetchMethod,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 listing_id: listingId,
