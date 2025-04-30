@@ -81,7 +81,7 @@ Whether you're having issues signing up after adding these two lines of code abo
 ```
 ALTER TABLE users 
 MODIFY acc_balance INT DEFAULT 1000,
-MODIFY user_descript TEXT DEFAULT NULL;
+MODIFY user_descript TEXT NOT NULL DEFAULT 'change your description';
 ```
  
  **Create `listings` Table:**
