@@ -252,7 +252,7 @@ public function transferOwnershipToBuyer()
                 $listingModel = new ListingModel() ;
                 $result = $listingModel->transferOwner($buyer, $list_id) ;
             } else {
-                $result = "Insufficient funds, boi. Why are you so poor? Try being less poor next time." ;
+                $result = "" ;
             }
         } catch (Exception $e) {
             $this->sendOutput(
@@ -287,7 +287,7 @@ public function transferOwnershipToBuyer()
                 'success' => false,
                 'message' => 'Ownership could not be transfered.'
             ]),
-            ['Content-Type: application/json', 'HTTP/1.1 404 Not Found']
+            ['Content-Type: application/json']
         );
     }
 }

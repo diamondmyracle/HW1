@@ -67,7 +67,8 @@ if (isset($_GET["id"])) {
                                 <li><span id="num-favourited">0</span> people favourited!</li>
                             </ul>
                         </div>
-                        <button type="button" class="buy">Buy now!</button>
+                        <button type="button" class="buy" id="buy-button">Buy now!</button>
+                        <span id="buy-error" class="buy-error" style="color: red;"></span>
                         <div style="margin-top: 10px; text-align: center;">
                             <button id="favoriteButton" style="background: none; border: none; cursor: pointer; 
                             display: flex; align-items: center; gap: 8px;">
@@ -852,4 +853,80 @@ document.addEventListener('DOMContentLoaded', function () {
     updateFavoriteCount();
     checkIfFavorited();
 });
+
+
+document.getElementById("buy-button").addEventListener("click", async (event) => {
+        <?php
+            //If the user isn't logged in, redirect them to login
+            if (!isset($_SESSION["username"])) {
+                echo "window.location.href = '/login.php' ;" ;
+                echo "return ;" ;
+            }
+        ?>
+
+        const listing_id = <?php echo json_encode($list_id); ?> ;
+
+        const reqBody = { id: listing_id } ;
+
+        const listingStuff = await fetch("listings.php/listing/id", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(reqBody)
+        }).catch(err => console.error("Fetch error:", err)) ;
+
+        const response = await listingStuff.json() ;
+        const info = response[0] ;
+        const sellerUser = info.username ;
+        const price = info.price ;
+        // .then(data => {
+        //     const item = data[0];
+        //     document.getElementById("listing-image").innerHTML = `<img src="/uploads/${item.image}" alt="Listing photo">`;
+        //     document.getElementById("listing-name").innerText = item.listing_name;
+        //     document.getElementById("seller").innerHTML = `<a href="viewprofile.php?username=${encodeURIComponent(item.username)}" style="color: #242526;">${escapeHTML(item.username)}</a>`;
+        //     document.getElementById("listing-descript").innerText = item.listing_descript;
+        //     document.getElementById("cost").innerText = item.price;
+
+        //     if (loggedInUsername === item.username) {
+        //         const editButton = document.createElement("div");
+        //         editButton.setAttribute("class", "edit-listing-button") ;
+        //         editButton.innerHTML = `<a href="editlisting.php?id=${item.id}">✏️ Edit Listing</a>`;
+        //         document.getElementById("listing-image").append(editButton);
+        //     }
+        // })
+
+        const transactionData = {
+            list_id: listing_id,
+            <?php 
+                if (isset($_SESSION["username"])) {
+                    echo "buyer: " . "'" . htmlspecialchars($_SESSION["username"]) . "'," ;
+                } else {
+                    echo "buyer: null," ;
+                }
+            ?>
+            seller: sellerUser,
+            cost: price
+        } ;
+
+        const transactionResponse = await fetch('listings.php/listing/buy', {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(transactionData)
+        }).catch(err => console.error("Fetch error:", err)) ;
+
+        const transactionResult = await transactionResponse.json();
+
+        if (transactionResult.success) {
+            location.reload() ;
+            return ;
+        } else {
+            document.getElementById("buy-error").innerHTML = "Transaction could not be completed." ;
+            return ;
+        }
+}) ;
 </script>
