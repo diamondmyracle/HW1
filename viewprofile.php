@@ -59,7 +59,7 @@ $listings_result = $stmt->get_result();
     <div class="profile-container">
         <ul>
             <li class="li-img">
-                <div id="profile-image" class="listing-image">
+                <div id="profile-image" class="profile-image">
                     <img src="/uploads/smallSteve.png" alt="Profile icon">
                 </div>
             </li>
