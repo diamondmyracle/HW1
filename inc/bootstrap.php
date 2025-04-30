@@ -15,4 +15,7 @@
 
     // include the comment model file
     require_once PROJECT_ROOT_PATH . "/Model/CommentModel.php" ;
+
+    // include the favorites model file
+    require_once PROJECT_ROOT_PATH . "/Model/FavoritesModel.php" ;
 ?>
