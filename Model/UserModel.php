@@ -21,5 +21,17 @@ class UserModel extends Database
     {
         return $this->select("SELECT * FROM users WHERE username = ?", ["s", $username]) ;
     }
+
+    public function updateUser($data)
+    {
+    return $this->update(
+        "UPDATE users SET user_descript = ? WHERE username = ?",
+        ["ss", $data['user_descript'], $data['user']]
+    );
+    }
+
+    public function getUserDescription($username) {
+        return $this->select("SELECT user_descript FROM users WHERE username = ?", ["s", $username])[0];
+    }
 }
 ?>
