@@ -463,3 +463,31 @@ public function testPost_CreateListing(): void {
 ```
 This code is correct, however, it doesn't account for out `ListingController.php` and the http response we received which was a 200 OK instead of 201. Going into that code and changing the response then gave a correct test result in the terminal.
 
+# Question 3 - New Things On Diamond Real Estate
+
+We have implemented 5 new features to the website, that being individual listing page viewing, a favoriting system, profile pages, commenting, and buying functionality.
+
+**Individual Listing Page Viewing**:
+With this feature, when you navigate to the listings page via the navbar, you can click on the listings created and you get more information of the listing. When you get to the page of the individual listing, you are able to buy the listing, favorite it and even comment on it. (make sure you are logged in!) You are also able to access your profile page and the other users profile pages by clicking on the author of the listing.
+**(NOTE: the first 4 listings are hardcoded and we have a special attatchment to them to get rid of them)**
+
+**Favoriting System**:
+You can add a listing to your favorites and it increments each time someone favorites a listing and it also decrements when you remove the listing from your favorites. From your profile page, all your favorites are placed in one place. You are able to click on those favorites and it will bring you back to the individual listing page. 
+
+**Commenting**:
+You are able to comment on the individual lisitng pages. You can reply to comments and create a chain, edit, and delete your comment. There is also the ability to add emoji reaction to a comment and the comment holds the information for how many reactions it has recieved. There is also a timestamp that says how long ago the comment was posted.
+
+**Profile Page**:
+On the profile page which can be found either through the individual listing pages or at the navbar, you are able to see your profile picture (Steve), the listings you have posted, and your favorite listings. You are also able to see your account diamond balance for making future purchases as well as see your profile description that other players can also see. You are able to edit your profile description.
+
+**Buying Functionality**:
+ When you are logged into your account and you see a listing you like, you can buy it. When you click Buy you then lose some of your diamonds and the owner of the listing gains them (works like any transaction). When you signup with an account, you start with 1000 diamonds and your balance can once again be seen in your profile page. Only the logged in user can see their account balance and favorites.
+
+**(NOTE: These functions are also implemented as rest API)**
+
+We all contributed equally to this portion of the project. 
+
+We used ChatGPT to debug and help implement different functionality we have not encountered.
+
+
+
