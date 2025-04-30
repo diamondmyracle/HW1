@@ -244,7 +244,7 @@ public function transferOwnershipToBuyer()
             $list_id = $data["list_id"] ;
 
             $listingModel = new ListingModel();
-            $result = $listingModel->updateListing($username, $list_id);
+            $result = $listingModel->transferOwner($username, $list_id);
         } catch (Exception $e) {
             $this->sendOutput(
                 json_encode([

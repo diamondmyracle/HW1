@@ -39,6 +39,17 @@
             exit() ;
         }
     }
+    elseif ($reqMethod == "PUT")
+    {
+        if (isset($uriParts[1]) && $uriParts[1] === 'listing' && isset($uriParts[2]) && $uriParts[2] === 'buy') {
+            require __DIR__ . "/inc/bootstrap.php" ;
+            require PROJECT_ROOT_PATH . "/Controller/Api/ListingController.php" ;
+    
+            $controller = new ListingController() ;
+            $controller->transferOwnershipToBuyer() ;
+            exit() ;
+        }
+    }
 
 ?>
 

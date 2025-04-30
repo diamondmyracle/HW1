@@ -97,9 +97,11 @@ MODIFY user_descript TEXT NOT NULL DEFAULT 'change your description';
      INDEX username_idx (`username`),
      FOREIGN KEY (`username`) REFERENCES users(`username`));
 ```
-add this line
+add these lines
 ```
-     ALTER TABLE listings MODIFY id INT NOT NULL AUTO_INCREMENT;
+     ALTER TABLE listings 
+     ADD sold BOOLEAN NOT NULL DEFAULT FALSE AFTER image,
+     MODIFY id INT NOT NULL AUTO_INCREMENT;
  ```
  **Foreign Key Relationship:**  
  The column `username` in `listings` references the `username` in the `users` table.
