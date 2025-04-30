@@ -40,6 +40,90 @@ class UserController extends BaseController
         */
     }
 
+    
+    public function updateAction()
+    {
+        $requestMethod = $_SERVER["REQUEST_METHOD"];
+    
+        if (strtoupper($requestMethod) === 'POST') {
+            $data = json_decode(file_get_contents('php://input'), true);
+    
+            try {
+                if (!isset($data['username'])) {
+                    throw new Exception("Username not provided");
+                }
+    
+                $userModel = new UserModel();
+                $result = $userModel->getUserDescription($data['username']);
+    
+                if ($result) {
+                    $this->sendOutput(
+                        json_encode([$result]),
+                        ['Content-Type: application/json']
+                    );
+                } else {
+                    $this->sendOutput(
+                        json_encode(["error" => "User not found"]),
+                        ['Content-Type: application/json', 'HTTP/1.1 404 Not Found']
+                    );
+                }
+    
+            } catch (Exception $e) {
+                $this->sendOutput(
+                    json_encode([
+                        'success' => false,
+                        'message' => 'Exception: ' . $e->getMessage()
+                    ]),
+                    ['Content-Type: application/json', 'HTTP/1.1 500 Internal Server Error']
+                );
+            }
+        } elseif (strtoupper($requestMethod) === 'PUT') {
+            $data = json_decode(file_get_contents('php://input'), true);
+    
+            try {
+                $userModel = new UserModel();
+                $result = $userModel->updateUser($data);
+    
+                if ($result) {
+                    $this->sendOutput(
+                        json_encode([
+                            'success' => true,
+                            'message' => 'User profile updated'
+                        ]),
+                        ['Content-Type: application/json']
+                    );
+                } else {
+                    $this->sendOutput(
+                        json_encode([
+                            'success' => false,
+                            'message' => 'No changes made or user not found.'
+                        ]),
+                        ['Content-Type: application/json', 'HTTP/1.1 404 Not Found']
+                    );
+                }
+    
+            } catch (Exception $e) {
+                $this->sendOutput(
+                    json_encode([
+                        'success' => false,
+                        'message' => 'Exception: ' . $e->getMessage()
+                    ]),
+                    ['Content-Type: application/json', 'HTTP/1.1 500 Internal Server Error']
+                );
+            }
+        } else {
+            $this->sendOutput(
+                json_encode([
+                    'success' => false,
+                    'message' => 'Method not allowed'
+                ]),
+                ['Content-Type: application/json', 'HTTP/1.1 405 Method Not Allowed']
+            );
+        }
+    }
+    
+
+
 public function userExists()
     {
         $strErrorDesc = '' ;

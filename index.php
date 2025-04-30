@@ -56,6 +56,7 @@ Index file for the landing page-->
             <a href="#faq">FAQ</a>
             <?php if (!empty($username)): ?>
                  <a href="logout.php">Logout (<?php echo htmlspecialchars($username); ?>)</a>
+                 <a href="viewprofile.php?username=<?php echo $_SESSION['username']?>">MyProfile</a>
             <?php else: ?>
                     <a href="login.php">Login</a>
                     <a href="signup.php">Signup</a>

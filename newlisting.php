@@ -39,6 +39,7 @@ if (isset($uriParts[1]) && $uriParts[1] === 'listing' && isset($uriParts[2]) && 
 
     <?php if (isset($_SESSION['username'])): ?>
         <a href="logout.php">Logout (<?php echo htmlspecialchars($_SESSION['username']); ?>)</a>
+        <a href="viewprofile.php?username=<?php echo $_SESSION['username']?>">MyProfile</a>
     <?php else: ?>
         <a href="login.php">Login</a>
         <a href="signup.php">Signup</a>
