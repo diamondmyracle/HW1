@@ -40,7 +40,7 @@ body {
 }
 
 .profile-container li.li-img {
-    width: 35%;
+    width: 25%;
     background-color: #ffffff;
 }
 
@@ -50,12 +50,18 @@ body {
 }
 
 .profile-image img {
-    width: auto;
-    max-width: 150px; /* Adjusted size */
-    height: auto;
+    width: 10em;
+    max-width: 100%; /* Adjusted size */
+    height: 10em;
     border-radius: 50%;
     margin: 0 auto;
     display: block;
+    padding: 20%;
+    /* egg
+    padding-top: 2em;
+    padding-bottom: 2em;
+    padding-left: 3em;*/
+
 }
 
 .profile-container h2 {
