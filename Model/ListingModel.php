@@ -8,7 +8,7 @@ class ListingModel extends Database
         return $this->select(
             "SELECT id, username, listing_name, listing_descript, price, image FROM listings ORDER BY id DESC LIMIT ?",
             ["i", $limit]
-        );
+        ) ;
     }
     public function createListing($data)
 {
@@ -21,7 +21,7 @@ class ListingModel extends Database
             $data["price"], 
             $data["image"]
         ]
-    );
+    ) ;
 }
 
     public function updateListing($data)
@@ -29,7 +29,7 @@ class ListingModel extends Database
         return $this->update(
             "UPDATE listings SET listing_name = ?, listing_descript = ?, price = ? WHERE id = ?",
             ["ssii", $data['listing_name'], $data['listing_descript'], $data['price'], $data['id']]
-        );
+        ) ;
     }
 
     public function deleteListing($data)
@@ -41,12 +41,18 @@ class ListingModel extends Database
         return $this->delete(
             "DELETE FROM listings WHERE id = ?",
             ["i", $data["id"]]
-        );
+        ) ;
     }
 
     public function getListingByID($data)
     {
         return $this->select("SELECT * FROM listings WHERE id = ?", ["i", $data['id']]) ;
+    }
+
+    public function transferOwner($username, $list_id)
+    {
+        //return $this->update("UPDATE listings SET username = ?, sold = 1 WHERE id = ?", ["si", $username, $list_id]) ;
+        return $this->update("UPDATE listings SET username = ? WHERE id = ?", ["si", $username, $list_id]) ;
     }
     
 }
