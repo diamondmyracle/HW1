@@ -36,10 +36,13 @@ class FavoritesModel extends Database
     }
 
     // Get all favorites for a specific user - will be useful on profile page
-    public function getUserFavorites($username)
+     public function getUserFavorites($username)
     {
         return $this->select(
-            "SELECT listing_id FROM favorites WHERE username = ?",
+            "SELECT l.id, l.listing_name, l.image, l.price 
+             FROM favorites f
+             JOIN listings l ON f.listing_id = l.id
+             WHERE f.username = ?",
             ["s", $username]
         );
     }
