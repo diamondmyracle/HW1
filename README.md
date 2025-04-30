@@ -77,6 +77,12 @@ add this line
 ALTER TABLE `users` ADD `acc_balance` INT(11) NOT NULL AFTER `password`,
 ADD `user_descript` VARCHAR(255) NOT NULL AFTER `acc_balance`;
 ```
+If you're having issues signing up after adding these two lines of code above^, enter in these lines below:
+```
+ALTER TABLE users 
+MODIFY acc_balance INT DEFAULT 1000,
+MODIFY user_descript TEXT DEFAULT NULL;
+```
  
  **Create `listings` Table:**
  ```sql
