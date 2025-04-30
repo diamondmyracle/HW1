@@ -751,85 +751,91 @@ if (isset($_GET["id"])) {
 </script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const favoriteButton = document.getElementById('favoriteButton');
     const favoriteIcon = document.getElementById('favoriteIcon');
     const favoriteText = document.getElementById('favoriteText');
+    const favoriteCount = document.getElementById('num-favourited');
+
     const listingId = <?php echo json_encode($list_id); ?>;
     const loggedInUsername = <?php echo json_encode($_SESSION['username'] ?? ''); ?>;
 
+    let isFavorited = false;
+
     if (!loggedInUsername) {
-        favoriteButton.addEventListener('click', function() {
-            window.location.href = '/login.php'; // Redirect if not logged in
+        favoriteButton.addEventListener('click', function () {
+            window.location.href = '/login.php';
         });
         return;
     }
-    fetch('favorite_action.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            listing_id: listingId,
-            favorite_action: 'check'
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.favorited) {
-            favoriteIcon.src = 'minecraft-red-heart.png';
-            favoriteText.textContent = 'Added to Favorites';
-        } else {
-            favoriteIcon.src = 'minecraft-black-heart.png';
-            favoriteText.textContent = 'Add to Favorites';
-        }
-    });
 
-    // --- Fetch and update the number of favorites ---
     function updateFavoriteCount() {
-        fetch('favorites_count.php', {
+        fetch('favorites_api.php/favorites/count', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                listing_id: listingId
-            })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ listing_id: listingId })
         })
         .then(response => response.json())
         .then(data => {
-            if (data.success) {
-                document.getElementById('num-favourited').innerText = data.count;
+            if (data.status === 'success') {
+                favoriteCount.innerText = data.favorites;
             }
         });
     }
 
-    updateFavoriteCount(); // call once on page load
-
-    favoriteButton.addEventListener('click', function() {
-        const isFavorited = favoriteIcon.src.includes('red-heart');
-
-        fetch('favorite_action.php', {
+    function checkIfFavorited() {
+        fetch('favorites_api.php/favorites/isFavorited', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 listing_id: listingId,
-                favorite_action: isFavorited ? 'unfavorite' : 'favorite'
+                username: loggedInUsername // required by your controller
             })
         })
         .then(response => response.json())
         .then(data => {
-            if (data.success) {
+            isFavorited = data.favorited;
+            if (isFavorited) {
+                favoriteIcon.src = 'minecraft-red-heart.png';
+                favoriteText.textContent = 'Added to Favorites';
+                favoriteButton.classList.add('favorited');
+            } else {
+                favoriteIcon.src = 'minecraft-black-heart.png';
+                favoriteText.textContent = 'Add to Favorites';
+                favoriteButton.classList.remove('favorited');
+            }
+        });
+    }
+
+    favoriteButton.addEventListener('click', function () {
+        const endpoint = isFavorited 
+            ? 'favorites_api.php/favorites/remove'
+            : 'favorites_api.php/favorites/add';
+
+        fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                listing_id: listingId,
+                username: loggedInUsername // required by your controller
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                isFavorited = !isFavorited;
+
                 if (isFavorited) {
-                    favoriteIcon.src = 'minecraft-black-heart.png';
-                    favoriteText.textContent = 'Add to Favorites';
-                } else {
                     favoriteIcon.src = 'minecraft-red-heart.png';
                     favoriteText.textContent = 'Added to Favorites';
+                    favoriteButton.classList.add('favorited');
+                } else {
+                    favoriteIcon.src = 'minecraft-black-heart.png';
+                    favoriteText.textContent = 'Add to Favorites';
+                    favoriteButton.classList.remove('favorited');
                 }
-                updateFavoriteCount(); // refresh favorites count after toggle
+
+                updateFavoriteCount();
             } else {
                 alert('Error: ' + data.message);
             }
@@ -839,5 +845,9 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('An error occurred.');
         });
     });
+
+    // Initial page setup
+    updateFavoriteCount();
+    checkIfFavorited();
 });
 </script>
