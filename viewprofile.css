@@ -17,6 +17,7 @@ body {
     border: 2px solid rgb(197, 197, 197);
     width: 100%;
     margin: 0px;
+    margin-bottom: 10px;
     border-radius: 1em;
 }
 
@@ -148,7 +149,7 @@ body {
 .profile-listing img {
     max-width: 100%;
     border-radius: 0.5em;
-    margin-bottom: 10px;
+    margin-bottom: 13px;
 }
 
 .profile-listing h3 {
@@ -199,6 +200,7 @@ body {
     border: 2px solid rgb(197, 197, 197);
     width: auto;
     margin: 0px;
+    margin-bottom: 13px;
     padding: 0px;
     border-radius: 1em;
 }
