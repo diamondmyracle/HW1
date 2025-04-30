@@ -51,7 +51,8 @@ class ListingModel extends Database
 
     public function transferOwner($username, $list_id)
     {
-        return $this->update("UPDATE listings SET username = ?, sold = 1 WHERE id = ?", ["si",$username, $list_id]) ;
+        //return $this->update("UPDATE listings SET username = ?, sold = 1 WHERE id = ?", ["si", $username, $list_id]) ;
+        return $this->update("UPDATE listings SET username = ? WHERE id = ?", ["si", $username, $list_id]) ;
     }
     
 }

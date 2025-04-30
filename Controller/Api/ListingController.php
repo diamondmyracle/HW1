@@ -240,11 +240,20 @@ public function transferOwnershipToBuyer()
         $data = json_decode(file_get_contents('php://input'), true);
 
         try {
-            $username = $data["username"] ;
+            $buyer = $data["buyer"] ;
+            $seller = $data["seller"] ;
             $list_id = $data["list_id"] ;
+            $cost = $data["cost"] ;
 
-            $listingModel = new ListingModel();
-            $result = $listingModel->transferOwner($username, $list_id);
+            if ($this->removeBalance($buyer, $cost)) {
+                //The transaction worked. Add amount to seller
+                $this->addBalance($seller, $cost) ;
+
+                $listingModel = new ListingModel() ;
+                $result = $listingModel->transferOwner($buyer, $list_id) ;
+            } else {
+                $result = "Insufficient funds, boi. Why are you so poor? Try being less poor next time." ;
+            }
         } catch (Exception $e) {
             $this->sendOutput(
                 json_encode([
@@ -281,6 +290,29 @@ public function transferOwnershipToBuyer()
             ['Content-Type: application/json', 'HTTP/1.1 404 Not Found']
         );
     }
+}
+
+private function removeBalance($username, $amount)
+{
+    $userModel = new UserModel() ;
+    $userInfo = $userModel->getUserInfo($username) ;
+    $userBalance = $userInfo[0]["acc_balance"] ;
+    $newBalance = $userBalance - $amount ;
+    if ($newBalance >= 0) {
+        $userModel->setBalance($newBalance, $username) ;
+        return true ;
+    } else {
+        return false ;
+    }
+}
+
+private function addBalance($username, $amount)
+{
+    $userModel = new UserModel() ;
+    $userInfo = $userModel->getUserInfo($username) ;
+    $userBalance = $userInfo[0]["acc_balance"] ;
+    $newBalance = $userBalance + $amount ;
+    $userModel->setBalance($newBalance, $username) ;
 }
 
 

@@ -21,5 +21,10 @@ class UserModel extends Database
     {
         return $this->select("SELECT * FROM users WHERE username = ?", ["s", $username]) ;
     }
+
+    public function setBalance($amount, $username)
+    {
+        return $this->update("UPDATE users SET acc_balance = ? WHERE username = ?", ["is", $amount, $username]) ;
+    }
 }
 ?>
