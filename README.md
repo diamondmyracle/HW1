@@ -300,7 +300,7 @@ Make sure you have the following downloaded in your terminal as per Zimmeck's tu
 7. Version used will be ```^10.4```, skip following steps until you need to confirm generation.
 8. Type ```yes``` to confirm generation, skip installing dependencies.
    
-When you do "composer init" inside the `test-project` folder, many other files will be added. In the repo, we have provided the `test-project` folder which contains the `tests` folder and `phpunit.umx` file. The `tests` folder contains the unit test file `UserAPITest.php`. At this point your `test-project` folder should look like the following:
+When you do "composer init" inside the `test-project` folder, many other files will be added. In the repo, we have provided the `test-project` folder which contains the `tests` folder and `phpunit.xml` file. The `tests` folder contains the unit test file `UserAPITest.php`. At this point your `test-project` folder should look like the following:
 
 <img width="940" alt="Screenshot 2025-04-20 at 2 41 32 PM" src="https://github.com/user-attachments/assets/3375d6c6-88b4-466d-8dee-01c0314acc83" />
 
